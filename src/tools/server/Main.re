@@ -4,34 +4,37 @@ let module Header = {
     b := !b ^ "Content-Length: ";
     b := !b ^ string_of_int length;
     b := !b ^ "\r\n\r\n";
-    !b;
+    !b
   };
 };
 
-let readMessage txLog rxClient => try {
-  let () = ignore @@ read_line ();
-  let result = JSON.parse rxClient;
-  Printf.fprintf txLog "\nresult: %s\n" @@ JSON.show_result result;
-  switch result {
-    | JSON.Value ((`O members) as value) =>
+let readMessage txLog rxClient => {
+  try {
+    let () = ignore @@ read_line ();
+    let result = JSON.parse rxClient;
+    Printf.fprintf txLog "\nresult: %s\n" @@ JSON.show_result result;
+    switch result {
+    | JSON.Value (`O members as value) =>
       try {
         switch (List.assoc "id" members) {
         | `Float _ as id => Some (id, value)
         | _ => None
-        };
+        }
       } {
       | Not_found => None
       }
     | _ => None
-  } [@warning "-4"];
-} {
-| End_of_file => None
+    }
+  [@warning "-4"]
+  } {
+  | End_of_file => None
+  }
 };
 
 let logResult txLog out value => {
   Buffer.add_string out @@ JSON.show_value value;
   Buffer.output_buffer txLog out;
-  flush txLog;
+  flush txLog
 };
 
 let sayHello txLog txClient id => {
@@ -58,7 +61,7 @@ let sayHello txLog txClient id => {
   Buffer.add_string headers contentLength;
   Buffer.output_buffer txClient headers;
   Buffer.output_buffer txClient content;
-  flush txClient;
+  flush txClient
 };
 
 let loop txLog txClient => {
@@ -84,5 +87,5 @@ let loop txLog txClient => {
 let () = {
   let txLog = open_out "/tmp/caml-language-server.log";
   let txClient = stdout;
-  loop txLog txClient;
+  loop txLog txClient
 };
