@@ -31,17 +31,17 @@ let readMessage txLog rxClient => {
   }
 };
 
-let logResult txLog out value => {
-  Buffer.add_string out @@ JSON.show_value value;
-  Buffer.output_buffer txLog out;
+let logResult txLog buffer value => {
+  Buffer.add_string buffer @@ JSON.show_value value;
+  Buffer.output_buffer txLog buffer;
   flush txLog
 };
 
 let sayHello txLog txClient id => {
   let headers = Buffer.create 0;
   let content = Buffer.create 0;
-  let e = Jsonm.encoder @@ `Buffer content;
-  let emit lexeme => ignore @@ Jsonm.encode e @@ `Lexeme lexeme;
+  let encoder = Jsonm.encoder @@ `Buffer content;
+  let emit lexeme => ignore @@ Jsonm.encode encoder @@ `Lexeme lexeme;
   emit `Os;
   emit (`Name "jsonrpc"); emit (`String "2.0");
   emit (`Name "id"); emit id;
@@ -53,7 +53,7 @@ let sayHello txLog txClient id => {
         emit `Oe;
     emit `Oe;
   emit `Oe;
-  ignore @@ Jsonm.encode e `End;
+  ignore @@ Jsonm.encode encoder `End;
   let contentLength = Header.contentLength @@ Buffer.length content;
   Printf.fprintf txLog "\nheaders: %s\n" @@ contentLength;
   Printf.fprintf txLog "\ncontent: %s\n" @@ Buffer.contents content;
@@ -79,7 +79,7 @@ let loop txLog txClient => {
     | None => ()
     | Some (_, value) =>
       logResult txLog b value
-    };
+    }
   };
   go ()
 };
