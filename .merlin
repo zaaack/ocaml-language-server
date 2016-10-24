@@ -1,0 +1,5 @@
+B _build/**
+S src/**
+PKG jsonm
+PKG ppx_deriving.std
+FLG -short-paths -w +a-6-30-32-39-41-42-48

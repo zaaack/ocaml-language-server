@@ -1,0 +1,13 @@
+opam-version: "1.2.2"
+name: "caml-language-server"
+version: "0.0.0"
+maintainer: "Darin Morrison <freebroccolo@users.noreply.github.com>"
+authors: [ "Darin Morrison" ]
+license: "MIT"
+homepage: "https://github.com/freebroccolo/caml-language-server"
+dev-repo: "https://github.com/freebroccolo/caml-language-server.git"
+bug-reports: "https://github.com/freebroccolo/caml-language-server/issues"
+depends: [
+  "jsonm"
+  "ppx_deriving"
+]
