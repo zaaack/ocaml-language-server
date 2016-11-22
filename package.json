@@ -28,6 +28,9 @@
   "bin": {
     "ocaml-language-server": "./out/src/server/index.js"
   },
+  "files":[
+    "out"
+  ],
   "devDependencies": {
     "@types/async": "2.0.33",
     "@types/glob": "5.0.30",
