@@ -1,19 +1,11 @@
-bin
-dep
+out
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Agda.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Agda.gitignore
 
 *.agdai
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Coq.gitignore
-
-*.vo
-*.glob
-*.v.d
-
-
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Node.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Node.gitignore
 
 # Logs
 logs
@@ -51,11 +43,21 @@ jspm_packages
 # Optional npm cache directory
 .npm
 
+# Optional eslint cache
+.eslintcache
+
 # Optional REPL history
 .node_repl_history
 
+# Output of 'npm pack'
+*.tgz
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/OCaml.gitignore
+# Yarn Integrity file
+.yarn-integrity
+
+
+
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/OCaml.gitignore
 
 *.annot
 *.cmo
@@ -79,7 +81,7 @@ setup.data
 setup.log
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/Archives.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/Archives.gitignore
 
 # It's better to unpack these files and commit the raw source because
 # git has its own built in compression methods.
@@ -110,7 +112,7 @@ setup.log
 *.msp
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/Emacs.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/Emacs.gitignore
 
 # -*- mode: gitignore; -*-
 *~
@@ -155,7 +157,11 @@ flycheck_*.el
 # projectiles files
 .projectile
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/SublimeText.gitignore
+# directory configuration
+.dir-locals.el
+
+
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/SublimeText.gitignore
 
 # cache files for sublime text
 *.tmlanguage.cache
@@ -186,7 +192,7 @@ bh_unicode_properties.cache
 GitHub.sublime-settings
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/Vim.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/Vim.gitignore
 
 # swap
 [._]*.s[a-w][a-z]
@@ -200,15 +206,16 @@ Session.vim
 tags
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/VisualStudioCode.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/VisualStudioCode.gitignore
 
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/extensions.json
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/Linux.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/Linux.gitignore
 
 *~
 
@@ -221,8 +228,11 @@ tags
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
 
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/OSX.gitignore
+
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/macOS.gitignore
 
 *.DS_Store
 .AppleDouble
@@ -252,7 +262,7 @@ Temporary Items
 .apdisk
 
 
-### https://raw.github.com/github/gitignore/2664dad61f3fda7755acc70ceb5aac4b1e956981/Global/Windows.gitignore
+### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/Windows.gitignore
 
 # Windows image file caches
 Thumbs.db
@@ -272,3 +282,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
