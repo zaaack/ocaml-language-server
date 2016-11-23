@@ -11,7 +11,10 @@ and [Reason](https://facebook.github.io/reason).
 
 ## Server Clients
 
-The language server protocol is still quite new but many editor clients are already being developed:
+For a full-featured client for this server see
+[vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml).
+
+The language server protocol is still quite new but many other clients being developed:
 
 - [atom-languageclient](https://github.com/OmniSharp/atom-languageclient)
 - [emacs-lsp](https://github.com/sourcegraph/emacs-lsp)
