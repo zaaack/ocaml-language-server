@@ -26,6 +26,14 @@ and [Reason](https://facebook.github.io/reason).
 - [x] references provider
 - [x] workspace symbol provider
 
+## Installing the Server
+
+The server can be installed with npm:
+
+```
+npm install -g ocaml-language-server
+```
+
 ## Launching the Server
 
 The server can be launched in the following ways:
