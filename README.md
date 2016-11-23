@@ -13,6 +13,7 @@ and [Reason](https://facebook.github.io/reason).
 
 The language server protocol is still quite new but many editor clients are already being developed:
 
+- [atom-languageclient](https://github.com/OmniSharp/atom-languageclient)
 - [emacs-lsp](https://github.com/sourcegraph/emacs-lsp)
 - [sublime-lsp](https://github.com/sourcegraph/sublime-lsp)
 - [nvim-langserver-shim](https://github.com/tjdevries/nvim-langserver-shim)
