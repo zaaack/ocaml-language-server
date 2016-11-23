@@ -14,7 +14,8 @@ and [Reason](https://facebook.github.io/reason).
 For a full-featured client for this server see
 [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml).
 
-The language server protocol is still quite new but many other clients being developed:
+The language server protocol is still quite new but many other clients are being
+developed:
 
 - [atom-languageclient](https://github.com/OmniSharp/atom-languageclient)
 - [emacs-lsp](https://github.com/sourcegraph/emacs-lsp)
@@ -67,7 +68,7 @@ ocaml-language-server --stdio
 
 For node-based clients like
 [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml) `--node-ipc`
-is the most efficient approach. Clients written other languages should use
+is the most efficient approach. Clients written in other languages should use
 `--stdio` or `--socket`.
 
 ## Building the server
