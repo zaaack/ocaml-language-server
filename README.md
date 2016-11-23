@@ -28,6 +28,12 @@ and [Reason](https://facebook.github.io/reason).
 
 ## Installing the Server
 
+### Requirements
+
+- OCaml `4.02.3` or greater
+- [Reason](https://github.com/facebook/reason) `1.4.0` (optional)
+- [merlin](https://github.com/the-lambda-church/merlin) `2.5.0` or greater
+
 The server can be installed with npm:
 
 ```
