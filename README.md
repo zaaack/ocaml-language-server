@@ -9,6 +9,17 @@ protocol](https://github.com/Microsoft/language-server-protocol) for OCaml and
 related languages like [BuckleScript](http://bloomberg.github.io/bucklescript)
 and [Reason](https://facebook.github.io/reason).
 
+## Server Clients
+
+The language server protocol is still quite new but many editor clients are already being developed:
+
+- [emacs-lsp](https://github.com/sourcegraph/emacs-lsp)
+- [sublime-lsp](https://github.com/sourcegraph/sublime-lsp)
+- [nvim-langserver-shim](https://github.com/tjdevries/nvim-langserver-shim)
+- [vim-lsp](https://github.com/prabirshrestha/vim-lsp)
+
+NOTE: Most of these clients have not yet been tested with the server.
+
 ## Server Capabilities
 
 - [x] OCaml support
