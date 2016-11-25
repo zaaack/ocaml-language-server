@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@types/async@2.0.33":
-  version "2.0.33"
-  resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.33.tgz#e676d725e21fff68cc392c02d9db1f6e57a4441c"
+"@types/async@^2.0.34":
+  version "2.0.34"
+  resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.34.tgz#f23e1729609ccbe6cfaffc88270c5e71a6341678"
 
 "@types/glob@5.0.30":
   version "5.0.30"
@@ -13,9 +13,9 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/lodash@4.14.39":
-  version "4.14.39"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.39.tgz#99e2180351609e4466abde8952d153a63a03eb14"
+"@types/lodash@^4.14.40":
+  version "4.14.40"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.40.tgz#e67478f69bb1ad93a0e7ab6f3f276816d27088de"
 
 "@types/lokijs@1.2.30":
   version "1.2.30"
@@ -25,9 +25,13 @@
   version "2.0.29"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
 
-"@types/node@*", "@types/node@6.0.49":
+"@types/node@*":
   version "6.0.49"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.49.tgz#c644f7305e0d64bd797c939af833f22d150e1d33"
+
+"@types/node@^6.0.51":
+  version "6.0.51"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.51.tgz#84cbf25111516ec9304d0b61469dc0fa9d12ba32"
 
 "@types/pegjs@0.10.0":
   version "0.10.0"
@@ -519,9 +523,9 @@ timed-out@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-3.0.0.tgz#ff88de96030ce960eabd42487db61d3add229273"
 
-tslint@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.0.1.tgz#42ae8ac2b994331a6f61c5809916df86411fd880"
+tslint@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.0.2.tgz#d43f24c0c1f826de7f3a097bb7808a8b4325feac"
   dependencies:
     colors "^1.1.2"
     diff "^3.0.1"
