@@ -1,5 +1,5 @@
 import * as async from "async";
-import * as child_process from "child_process";
+import * as childProcess from "child_process";
 import * as _ from "lodash";
 import * as readline from "readline";
 import * as rpc from "vscode-jsonrpc";
@@ -9,7 +9,7 @@ import Session from "../session";
 export default class Merlin implements rpc.Disposable {
   private readonly queue: AsyncPriorityQueue<any>;
   private readline: readline.ReadLine;
-  private process: child_process.ChildProcess;
+  private process: childProcess.ChildProcess;
   private readonly session: Session;
 
   constructor(session: Session) {
@@ -26,11 +26,11 @@ export default class Merlin implements rpc.Disposable {
 
   public initialize(): void {
     const dependencyEnv = this.session.environment.hasDependencyEnv
-      ? `eval $((${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv) || true) && `
+      ? `eval $((${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv) || true) &&`
       : "";
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
-    const command = `${dependencyEnv}${ocamlmerlin}`;
-    this.process = child_process.spawn("sh", ["-c", command]);
+    const command = `${dependencyEnv} ${ocamlmerlin}`;
+    this.process = childProcess.spawn("sh", ["-c", command]);
     this.process.on("error", (error: Error & { code: string }) => {
       if (error.code === "ENOENT") {
         const msg = `Cannot find merlin binary at "${ocamlmerlin}".`;

@@ -7,7 +7,7 @@ export default async (session: Session, id: types.TextDocument, range?: types.Ra
     range ? id.offsetAt(range.start) : 0,
     range ? id.offsetAt(range.end) : undefined);
   if (/^\s*$/.test(text)) return text;
-  const refmt = new processes.ReFMT(session, id).child;
+  const refmt = new processes.ReFMT(session, id).process;
   refmt.stdin.write(text);
   refmt.stdin.end();
   const otxt = await new Promise<string>((resolve, reject) => {
