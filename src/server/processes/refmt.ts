@@ -18,7 +18,6 @@ export default class ReFMT {
       "-is-interface-pp", `${/\.rei$/.test(uri)}`,
     ];
     const command = `${dependencyEnv} ${refmt} ${refmtArgs.join(" ")}`;
-    session.connection.console.log(command);
     this.process = childProcess.spawn("sh", ["-c", command]);
     return this;
   }
