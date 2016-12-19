@@ -39,7 +39,7 @@
     "@types/node": "^6.0.52",
     "@types/pegjs": "0.10.0",
     "tslint": "^4.1.1",
-    "typescript": "^2.1.4"
+    "typescript": "^2.2.0-dev.20161215"
   },
   "dependencies": {
     "async": "2.1.4",
@@ -47,6 +47,7 @@
     "lodash": "4.17.2",
     "lokijs": "1.4.1",
     "pegjs": "0.10.0",
+    "typescript": "next",
     "vscode-jsonrpc": "2.4.0",
     "vscode-languageclient": "2.6.3",
     "vscode-languageserver": "2.6.2",
