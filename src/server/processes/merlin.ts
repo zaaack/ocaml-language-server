@@ -25,7 +25,7 @@ export default class Merlin implements rpc.Disposable {
   }
 
   public initialize(): void {
-    const dependencyEnv = this.session.environment.isRebelProject
+    const dependencyEnv = this.session.environment.hasDependencyEnv
       ? `eval $((${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv) || true) && `
       : "";
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
