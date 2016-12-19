@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
 import * as command from "../command";
@@ -7,7 +8,7 @@ import Session from "./index";
 /**
  * Diagnostics manager for the session.
  */
-export default class Analyzer {
+export default class Analyzer implements rpc.Disposable {
   public refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
   public refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
   private session: Session;

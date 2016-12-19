@@ -1,3 +1,4 @@
+import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { ISettings } from "../../shared";
 import { Merlin } from "../processes";
@@ -14,7 +15,7 @@ export {
 /**
  * Manager for the session. Launched on client connection.
  */
-export default class Session {
+export default class Session implements rpc.Disposable {
   public initConf: server.InitializeParams;
   public settings: ISettings = ({} as any);
   public readonly connection: server.IConnection = server.createConnection();

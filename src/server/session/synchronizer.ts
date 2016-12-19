@@ -1,10 +1,11 @@
+import * as rpc from "vscode-jsonrpc";
 import { merlin } from "../../shared";
 import Session from "./index";
 
 /**
  * Document synchronizer for the session.
  */
-export default class Synchronizer {
+export default class Synchronizer implements rpc.Disposable {
   private session: Session;
 
   constructor(session: Session) {

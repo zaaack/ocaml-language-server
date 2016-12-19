@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as URL from "url";
+import * as rpc from "vscode-jsonrpc";
 import { types } from "../../shared";
 import Session from "./index";
 
 const fileSchemeLength = "file://".length - 1;
 
-export default class Environment {
+export default class Environment implements rpc.Disposable {
   public static pathToUri(path: string): types.TextDocumentIdentifier {
     const uri = URL.format(URL.parse(`file://${path}`));
     return { uri };

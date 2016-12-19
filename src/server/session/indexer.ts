@@ -9,7 +9,7 @@ import * as server from "vscode-languageserver";
 /**
  * Index for outline metadata
  */
-export default class Indexer {
+export default class Indexer implements rpc.Disposable {
   public populated: boolean = false;
   private readonly db: Loki = new Loki(".vscode.reasonml.loki");
   private readonly symbols: LokiCollection<types.SymbolInformation>;
