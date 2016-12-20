@@ -32,14 +32,14 @@
     "out"
   ],
   "devDependencies": {
-    "@types/async": "^2.0.37",
+    "@types/async": "2.0.37",
     "@types/glob": "5.0.30",
-    "@types/lodash": "^4.14.43",
+    "@types/lodash": "4.14.44",
     "@types/lokijs": "1.2.30",
-    "@types/node": "^6.0.52",
+    "@types/node": "6.0.52",
     "@types/pegjs": "0.10.0",
-    "tslint": "^4.1.1",
-    "typescript": "^2.2.0-dev.20161215"
+    "tslint": "4.1.1",
+    "typescript": "2.2.0-dev.20161215"
   },
   "dependencies": {
     "async": "2.1.4",
