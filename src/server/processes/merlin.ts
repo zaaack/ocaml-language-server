@@ -25,12 +25,8 @@ export default class Merlin implements rpc.Disposable {
   }
 
   public initialize(): void {
-    const dependencyEnv = this.session.environment.hasDependencyEnv
-      ? `eval $((${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv) || true) &&`
-      : "";
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
-    const command = `${dependencyEnv} ${ocamlmerlin}`;
-    this.process = childProcess.spawn("sh", ["-c", command]);
+    this.process = this.session.environment.spawn(ocamlmerlin);
     this.process.on("error", (error: Error & { code: string }) => {
       if (error.code === "ENOENT") {
         const msg = `Cannot find merlin binary at "${ocamlmerlin}".`;
