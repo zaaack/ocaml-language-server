@@ -13,7 +13,7 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/lodash@^4.14.44":
+"@types/lodash@4.14.44":
   version "4.14.44"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.44.tgz#04585ff0b80d5e434a5f86f15e7964be4f775cba"
 
@@ -25,9 +25,13 @@
   version "2.0.29"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-2.0.29.tgz#5002e14f75e2d71e564281df0431c8c1b4a2a36a"
 
-"@types/node@*", "@types/node@6.0.52":
+"@types/node@*":
   version "6.0.52"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.52.tgz#1ac3a99b42320f9e463482f25af4c2359473aaa6"
+
+"@types/node@6.0.53":
+  version "6.0.53"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.53.tgz#8c300ca8ba51f80f98f3525b932ff47c6efd6be1"
 
 "@types/pegjs@0.10.0":
   version "0.10.0"
@@ -320,13 +324,17 @@ lazy-req@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/lazy-req/-/lazy-req-1.1.0.tgz#bdaebead30f8d824039ce0ce149d4daa07ba1fac"
 
-lodash@4.17.2, lodash@^4.14.0:
+lodash@4.17.3:
+  version "4.17.3"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.3.tgz#557ed7d2a9438cac5fd5a43043ca60cb455e01f7"
+
+lodash@^4.14.0:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
-lokijs@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/lokijs/-/lokijs-1.4.1.tgz#ea17be92d2ea7caba1c816d6c2006424e8db0bfe"
+lokijs@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/lokijs/-/lokijs-1.4.2.tgz#0f176380f9930d117946fc7c15ccb4ca001ddb4a"
 
 lowercase-keys@^1.0.0:
   version "1.0.0"
@@ -535,9 +543,9 @@ timed-out@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-3.0.0.tgz#ff88de96030ce960eabd42487db61d3add229273"
 
-tslint@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.1.1.tgz#ae15c9478d92eb2f01d5102c69c493ec02d7e7e4"
+tslint@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.2.0.tgz#b9f5c5b871b784ab2f4809e704ade42d62f523ad"
   dependencies:
     babel-code-frame "^6.20.0"
     colors "^1.1.2"
