@@ -1,5 +1,5 @@
 import * as server from "vscode-languageserver";
-import { merlin, parser, types } from "../../shared";
+import { parser, types } from "../../shared";
 import * as command from "../command";
 import Session from "../session";
 
@@ -13,9 +13,10 @@ export default function(session: Session): server.RequestHandler<server.TextDocu
     const itemDocs = await command.getDocumentation(session, event);
     if (token.isCancellationRequested) return { contents: [] };
     if (itemType != null) {
-      const language = /^[A-Z]/.test(word) ? "reason.hover.signature" : "reason.hover.type";
+      let language = "plaintext";
+      if (/\.mli?/.test(event.textDocument.uri)) language = "ocaml.hover.type";
+      if (/\.rei?/.test(event.textDocument.uri)) language = /^[A-Z]/.test(word) ? "reason.hover.signature" : "reason.hover.type";
       markedStrings.push({ language, value: itemType.type });
-      markedStrings.push(merlin.TailPosition.intoCode(itemType.tail)); // FIXME: make configurable
       if (itemDocs != null && !parser.ocamldoc.ignore.test(itemDocs)) markedStrings.push(parser.ocamldoc.intoMarkdown(itemDocs));
     }
     return { contents: markedStrings };
