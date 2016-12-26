@@ -19,8 +19,6 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
     const fileKindMatch = textDocument.uri.match(new RegExp(`\.(${allowedFileKinds.join("|")})$`));
     if (fileKindMatch == null) return [];
     const fileKind = fileKindMatch[1];
-    const isOCaml  = fileKind === "ml";
-    const isReason = fileKind === "re";
 
     const request = merlin.Query.outline();
     const response = await session.merlin.query(request, textDocument, 1);
@@ -43,15 +41,14 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
         const position = types.Position.create(line, character);
         const event = { position, textDocument };
         // reason requires computing some offsets first
-        if (isReason
-        && (null != (textLine = textDoc.getText().substring(textDoc.offsetAt(start), textDoc.offsetAt(end)))) // tslint:disable-line no-conditional-assignment
-        && (null != (matches = textLine.match(/^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m)))) { // tslint:disable-line no-conditional-assignment
+        if ((null != (textLine = textDoc.getText().substring(textDoc.offsetAt(start), textDoc.offsetAt(end)))) // tslint:disable-line no-conditional-assignment
+        &&  (null != (matches = textLine.match(/^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m)))) { // tslint:disable-line no-conditional-assignment
           event.position.character +=              matches[1].length;
           event.position.character +=              matches[2].length;
           event.position.character += matches[3] ? matches[3].length : 0;
           event.position.character +=              matches[4].length;
         }
-        if (isOCaml || (null != (matches))) codeLenses.push({ data: { containerName, event, fileKind, kind, location, name }, range });
+        if (null != matches) codeLenses.push({ data: { containerName, event, fileKind, kind, location, name }, range });
       }
     }
     return codeLenses;
