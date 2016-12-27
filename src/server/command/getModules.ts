@@ -12,7 +12,7 @@ export default async function (session: Session, event: server.TextDocumentIdent
   for (const cwd of response.value) {
     if (cwd && !(/\.opam\b/.test(cwd) || srcDirs.has(cwd))) {
       srcDirs.add(cwd);
-      const cwdMods = new Glob("*.re?(i)", { cwd, realpath: true, sync: true }).found;
+      const cwdMods = new Glob("*.@(ml|re)?(i)", { cwd, realpath: true, sync: true }).found;
       for (const path of cwdMods) srcMods.push(Environment.pathToUri(path));
     }
   }
