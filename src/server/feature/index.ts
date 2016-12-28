@@ -9,7 +9,6 @@ import didChangeWatchedFiles from "./didChangeWatchedFiles";
 import documentFormatting from "./documentFormatting";
 import documentHighlight from "./documentHighlight";
 import documentOnTypeFormatting from "./documentOnTypeFormatting";
-import documentRangeFormatting from "./documentRangeFormatting";
 import documentSymbol from "./documentSymbol";
 import hover from "./hover";
 import references from "./references";
@@ -28,7 +27,6 @@ export {
   documentFormatting,
   documentHighlight,
   documentOnTypeFormatting,
-  documentRangeFormatting,
   documentSymbol,
   hover,
   references,

@@ -8,7 +8,9 @@ export default function(session: Session): server.RequestHandler<server.Document
     const itxt = await command.getTextDocument(session, event.textDocument);
     const idoc = types.TextDocument.create(event.textDocument.uri, itxt.languageId, itxt.version, itxt.getText());
     if (token.isCancellationRequested) return [];
-    const otxt = await command.getFormatted(session, idoc);
+    let otxt : null | string = null;
+    if (idoc.languageId ===  "ocaml") otxt = await command.getFormatted.ocpIndent(session, idoc);
+    if (idoc.languageId === "reason") otxt = await command.getFormatted.refmt(session, idoc);
     if (token.isCancellationRequested) return [];
     if (otxt == null) return [];
     const edits: types.TextEdit[] = [];

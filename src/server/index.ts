@@ -25,7 +25,6 @@ session.connection.onDefinition(feature.definition(session));
 session.connection.onDidChangeWatchedFiles(feature.didChangeWatchedFiles(session));
 session.connection.onDocumentFormatting(feature.documentFormatting(session));
 session.connection.onDocumentOnTypeFormatting(feature.documentOnTypeFormatting(session));
-session.connection.onDocumentRangeFormatting(feature.documentRangeFormatting(session));
 session.connection.onDocumentSymbol(feature.documentSymbol(session));
 session.connection.onHover(feature.hover(session));
 session.connection.onReferences(feature.references(session));

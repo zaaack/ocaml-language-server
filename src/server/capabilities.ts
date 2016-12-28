@@ -12,7 +12,6 @@ const capabilities: server.ServerCapabilities = {
   definitionProvider: true,
   documentFormattingProvider: true,
   documentHighlightProvider: true,
-  documentRangeFormattingProvider: true,
   documentSymbolProvider: true,
   hoverProvider: true,
   referencesProvider: true,
