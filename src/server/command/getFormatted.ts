@@ -37,7 +37,7 @@ export async function ocpIndentRange(session: Session, doc: types.TextDocument, 
   const indents: number[] = [];
   const pattern = /\d+/g;
   let match: null | RegExpExecArray = null
-  while((match = pattern.exec(output)) != null) {
+  while ((match = pattern.exec(output)) != null) {
     const digits = match.shift() as string;
     const number = parseInt(digits, 10);
     indents.push(number);
