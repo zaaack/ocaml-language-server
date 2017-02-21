@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@types/async@^2.0.38":
+"@types/async@2.0.38":
   version "2.0.38"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.38.tgz#5c369dcb14788da0621daafa8594a053b0edcb21"
 
@@ -13,7 +13,7 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/lodash@^4.14.52":
+"@types/lodash@4.14.52":
   version "4.14.52"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.52.tgz#de5c7ab14da1289733233c9b0ec6f9e377db90f5"
 
@@ -29,7 +29,7 @@
   version "6.0.53"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.53.tgz#8c300ca8ba51f80f98f3525b932ff47c6efd6be1"
 
-"@types/node@^7.0.5":
+"@types/node@7.0.5":
   version "7.0.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.5.tgz#96a0f0a618b7b606f1ec547403c00650210bfbb7"
 
@@ -51,7 +51,7 @@ ansi-styles@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
 
-async@^2.1.5:
+async@2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/async/-/async-2.1.5.tgz#e587c68580994ac67fc56ff86d3ac56bdbe810bc"
   dependencies:
@@ -324,11 +324,11 @@ lazy-req@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/lazy-req/-/lazy-req-1.1.0.tgz#bdaebead30f8d824039ce0ce149d4daa07ba1fac"
 
-lodash@^4.14.0, lodash@^4.17.4:
+lodash@4.17.4, lodash@^4.14.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lokijs@^1.4.3:
+lokijs@1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/lokijs/-/lokijs-1.4.3.tgz#f2a47ba8d6991c92d6da6a5b35be79b674453abb"
 
@@ -535,7 +535,7 @@ timed-out@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-3.0.0.tgz#ff88de96030ce960eabd42487db61d3add229273"
 
-tslint@^4.4.2:
+tslint@4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.4.2.tgz#b14cb79ae039c72471ab4c2627226b940dda19c6"
   dependencies:
@@ -548,9 +548,9 @@ tslint@^4.4.2:
     resolve "^1.1.7"
     update-notifier "^1.0.2"
 
-typescript@2.2.0-dev.20161215:
-  version "2.2.0-dev.20161215"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20161215.tgz#574d53d5a842e0cf18e5d8f81409a898d378bba1"
+typescript@2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.6.tgz#40c7e6e9e5da7961b7718b55505f9cac9487a607"
 
 unzip-response@^1.0.2:
   version "1.0.2"
@@ -583,22 +583,22 @@ uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-vscode-jsonrpc@^3.0.3, vscode-jsonrpc@^3.0.4:
+vscode-jsonrpc@3.0.4, vscode-jsonrpc@^3.0.3:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-3.0.4.tgz#07fdae38e3122412faddf45756fba1d2cb1eb9c8"
 
-vscode-languageclient@^3.0.4:
+vscode-languageclient@3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/vscode-languageclient/-/vscode-languageclient-3.0.4.tgz#d0a4ecf3e1c5bf486a49a161962f9189b0bd2bf7"
   dependencies:
     vscode-jsonrpc "^3.0.3"
     vscode-languageserver-types "^3.0.3"
 
-vscode-languageserver-types@^3.0.3:
+vscode-languageserver-types@3.0.3, vscode-languageserver-types@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.0.3.tgz#303b2a307c20952ff5c1f5a608f3c91146028d47"
 
-vscode-languageserver@^3.0.5:
+vscode-languageserver@3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/vscode-languageserver/-/vscode-languageserver-3.0.5.tgz#080f7b7ce6d43a0785a21195e00068ac57558c85"
   dependencies:
