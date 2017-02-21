@@ -35,8 +35,10 @@ export default class Environment implements rpc.Disposable {
     await this.detectDependencyEnv();
   }
 
-  public relativize(id: types.TextDocumentIdentifier): string {
-    return path.relative(this.workspaceRoot(), Environment.uriToPath(id));
+  public relativize(id: types.TextDocumentIdentifier): string | undefined {
+    const rootPath = this.workspaceRoot();
+    if (!rootPath) return;
+    return path.relative(rootPath, Environment.uriToPath(id));
   }
 
   public spawn(command: string, args?: string[], options?: SpawnOptions): ChildProcess {
@@ -50,7 +52,7 @@ export default class Environment implements rpc.Disposable {
     }
   }
 
-  public workspaceRoot(): string {
+  public workspaceRoot(): string | null | undefined {
     return this.session.initConf.rootPath;
   }
 

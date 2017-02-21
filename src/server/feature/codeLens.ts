@@ -3,7 +3,7 @@ import { merlin, types } from "../../shared";
 import * as command from "../command";
 import Session from "../session";
 
-const annotateKinds = new Set([
+const annotateKinds = new Set<number>([
   types.SymbolKind.Variable,
 ]);
 
