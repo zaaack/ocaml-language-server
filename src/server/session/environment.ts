@@ -1,6 +1,5 @@
 import { ChildProcess, SpawnOptions } from "child_process";
 import * as childProcess from "child_process";
-import * as fs from "fs";
 import * as path from "path";
 import * as URL from "url";
 import * as rpc from "vscode-jsonrpc";
@@ -57,15 +56,10 @@ export default class Environment implements rpc.Disposable {
   }
 
   private async detectDependencyEnv(): Promise<void> {
-    const pkgPath = `${this.workspaceRoot()}/package.json`;
     try {
-      let hasDependencyEnv = true;
-      const pkg: any = await new Promise((res, rej) => fs.readFile(pkgPath, (err, data) => err ? rej(err) : res(JSON.parse(data.toString()))));
-      // tslint:disable
-      hasDependencyEnv = hasDependencyEnv && pkg["dependencies"] != null;
-      hasDependencyEnv = hasDependencyEnv && pkg["dependencies"]["dependency-env"] != null;
-      // tslint:enable
-      (this as any).preamble = `eval $(${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv) && `;
+      // Add preamble to run dependencyEnv, but only if it exists
+      const dependencyEnvScript = `${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv`;
+      (this as any).preamble = `[ ! -f ${dependencyEnvScript} ] || eval $(${dependencyEnvScript}) && `;
     } catch (err) {
       //
     }
