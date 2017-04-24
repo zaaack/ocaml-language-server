@@ -27,6 +27,7 @@ export default class Merlin implements rpc.Disposable {
   public initialize(): void {
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
     this.process = this.session.environment.spawn(ocamlmerlin);
+
     this.process.on("error", (error: Error & { code: string }) => {
       if (error.code === "ENOENT") {
         const msg = `Cannot find merlin binary at "${ocamlmerlin}".`;
@@ -36,6 +37,11 @@ export default class Merlin implements rpc.Disposable {
         throw error;
      }
     });
+
+    this.process.stderr.on("data", (data: string) => {
+      this.session.connection.window.showErrorMessage(`ocamlmerlin error: ${data}`);
+    });
+
     this.readline = readline.createInterface({
       input: this.process.stdout,
       output: this.process.stdin,
