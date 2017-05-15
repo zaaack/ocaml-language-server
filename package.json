@@ -32,24 +32,24 @@
     "out"
   ],
   "devDependencies": {
-    "@types/async": "2.0.38",
+    "@types/async": "2.0.40",
     "@types/glob": "5.0.30",
-    "@types/lodash": "4.14.52",
+    "@types/lodash": "4.14.64",
     "@types/lokijs": "1.2.30",
-    "@types/node": "7.0.5",
+    "@types/node": "7.0.18",
     "@types/pegjs": "0.10.0",
-    "tslint": "4.4.2",
-    "typescript": "2.1.6"
+    "tslint": "5.2.0",
+    "typescript": "2.3.2"
   },
   "dependencies": {
-    "async": "2.1.5",
+    "async": "2.4.0",
     "glob": "7.1.1",
     "lodash": "4.17.4",
     "lokijs": "1.4.3",
     "pegjs": "0.10.0",
-    "vscode-jsonrpc": "3.0.4",
-    "vscode-languageclient": "3.0.4",
-    "vscode-languageserver": "3.0.5",
-    "vscode-languageserver-types": "3.0.3"
+    "vscode-jsonrpc": "3.2.0",
+    "vscode-languageclient": "3.2.2",
+    "vscode-languageserver": "3.2.2",
+    "vscode-languageserver-types": "3.2.0"
   }
 }
