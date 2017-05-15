@@ -10,8 +10,8 @@ export default function(session: Session): server.RequestHandler<server.RenamePa
     if (occurrences == null) return { changes: {} };
     const renamings = occurrences.map((loc) => types.TextEdit.replace(merlin.Location.intoCode(loc), event.newName));
     // FIXME: versioning
-    const changes = [types.TextDocumentEdit.create(types.VersionedTextDocumentIdentifier.create(event.textDocument.uri, 0), renamings)];
-    const edit: types.WorkspaceEdit = { changes };
+    const documentChanges = [types.TextDocumentEdit.create(types.VersionedTextDocumentIdentifier.create(event.textDocument.uri, 0), renamings)];
+    const edit: types.WorkspaceEdit = { documentChanges };
     return edit;
   };
 }
