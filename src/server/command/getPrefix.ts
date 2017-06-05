@@ -1,7 +1,17 @@
 import * as server from "vscode-languageserver";
-import { remote } from "../../shared";
 import Session from "../session";
 
 export default async function(session: Session, event: server.TextDocumentPositionParams): Promise<null | string> {
-  return session.connection.sendRequest<null | string>(remote.client.givePrefix.method, event);
+  const document = session.synchronizer.getTextDocument(event.textDocument.uri);
+  if (!document) {
+    return null;
+  }
+  const startPosition = {
+    character: 0,
+    line: event.position.line,
+  };
+  const endPosition = event.position;
+  const startOffset = document.offsetAt(startPosition);
+  const endOffset = document.offsetAt(endPosition);
+  return document.getText().substring(startOffset, endOffset);
 }
