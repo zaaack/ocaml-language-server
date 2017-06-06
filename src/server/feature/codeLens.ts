@@ -9,6 +9,8 @@ const annotateKinds = new Set<number>([
 
 export default function(session: Session): server.RequestHandler<server.CodeLensParams, types.CodeLens[], void> {
   return async ({ textDocument }, token) => {
+    if (!session.settings.reason.codelens.enabled) return [];
+
     const languages: Set<string> = new Set(session.settings.reason.server.languages);
     if (languages.size < 1) return [];
 

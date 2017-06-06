@@ -6,6 +6,7 @@ import * as types from "./types";
 export interface ISettings {
   reason: {
     codelens: {
+      enabled: boolean;
       unicode: boolean;
     };
     debounce: {
@@ -29,6 +30,7 @@ export namespace ISettings {
   export const defaults: ISettings = {
     reason: {
       codelens: {
+        enabled: true,
         unicode: true,
       },
       debounce: {
