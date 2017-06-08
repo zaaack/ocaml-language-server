@@ -3,9 +3,6 @@ import { merlin, types } from "../../shared";
 import { TextDocumentContentChangeEvent } from "../../shared/types";
 import Session from "./index";
 
-/**
- * Document synchronizer for the session.
- */
 export default class Synchronizer implements rpc.Disposable {
   private session: Session;
   private textDocuments: Map<string, types.TextDocument> = new Map();

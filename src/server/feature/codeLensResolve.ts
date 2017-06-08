@@ -3,7 +3,7 @@ import { types } from "../../shared";
 import * as command from "../command";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<types.CodeLens, types.CodeLens, void> {
+export default function (session: Session): server.RequestHandler<types.CodeLens, types.CodeLens, void> {
   return async (event, token) => {
     const data: types.SymbolInformation & { event: server.TextDocumentPositionParams, fileKind: "ml" | "re" } = event.data;
     const itemType = await command.getType(session, data.event, 1);

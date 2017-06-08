@@ -3,7 +3,7 @@ import { ISettings, merlin } from "../../shared";
 import capabilities from "../capabilities";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.InitializeParams, server.InitializeResult, server.InitializeError> {
+export default function (session: Session): server.RequestHandler<server.InitializeParams, server.InitializeResult, server.InitializeError> {
   return async (event) => {
     session.initConf = event;
     session.settings.reason = event.initializationOptions ? event.initializationOptions : ISettings.defaults.reason;

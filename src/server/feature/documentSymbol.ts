@@ -3,7 +3,7 @@ import * as server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.DocumentSymbolParams, types.SymbolInformation[], void> {
+export default function (session: Session): server.RequestHandler<server.DocumentSymbolParams, types.SymbolInformation[], void> {
   return async (event, token) => {
     const request = merlin.Query.outline();
     const response = await session.merlin.query(request, event.textDocument, Infinity);

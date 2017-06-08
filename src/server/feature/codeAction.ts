@@ -2,7 +2,7 @@ import * as server from "vscode-languageserver";
 import { types } from "../../shared";
 import Session from "../session";
 
-export default function(_: Session): server.RequestHandler<server.CodeActionParams, types.Command[], void> {
+export default function (_: Session): server.RequestHandler<server.CodeActionParams, types.Command[], void> {
   return async ({ context, textDocument: { uri } }) => {
     const actions: types.Command[] = [];
     let matches: null | RegExpMatchArray = null;

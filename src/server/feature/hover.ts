@@ -3,7 +3,7 @@ import { parser, types } from "../../shared";
 import * as command from "../command";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.TextDocumentPositionParams, types.Hover, void> {
+export default function (session: Session): server.RequestHandler<server.TextDocumentPositionParams, types.Hover, void> {
   return async (event, token) => {
     const position = { position: event.position, uri: event.textDocument.uri };
     const word = await command.getWordAtPosition(session, position);

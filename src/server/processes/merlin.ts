@@ -35,7 +35,7 @@ export default class Merlin implements rpc.Disposable {
         this.session.connection.window.showWarningMessage(`Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`);
         this.dispose();
         throw error;
-     }
+      }
     });
 
     this.process.stderr.on("data", (data: string) => {

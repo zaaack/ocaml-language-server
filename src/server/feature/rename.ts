@@ -3,7 +3,7 @@ import { merlin, types } from "../../shared";
 import * as command from "../command";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.RenameParams, types.WorkspaceEdit, void> {
+export default function (session: Session): server.RequestHandler<server.RenameParams, types.WorkspaceEdit, void> {
   return async (event, token) => {
     const occurrences = await command.getOccurrences(session, event);
     if (token.isCancellationRequested) return { changes: {} };

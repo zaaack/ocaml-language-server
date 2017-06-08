@@ -32,4 +32,4 @@ export {
   references,
   rename,
   workspaceSymbol,
-}
+};

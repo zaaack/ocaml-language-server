@@ -1,14 +1,10 @@
 import { merlin, types } from "../../shared";
 import * as command from "../command";
 import Session from "./index";
-// import * as path from "path";
 import Loki = require("lokijs");
 import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 
-/**
- * Index for outline metadata
- */
 export default class Indexer implements rpc.Disposable {
   public populated: boolean = false;
   private readonly db: Loki = new Loki(".vscode.reasonml.loki");
@@ -18,7 +14,7 @@ export default class Indexer implements rpc.Disposable {
   constructor(session: Session) {
     this.session = session;
     this.symbols = this.db.addCollection<types.SymbolInformation>("symbols", {
-      indices: [ "name" ],
+      indices: ["name"],
     });
     return this;
   }
@@ -47,7 +43,7 @@ export default class Indexer implements rpc.Disposable {
       item.containerName = this.session.environment.relativize(id);
       this.symbols.insert(item);
     }
-  };
+  }
 
   public async initialize(): Promise<void> {
     return;

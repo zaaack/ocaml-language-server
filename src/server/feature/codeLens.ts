@@ -44,8 +44,8 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
         const position = types.Position.create(line, character);
         const event = { position, textDocument };
         // reason requires computing some offsets first
-        if ((null != (textLine = textDoc.getText().substring(textDoc.offsetAt(start), textDoc.offsetAt(end)))) // tslint:disable-line no-conditional-assignment
-        &&  (null != (matches = textLine.match(/^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m)))) { // tslint:disable-line no-conditional-assignment
+        if ((null != (textLine = textDoc.getText().substring(textDoc.offsetAt(start), textDoc.offsetAt(end))))
+        &&  (null != (matches = textLine.match(/^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m)))) {
           event.position.character +=              matches[1].length;
           event.position.character +=              matches[2].length;
           event.position.character += matches[3] ? matches[3].length : 0;

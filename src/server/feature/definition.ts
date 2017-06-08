@@ -2,7 +2,7 @@ import * as server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.TextDocumentPositionParams, types.Definition, void> {
+export default function (session: Session): server.RequestHandler<server.TextDocumentPositionParams, types.Definition, void> {
   return async (event, token) => {
     const find = async (kind: "ml" | "mli"): Promise<null | types.Location> => { // tslint:disable-line arrow-parens
       const request = merlin.Query.locate(null, kind).at(merlin.Position.fromCode(event.position));

@@ -20,4 +20,4 @@ export {
   getTextDocument,
   getType,
   getWordAtPosition,
-}
+};

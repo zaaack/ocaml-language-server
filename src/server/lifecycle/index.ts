@@ -6,4 +6,4 @@ export {
   exit,
   initialize,
   shutdown,
-}
+};

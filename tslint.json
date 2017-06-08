@@ -3,6 +3,9 @@
   "rules": {
     "curly": false,
     "max-line-length": [false],
-    "no-namespace": false
+    "no-conditional-assignment": false,
+    "no-empty-interface": false,
+    "no-namespace": false,
+    "space-before-function-paren": false
   }
 }

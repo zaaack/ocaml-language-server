@@ -10,11 +10,8 @@ import Synchronizer from "./synchronizer";
 
 export {
   Environment,
-}
+};
 
-/**
- * Manager for the session. Launched on client connection.
- */
 export default class Session implements rpc.Disposable {
   public initConf: server.InitializeParams;
   public settings: ISettings = ({} as any);
