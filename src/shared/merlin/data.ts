@@ -1,6 +1,5 @@
 import * as types from "vscode-languageserver-types";
 import * as ordinal from "./ordinal";
-import * as remote from "../remote";
 
 export namespace Case {
   export type Destruct = [{ end: ordinal.ColumnLine; start: ordinal.ColumnLine }, string];
@@ -89,11 +88,10 @@ export namespace ErrorReport {
       }
     }
   }
-  async function improveMessage(session: any, { uri, range  }: types.Location, original: string): Promise<string> {
+  async function improveMessage(session: any, { uri }: types.Location, original: string): Promise<string> {
     if (original === "Invalid statement") {
-      const location = types.Location.create(uri, range);
-      const text = await session.connection.sendRequest(remote.client.giveText, location);
-      if (text === "=") {
+      const document = session.synchronizer.getText(uri);
+      if (document && document.getText() === "=") {
         return "Functions must be defined with => instead of the = symbol.";
       }
     }

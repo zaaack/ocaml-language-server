@@ -6,6 +6,7 @@ import Session from "../session";
 export default function(session: Session): server.RequestHandler<server.DocumentFormattingParams, types.TextEdit[], void> {
   return async (event, token) => {
     const itxt = await command.getTextDocument(session, event.textDocument);
+    if (itxt == null) return [];
     const idoc = types.TextDocument.create(event.textDocument.uri, itxt.languageId, itxt.version, itxt.getText());
     if (token.isCancellationRequested) return [];
     let otxt : null | string = null;

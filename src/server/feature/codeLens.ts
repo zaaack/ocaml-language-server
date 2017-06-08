@@ -28,6 +28,7 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
 
     if (response.class !== "return") return []; // new rpc.ResponseError(-1, "onCodeLens: failed", undefined);
     const textDoc = await command.getTextDocument(session, textDocument);
+    if (!textDoc) return [];
     if (token.isCancellationRequested) return [];
 
     const symbols = merlin.Outline.intoCode(response.value, textDocument);
