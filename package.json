@@ -34,12 +34,12 @@
   "devDependencies": {
     "@types/async": "2.0.40",
     "@types/glob": "5.0.30",
-    "@types/lodash": "4.14.64",
+    "@types/lodash": "4.14.65",
     "@types/lokijs": "1.2.30",
-    "@types/node": "7.0.22",
+    "@types/node": "7.0.29",
     "@types/pegjs": "0.10.0",
-    "tslint": "5.3.2",
-    "typescript": "2.3.3"
+    "tslint": "5.4.3",
+    "typescript": "2.3.4"
   },
   "dependencies": {
     "async": "2.4.1",
