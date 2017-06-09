@@ -14,9 +14,10 @@ and [Reason](https://facebook.github.io/reason).
 ### Emacs
 
 See [lsp-mode](https://github.com/emacs-lsp/lsp-mode). Follow the installation
-instructions there then add the following snippet(s) to your `~/.init.el`. You
-will need the `tuareg` package installed and probably other packages like
-`flycheck` and `company-mode` for most of the language server features to work.
+instructions there then add the following snippet(s) to your
+`~/.emacs.d/init.el`. You will need the `tuareg` package installed and probably
+other packages like `flycheck` and `company-mode` for most of the language
+server features to work.
 
 ```elisp
 (lsp-define-stdio-client 'tuareg-mode "ocaml" 'stdio
