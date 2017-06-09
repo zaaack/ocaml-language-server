@@ -13,5 +13,9 @@ export default async function(session: Session, event: server.TextDocumentPositi
   const endPosition = event.position;
   const startOffset = document.offsetAt(startPosition);
   const endOffset = document.offsetAt(endPosition);
-  return document.getText().substring(startOffset, endOffset);
+  const lineContent = document.getText().substring(startOffset, endOffset);
+
+  const pattern = /[A-Za-z_][A-Za-z_'0-9]*(?:\.[A-Za-z_][A-Za-z_'0-9]*)*\.?$/;
+  const match = pattern.exec(lineContent);
+  return match ? match[0] : null;
 }
