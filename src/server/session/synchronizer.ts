@@ -1,11 +1,14 @@
 import * as rpc from "vscode-jsonrpc";
+import { TextDocumentPositionParams } from "vscode-languageserver/lib/main";
 import { merlin, types } from "../../shared";
 import { TextDocumentContentChangeEvent } from "../../shared/types";
+import { getWordAtPosition } from "../command";
 import Session from "./index";
 
 export default class Synchronizer implements rpc.Disposable {
   private session: Session;
   private textDocuments: Map<string, types.TextDocument> = new Map();
+  private eventCache: Map<string, Map<string, any>> = new Map();
 
   constructor(session: Session) {
     this.session = session;
@@ -45,6 +48,8 @@ export default class Synchronizer implements rpc.Disposable {
     });
 
     this.session.connection.onDidChangeTextDocument(async (event): Promise<void> => {
+      this.clearCache();
+
       for (const change of event.contentChanges) {
         if (change && change.range) {
           const oldDocument = this.textDocuments.get(event.textDocument.uri);
@@ -78,6 +83,20 @@ export default class Synchronizer implements rpc.Disposable {
     });
   }
 
+  public getCachedResult(method: string, key: TextDocumentPositionParams): null | any {
+    const methodCache = this.eventCache.get(method);
+    if (methodCache) {
+      return methodCache.get(this.getCacheKey(key));
+    }
+    return null;
+  }
+
+  public addCachedResult(method: string, key: TextDocumentPositionParams, result: any): void {
+    const methodCache = this.eventCache.get(method) || new Map();
+    methodCache.set(this.getCacheKey(key), result);
+    this.eventCache.set(method, methodCache);
+  }
+
   public onDidChangeConfiguration(): void {
     return;
   }
@@ -95,5 +114,15 @@ export default class Synchronizer implements rpc.Disposable {
     const before = oldDocument.getText().substr(0, startOffset);
     const after = oldDocument.getText().substr(endOffset);
     return `${before}${change.text}${after}`;
+  }
+
+  private getCacheKey(from: TextDocumentPositionParams): string {
+    const position = { position: from.position, uri: from.textDocument.uri };
+    const word = getWordAtPosition(this.session, position);
+    return JSON.stringify(word);
+  }
+
+  private clearCache(): void {
+    this.eventCache = new Map();
   }
 }
