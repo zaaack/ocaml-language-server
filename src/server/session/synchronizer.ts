@@ -48,9 +48,9 @@ export default class Synchronizer implements rpc.Disposable {
       for (const change of event.contentChanges) {
         if (change && change.range) {
           const oldDocument = this.textDocuments.get(event.textDocument.uri);
-          if (oldDocument) {
+          if (null != oldDocument) {
             const newContent = this.applyChangesToTextDocumentContent(oldDocument, change);
-            if (newContent) {
+            if (null != newContent) {
               this.textDocuments.set(
                 event.textDocument.uri,
                 types.TextDocument.create(
@@ -82,18 +82,18 @@ export default class Synchronizer implements rpc.Disposable {
     return;
   }
 
-  public getTextDocument(uri: string): types.TextDocument | undefined {
-    return this.textDocuments.get(uri);
+  public getTextDocument(uri: string): null | types.TextDocument {
+    const document = this.textDocuments.get(uri);
+    if (null == document) return null;
+    return document;
   }
 
-  private applyChangesToTextDocumentContent(oldDocument: types.TextDocument, change: TextDocumentContentChangeEvent): string | null {
-    if (!change.range) {
-      return null;
-    }
+  private applyChangesToTextDocumentContent(oldDocument: types.TextDocument, change: TextDocumentContentChangeEvent): null | string {
+    if (null == change.range) return null;
     const startOffset = oldDocument.offsetAt(change.range.start);
     const endOffset = oldDocument.offsetAt(change.range.end);
     const before = oldDocument.getText().substr(0, startOffset);
     const after = oldDocument.getText().substr(endOffset);
-    return before + change.text + after;
+    return `${before}${change.text}${after}`;
   }
 }

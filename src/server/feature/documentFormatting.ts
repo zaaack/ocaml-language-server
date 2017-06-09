@@ -5,21 +5,21 @@ import Session from "../session";
 
 export default function (session: Session): server.RequestHandler<server.DocumentFormattingParams, types.TextEdit[], void> {
   return async (event, token) => {
-    const itxt = await command.getTextDocument(session, event.textDocument);
-    if (itxt == null) return [];
-    const idoc = types.TextDocument.create(event.textDocument.uri, itxt.languageId, itxt.version, itxt.getText());
+    const result = await command.getTextDocument(session, event.textDocument);
+    if (null == result) return [];
+    const document = types.TextDocument.create(event.textDocument.uri, result.languageId, result.version, result.getText());
     if (token.isCancellationRequested) return [];
     let otxt: null | string = null;
-    if (idoc.languageId === "ocaml") otxt = await command.getFormatted.ocpIndent(session, idoc);
-    if (idoc.languageId === "reason") otxt = await command.getFormatted.refmt(session, idoc);
+    if (document.languageId === "ocaml") otxt = await command.getFormatted.ocpIndent(session, document);
+    if (document.languageId === "reason") otxt = await command.getFormatted.refmt(session, document);
     if (token.isCancellationRequested) return [];
     if (otxt == null) return [];
     const edits: types.TextEdit[] = [];
     edits.push(
       types.TextEdit.replace(
         types.Range.create(
-          idoc.positionAt(0),
-          idoc.positionAt(itxt.getText().length)),
+          document.positionAt(0),
+          document.positionAt(result.getText().length)),
         otxt));
     return edits;
   };

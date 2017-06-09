@@ -7,19 +7,12 @@ function isWhitespace(str: string): boolean {
 
 export default async function(session: Session, event: types.ILocatedPosition): Promise<string> {
   const textDocument = session.synchronizer.getTextDocument(event.uri);
-  if (!textDocument) {
-    return "";
-  }
-
+  if (null == textDocument) return "";
   const text = textDocument.getText();
   const offset = textDocument.offsetAt(event.position);
-  let startIndex = offset;
-  while (startIndex >= 0 && !isWhitespace(text[startIndex])) {
-    startIndex--;
-  }
-  let endIndex = offset;
-  while (endIndex < text.length && !isWhitespace(text[endIndex])) {
-    endIndex++;
-  }
-  return text.substring(startIndex, endIndex);
+  let start = offset;
+  while (0 < start && !isWhitespace(text[start])) start--;
+  let end = offset;
+  while (end < text.length && !isWhitespace(text[end])) end++;
+  return text.substring(start, end);
 }

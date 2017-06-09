@@ -43,9 +43,7 @@ export default class Analyzer implements rpc.Disposable {
     return async (id) => {
       if (syncKind === server.TextDocumentSyncKind.Full) {
         const document = await command.getTextDocument(this.session, id);
-        if (document) {
-          await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
-        }
+        if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
       }
       const errors = await this.session.merlin.query(merlin.Query.errors(), id);
       if (errors.class !== "return") return;

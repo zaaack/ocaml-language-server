@@ -27,8 +27,8 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
     if (token.isCancellationRequested) return [];
 
     if (response.class !== "return") return []; // new rpc.ResponseError(-1, "onCodeLens: failed", undefined);
-    const textDoc = await command.getTextDocument(session, textDocument);
-    if (!textDoc) return [];
+    const document = await command.getTextDocument(session, textDocument);
+    if (null == document) return [];
     if (token.isCancellationRequested) return [];
 
     const symbols = merlin.Outline.intoCode(response.value, textDocument);
@@ -44,7 +44,7 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
         const position = types.Position.create(line, character);
         const event = { position, textDocument };
         // reason requires computing some offsets first
-        if ((null != (textLine = textDoc.getText().substring(textDoc.offsetAt(start), textDoc.offsetAt(end))))
+        if ((null != (textLine = document.getText().substring(document.offsetAt(start), document.offsetAt(end))))
         &&  (null != (matches = textLine.match(/^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m)))) {
           event.position.character +=              matches[1].length;
           event.position.character +=              matches[2].length;

@@ -56,7 +56,7 @@ export default class Indexer implements rpc.Disposable {
       for (const id of modules) {
         if (/\.(ml|re)i$/.test(id.uri)) continue;
         const document = await command.getTextDocument(this.session, id);
-        if (document) {
+        if (null != document) {
           await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
           await this.refreshSymbols(id);
         }
