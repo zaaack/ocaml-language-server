@@ -26,6 +26,14 @@ will need the `tuareg` package installed and probably other packages like
 (add-hook 'tuareg-mode-hook #'lsp-mode)
 ```
 
+```
+(lsp-define-stdio-client 'reason-mode "reason" 'stdio
+	#'(lambda () default-directory)
+	"OCaml Language Server"
+	'("ocaml-language-server" "--stdio"))
+(add-hook 'reason-mode-hook #'lsp-mode)
+```
+
 ### VS Code
 
 See [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml). The
