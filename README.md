@@ -9,21 +9,40 @@ protocol](https://github.com/Microsoft/language-server-protocol) for OCaml and
 related languages like [BuckleScript](http://bloomberg.github.io/bucklescript)
 and [Reason](https://facebook.github.io/reason).
 
-## Server Clients
+## Usage
 
-For a full-featured client for this server see
-[vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml).
+### Emacs
 
-The language server protocol is still quite new but many other clients are being
-developed:
+See [Emacs](https://github.com/emacs-lsp/lsp-mode). Follow the installation
+instructions there and add the following to your `~/.init.el`. You will need the
+`tuareg` package installed and probably other packages like `flycheck` and
+`company-mode` for most of the language server features to work.
 
-- [atom-languageclient](https://github.com/OmniSharp/atom-languageclient)
-- [emacs-lsp](https://github.com/sourcegraph/emacs-lsp)
-- [sublime-lsp](https://github.com/sourcegraph/sublime-lsp)
-- [nvim-langserver-shim](https://github.com/tjdevries/nvim-langserver-shim)
-- [vim-lsp](https://github.com/prabirshrestha/vim-lsp)
+```elisp
+(lsp-define-stdio-client 'tuareg-mode "ocaml" 'stdio
+	#'(lambda () default-directory)
+	"OCaml Language Server"
+	'("ocaml-language-server" "--stdio"))
+(add-hook 'tuareg-mode-hook #'lsp-mode)
+```
 
-NOTE: Most of these clients have not yet been tested with the server.
+### VS Code
+
+See [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml). The
+OCaml Language Server comes bundled with this VS Code extension and no
+additional configuration steps are necessary.
+
+### Other Editors
+
+For other editors, see the following list of language client packages. Note that
+the OCaml language server has not been tested extensively with other editors
+yet. If you try to use one of these packages and encounter a problem, please
+open an issue about it.
+
+- [Atom](https://github.com/atom/atom-languageclient)
+- [Sublime Text](https://github.com/sourcegraph/sublime-lsp)
+- [Neovim](https://github.com/neovim/neovim/pull/6856)
+- [Vim](https://github.com/prabirshrestha/vim-lsp)
 
 ## Server Capabilities
 
@@ -56,7 +75,7 @@ The server can be installed with npm:
 npm install -g ocaml-language-server
 ```
 
-## Launching the Server
+## Launching the Server Manually
 
 The server can be launched in the following ways:
 
@@ -71,7 +90,7 @@ For node-based clients like
 is the most efficient approach. Clients written in other languages should use
 `--stdio` or `--socket`.
 
-## Building the server
+## Building the Server
 
 Execute the following steps:
 
