@@ -9,9 +9,16 @@ export async function ocpIndent(session: Session, doc: types.TextDocument): Prom
   ocpIndent.stdin.end();
   const otxt = await new Promise<string>((resolve, reject) => {
     let buffer = "";
-    ocpIndent.stdout.on("error", (error: Error) => reject(error));
+    ocpIndent.on("error", (error: Error) => reject(error));
+    ocpIndent.on("exit", (code: number) => {
+      if (code !== 0) {
+        session.connection.window.showErrorMessage(`ocp-indent failed with exit code ${code}`);
+        reject(new Error(`Failed with code ${code}`));
+      } else {
+        resolve(buffer);
+      }
+    });
     ocpIndent.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
-    ocpIndent.stdout.on("end", () => resolve(buffer));
   });
   ocpIndent.unref();
   return otxt;
@@ -29,7 +36,15 @@ export async function ocpIndentRange(session: Session, doc: types.TextDocument, 
   ocpIndent.stdin.end();
   const output = await new Promise<string>((resolve, reject) => {
     let buffer = "";
-    ocpIndent.stdout.on("error", (error: Error) => reject(error));
+    ocpIndent.on("error", (error: Error) => reject(error));
+    ocpIndent.on("exit", (code: number) => {
+      if (code !== 0) {
+        session.connection.window.showErrorMessage(`ocp-indent failed with exit code ${code}`);
+        reject(new Error(`Failed with code ${code}`));
+      } else {
+        resolve(buffer);
+      }
+    });
     ocpIndent.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
     ocpIndent.stdout.on("end", () => resolve(buffer));
   });

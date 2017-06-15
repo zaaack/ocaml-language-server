@@ -18,7 +18,7 @@ export default class Environment implements rpc.Disposable {
     return uri.substr(fileSchemeLength);
   }
 
-  private readonly preamble: null | string = null;
+  private preamble: null | string = null;
   private readonly session: Session;
 
   constructor(session: Session) {
@@ -59,7 +59,7 @@ export default class Environment implements rpc.Disposable {
     try {
       // Add preamble to run dependencyEnv, but only if it exists
       const dependencyEnvScript = `${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv`;
-      (this as any).preamble = `[ ! -f ${dependencyEnvScript} ] || eval $(${dependencyEnvScript}) && `;
+      this.preamble = `[ ! -f ${dependencyEnvScript} ] || eval $(${dependencyEnvScript}) && `;
     } catch (err) {
       //
     }

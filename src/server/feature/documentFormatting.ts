@@ -10,8 +10,15 @@ export default function (session: Session): server.RequestHandler<server.Documen
     const document = types.TextDocument.create(event.textDocument.uri, result.languageId, result.version, result.getText());
     if (token.isCancellationRequested) return [];
     let otxt: null | string = null;
-    if (document.languageId === "ocaml") otxt = await command.getFormatted.ocpIndent(session, document);
-    if (document.languageId === "reason") otxt = await command.getFormatted.refmt(session, document);
+    if (document.languageId === "ocaml") {
+      otxt = await command.getFormatted.ocpIndent(session, document);
+    } else if (document.languageId === "reason") {
+      otxt = await command.getFormatted.refmt(session, document);
+    } else {
+      session.connection.window.showErrorMessage(
+        `Can't format this file: its language ID is ${document.languageId}, which is not "ocaml" or "reason".`,
+      );
+    }
     if (token.isCancellationRequested) return [];
     if (otxt == null) return [];
     const edits: types.TextEdit[] = [];
