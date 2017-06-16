@@ -6,7 +6,7 @@ A language server for OCaml and related languages
 
 This is an implementation of the [language server
 protocol](https://github.com/Microsoft/language-server-protocol) for OCaml and
-related languages like [BuckleScript](http://bloomberg.github.io/bucklescript)
+related languages like [BuckleScript](http://bucklescript.github.io/bucklescript)
 and [Reason](https://facebook.github.io/reason).
 
 ## Usage
