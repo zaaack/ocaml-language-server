@@ -57,6 +57,7 @@ open an issue about it.
 
 - [x] OCaml support
 - [x] Reason support
+- [x] compiler diagnostics
 - [x] incremental document synchronization
 - [x] code action provider
 - [x] code lens provider
