@@ -3,6 +3,7 @@ import * as childProcess from "child_process";
 import * as _ from "lodash";
 import * as readline from "readline";
 import * as rpc from "vscode-jsonrpc";
+import Uri from "vscode-uri";
 import { merlin, types } from "../../shared";
 import Session from "../session";
 
@@ -26,7 +27,9 @@ export default class Merlin implements rpc.Disposable {
 
   public initialize(): void {
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
-    this.process = this.session.environment.spawn(ocamlmerlin);
+    const cwd = this.session.initConf.rootUri || this.session.initConf.rootPath;
+    const options = cwd ? { cwd: Uri.parse(cwd).fsPath } : {};
+    this.process = this.session.environment.spawn(ocamlmerlin, [], options);
 
     this.process.on("error", (error: Error & { code: string }) => {
       if (error.code === "ENOENT") {

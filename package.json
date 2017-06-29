@@ -50,6 +50,7 @@
     "vscode-jsonrpc": "3.2.0",
     "vscode-languageclient": "3.2.2",
     "vscode-languageserver": "3.2.2",
-    "vscode-languageserver-types": "3.2.0"
+    "vscode-languageserver-types": "3.2.0",
+    "vscode-uri": "1.0.1"
   }
 }
