@@ -36,19 +36,14 @@ export default class Synchronizer implements rpc.Disposable {
 
     this.session.connection.onDidChangeTextDocument(async (event): Promise<void> => {
       for (const change of event.contentChanges) {
-
         if (!change) continue;
-
         const oldDocument = this.textDocuments.get(event.textDocument.uri);
-
         if (!oldDocument) continue;
-
         if (!change.range) {
           await this.doFullSync(event.textDocument, oldDocument.languageId, change.text);
         } else {
           await this.doIncrementalSync(oldDocument, event.textDocument, change);
         }
-
         this.session.analyzer.refreshDebounced(event.textDocument);
       }
     });
