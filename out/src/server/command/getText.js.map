@@ -1,0 +1,1 @@
+{"version":3,"file":"getText.js","sourceRoot":"","sources":["../../../../src/server/command/getText.ts"],"names":[],"mappings":";;;;;;;;;;AAGA,mBAA+B,OAAgB,EAAE,KAAqB;;QACpE,MAAM,YAAY,GAAG,OAAO,CAAC,YAAY,CAAC,eAAe,CAAC,KAAK,CAAC,GAAG,CAAC,CAAC;QACrE,EAAE,CAAC,CAAC,IAAI,IAAI,YAAY,CAAC;YAAC,MAAM,CAAC,IAAI,CAAC;QACtC,MAAM,CAAC,YAAY,CAAC,OAAO,EAAE,CAAC;IAChC,CAAC;CAAA;AAJD,4BAIC"}
