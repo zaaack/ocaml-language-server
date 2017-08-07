@@ -40,7 +40,6 @@ export default class Session implements rpc.Disposable {
   }
 
   public async initialize(): Promise<void> {
-    await this.environment.initialize();
     await this.merlin.initialize();
     await this.indexer.initialize();
     await this.synchronizer.initialize();

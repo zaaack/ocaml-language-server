@@ -18,7 +18,6 @@ export default class Environment implements rpc.Disposable {
     return uri.substr(fileSchemeLength);
   }
 
-  private readonly preamble: null | string = null;
   private readonly session: Session;
 
   constructor(session: Session) {
@@ -30,10 +29,6 @@ export default class Environment implements rpc.Disposable {
     return;
   }
 
-  public async initialize(): Promise<void> {
-    await this.detectDependencyEnv();
-  }
-
   public relativize(id: types.TextDocumentIdentifier): string | undefined {
     const rootPath = this.workspaceRoot();
     if (!rootPath) return;
@@ -41,28 +36,10 @@ export default class Environment implements rpc.Disposable {
   }
 
   public spawn(command: string, args?: string[], options?: SpawnOptions): ChildProcess {
-    let cmd = "";
-    if (this.preamble != null) {
-      cmd = `${this.preamble}${command} ${args ? args.join(" ") : ""}`;
-      return childProcess.spawn("sh", ["-c", cmd], options);
-    } else {
-      cmd = command;
-      return childProcess.spawn(command, args, options);
-    }
+    return childProcess.spawn(command, args, options);
   }
 
   public workspaceRoot(): string | null | undefined {
     return this.session.initConf.rootPath;
-  }
-
-  private async detectDependencyEnv(): Promise<void> {
-    try {
-      // Add preamble to run dependencyEnv, but only if it exists
-      const dependencyEnvScript = `${this.session.environment.workspaceRoot()}/node_modules/.bin/dependencyEnv`;
-      (this as any).preamble = `[ ! -f ${dependencyEnvScript} ] || eval $(${dependencyEnvScript}) && `;
-    } catch (err) {
-      //
-    }
-    // FIXME: should also reflect this in the status item
   }
 }
