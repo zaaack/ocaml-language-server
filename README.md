@@ -49,7 +49,7 @@ yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
 - [Atom](https://github.com/atom/atom-languageclient)
-- [Sublime Text](https://github.com/sourcegraph/sublime-lsp)
+- [Sublime Text](https://github.com/tomv564/LSP)
 - [Neovim](https://github.com/neovim/neovim/pull/6856)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
