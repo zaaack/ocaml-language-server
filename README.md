@@ -11,10 +11,6 @@ and [Reason](https://facebook.github.io/reason).
 
 ## Usage
 
-### *** NOTE ***
-
-If you are attempting to use this server with a client other than [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml), it is ***highly recommended*** to build the server from the `master` branch until the next release (`1.0.0`). Version `0.2.0` of the server relied on several custom RPC messages which clients were required to implement in order to fully interface with the server. These custom messages are no longer used in the `master` branch and future releases.
-
 ### Emacs
 
 See [lsp-mode](https://github.com/emacs-lsp/lsp-mode). Follow the installation
