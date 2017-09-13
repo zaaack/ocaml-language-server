@@ -3,6 +3,7 @@ import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
 import * as command from "../command";
+import * as processes from "../processes";
 import Session from "./index";
 
 export default class Analyzer implements rpc.Disposable {
@@ -47,8 +48,41 @@ export default class Analyzer implements rpc.Disposable {
       }
       const errors = await this.session.merlin.query(merlin.Query.errors(), id);
       if (errors.class !== "return") return;
-      const diagnostics: types.Diagnostic[] = [];
+      let diagnostics: types.Diagnostic[] = [];
       for (const report of errors.value) diagnostics.push(await merlin.IErrorReport.intoCode(this.session, id, report));
+
+      // TEMP EXPERIMENT
+      const bsb = new processes.BuckleScript(this.session).process;
+      const bsbout = await new Promise<string>((resolve, reject) => {
+        let buffer = "";
+        bsb.stdout.on("error", (error: Error) => reject(error));
+        bsb.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
+        bsb.stdout.on("end", () => resolve(buffer));
+      });
+      const bsbRegexp = /We've found a bug for you!\s*(\S*)\s*(\d+).+\s*([\S\s]*)ninja: build stopped: subcommand failed\./;
+      const match = bsbRegexp.exec(bsbout);
+      if (match) {
+        diagnostics = [
+          {
+            code: "",
+            message: match[3],
+            range: {
+              end: {
+                character: 24, // TODO
+                line: Number(match[2]) - 1,
+              },
+              start: {
+                character: 13, // TODO
+                line: Number(match[2]) - 1,
+              },
+            },
+            severity: 1,
+            source: "bucklescript",
+          },
+        ];
+      }
+      // END - TEMP EXPERIMENT
+
       this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
     };
   }
