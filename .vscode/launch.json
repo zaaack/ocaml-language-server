@@ -2,12 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+			"name": "Attach to Server",
       "type": "node",
       "request": "attach",
-      "name": "Attach to Process",
-      "outDir": "${workspaceRoot}/out/src",
-      "port": 6004,
-      "sourceMaps": true
+			"port": 6004,
+      "sourceMaps": true,
+  		"outFiles": [
+				"${workspaceRoot}/out/src/**/*.js"
+			]
     },
     {
       "type": "node",
