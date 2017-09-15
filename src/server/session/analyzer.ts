@@ -48,8 +48,9 @@ export default class Analyzer implements rpc.Disposable {
       }
       const errors = await this.session.merlin.query(merlin.Query.errors(), id);
       if (errors.class !== "return") return;
-      let diagnostics: types.Diagnostic[] = [];
+      const diagnostics: types.Diagnostic[] = [];
       for (const report of errors.value) diagnostics.push(await merlin.IErrorReport.intoCode(this.session, id, report));
+      // this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
 
       // TEMP EXPERIMENT
       const bsb = new processes.BuckleScript(this.session).process;
@@ -73,7 +74,7 @@ export default class Analyzer implements rpc.Disposable {
         const startIndex = firstMatch ? firstMatch.index : 0;
         const secondMatch = ansiRegex.exec(fullLine);
         const endIndex = secondMatch ? secondMatch.index : 0;
-        const message = errorMatch[4];
+        const message = errorMatch[4].replace(ansiRegex, "").replace(/\n  /g, "\n");
 
         const newDiagnostic: types.Diagnostic = {
           code: "",
@@ -99,8 +100,6 @@ export default class Analyzer implements rpc.Disposable {
         this.session.connection.sendDiagnostics({ diagnostics: bsbAllDiagnostics[fileUri], uri: fileUri });
       });
       // END - TEMP EXPERIMENT
-
-      // this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
     };
   }
 }
