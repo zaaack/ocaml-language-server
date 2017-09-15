@@ -53,37 +53,54 @@ export default class Analyzer implements rpc.Disposable {
 
       // TEMP EXPERIMENT
       const bsb = new processes.BuckleScript(this.session).process;
-      const bsbout = await new Promise<string>((resolve, reject) => {
+      const bsbdata = await new Promise<string>((resolve, reject) => {
         let buffer = "";
         bsb.stdout.on("error", (error: Error) => reject(error));
         bsb.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
         bsb.stdout.on("end", () => resolve(buffer));
       });
-      const bsbRegexp = /We've found a bug for you!\s*(\S*)\s*(\d+).+\s*([\S\s]*)ninja: build stopped: subcommand failed\./;
-      const match = bsbRegexp.exec(bsbout);
-      if (match) {
-        diagnostics = [
-          {
-            code: "",
-            message: match[3],
-            range: {
-              end: {
-                character: 24, // TODO
-                line: Number(match[2]) - 1,
-              },
-              start: {
-                character: 13, // TODO
-                line: Number(match[2]) - 1,
-              },
+
+      const bsbAllDiagnostics: { [key: string]: types.Diagnostic[] } = {};
+
+      const reErrors = /We've found a bug for you!.+?\n\s*\x1b\[[0-9;]*?m(\S*)\x1b\[[0-9;]*?m\s*?(?:.|\n)*?\x1b\[[0-9;]*?m(\d*)\x1b\[[0-9;]*?m.*? \│ \x1b\[[0-9;]*?m(.*?)\n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
+      let errorMatch;
+      while (errorMatch = reErrors.exec(bsbdata)) {
+        const fileUri = "file://" + errorMatch[1];
+        const lineNumber = Number(errorMatch[2]) - 1;
+        const fullLine = errorMatch[3];
+        const ansiRegex = /\x1b\[[0-9;]*?m/g;
+        const firstMatch = ansiRegex.exec(fullLine);
+        const startIndex = firstMatch ? firstMatch.index : 0;
+        const secondMatch = ansiRegex.exec(fullLine);
+        const endIndex = secondMatch ? secondMatch.index : 0;
+        const message = errorMatch[4];
+
+        const newDiagnostic: types.Diagnostic = {
+          code: "",
+          message,
+          range: {
+            end: {
+              character: endIndex,
+              line: lineNumber,
             },
-            severity: 1,
-            source: "bucklescript",
+            start: {
+              character: startIndex,
+              line: lineNumber,
+            },
           },
-        ];
+          severity: 1,
+          source: "bucklescript",
+        };
+
+        if (!bsbAllDiagnostics[fileUri]) { bsbAllDiagnostics[fileUri] = []; }
+        bsbAllDiagnostics[fileUri].push(newDiagnostic);
       }
+      Object.keys(bsbAllDiagnostics).forEach((fileUri) => {
+        this.session.connection.sendDiagnostics({ diagnostics: bsbAllDiagnostics[fileUri], uri: fileUri });
+      });
       // END - TEMP EXPERIMENT
 
-      this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
+      // this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
     };
   }
 }
