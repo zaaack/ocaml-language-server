@@ -63,30 +63,28 @@ export default class Analyzer implements rpc.Disposable {
 
       const bsbAllDiagnostics: { [key: string]: types.Diagnostic[] } = {};
 
-      const reErrors = /We've found a bug for you!.+?\n\s*\x1b\[[0-9;]*?m(\S*)\x1b\[[0-9;]*?m\s*?(?:.|\n)*?\x1b\[[0-9;]*?m(\d*)\x1b\[[0-9;]*?m.*? \│ \x1b\[[0-9;]*?m(.*?)\n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
+      const reErrors = /We've found a bug for you!\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
       let errorMatch;
+
       while (errorMatch = reErrors.exec(bsbdata)) {
         const fileUri = "file://" + errorMatch[1];
-        const lineNumber = Number(errorMatch[2]) - 1;
-        const fullLine = errorMatch[3];
-        const ansiRegex = /\x1b\[[0-9;]*?m/g;
-        const firstMatch = ansiRegex.exec(fullLine);
-        const startIndex = firstMatch ? firstMatch.index : 0;
-        const secondMatch = ansiRegex.exec(fullLine);
-        const endIndex = secondMatch ? secondMatch.index : 0;
-        const message = errorMatch[4].replace(ansiRegex, "").replace(/\n  /g, "\n");
+        const startLine = Number(errorMatch[2]) - 1;
+        const startCharacter = Number(errorMatch[3]);
+        const endLine = Number(errorMatch[4]) - 1;
+        const endCharacter = Number(errorMatch[5]);
+        const message = errorMatch[6].replace(/\n  /g, "\n");
 
         const newDiagnostic: types.Diagnostic = {
           code: "",
           message,
           range: {
             end: {
-              character: endIndex,
-              line: lineNumber,
+              character: endCharacter,
+              line: endLine,
             },
             start: {
-              character: startIndex,
-              line: lineNumber,
+              character: startCharacter,
+              line: startLine,
             },
           },
           severity: 1,
