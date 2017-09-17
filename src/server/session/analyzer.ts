@@ -59,7 +59,7 @@ export default class Analyzer implements rpc.Disposable {
           bsbProcess.stdout.on("end", () => resolve(buffer));
         });
 
-        const reErrors = /We've found a bug for you!\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
+        const reErrors = /(?:We've found a bug for you!|Warning number \d+)\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|ninja: build stopped:)/g;
         let errorMatch;
 
         while (errorMatch = reErrors.exec(bsbOutput)) {
@@ -83,7 +83,7 @@ export default class Analyzer implements rpc.Disposable {
                 line: startLine,
               },
             },
-            severity: 1,
+            severity: /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error,
             source: "bucklescript",
           };
 
