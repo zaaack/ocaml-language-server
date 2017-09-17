@@ -59,7 +59,15 @@ export default class Analyzer implements rpc.Disposable {
           bsbProcess.stdout.on("end", () => resolve(buffer));
         });
 
-        const reErrors = /(?:We've found a bug for you!|Warning number \d+)\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|ninja: build stopped:)/g;
+        const reErrors = new RegExp ([
+          /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
+          /(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n/, // Capturing file name and lines / indexes
+          /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
+          /((?:.|\n)*?)\n/, // Capturing error / warning message
+          // TODO: Improve message tail/ending pattern in Bucklescript to ease this detection
+          /(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|ninja: build stopped:)/, // Tail
+        ].map((r) => r.source).join(""), "g");
+
         let errorMatch;
 
         while (errorMatch = reErrors.exec(bsbOutput)) {
