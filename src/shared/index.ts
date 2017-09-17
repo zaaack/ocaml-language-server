@@ -38,6 +38,7 @@ export namespace ISettings {
         linter: 500,
       },
       path: {
+        bsb: "bsb",
         ocamlfind: "ocamlfind",
         ocamlmerlin: "ocamlmerlin",
         opam: "opam",

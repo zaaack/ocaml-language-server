@@ -10,6 +10,7 @@ export default class Analyzer implements rpc.Disposable {
   public refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
   public refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
   private session: Session;
+  private bsbDiagnostics: { [key: string]: types.Diagnostic[] };
 
   constructor(session: Session) {
     this.session = session;
@@ -17,10 +18,12 @@ export default class Analyzer implements rpc.Disposable {
   }
 
   public clear(event: types.TextDocumentIdentifier): void {
-    this.session.connection.sendDiagnostics({
-      diagnostics: [],
-      uri: event.uri,
-    });
+    if (this.bsbDiagnostics[event.uri].length > 0 && this.bsbDiagnostics[event.uri][0].source !== "bucklescript") {
+      this.session.connection.sendDiagnostics({
+        diagnostics: [],
+        uri: event.uri,
+      });
+    }
   }
 
   public dispose(): void {
@@ -42,62 +45,66 @@ export default class Analyzer implements rpc.Disposable {
 
   public refreshWithKind(syncKind: server.TextDocumentSyncKind): (id: types.TextDocumentIdentifier) => Promise<void> {
     return async (id) => {
+
+      this.bsbDiagnostics = {};
+      this.bsbDiagnostics[id.uri] = [];
+
       if (syncKind === server.TextDocumentSyncKind.Full) {
-        const document = await command.getTextDocument(this.session, id);
-        if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
-      }
-      const errors = await this.session.merlin.query(merlin.Query.errors(), id);
-      if (errors.class !== "return") return;
-      const diagnostics: types.Diagnostic[] = [];
-      for (const report of errors.value) diagnostics.push(await merlin.IErrorReport.intoCode(this.session, id, report));
-      // this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
+        this.refreshDebounced.cancel();
+        const bsbProcess = new processes.BuckleScript(this.session).process;
+        const bsbOutput = await new Promise<string>((resolve, reject) => {
+          let buffer = "";
+          bsbProcess.stdout.on("error", (error: Error) => reject(error));
+          bsbProcess.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
+          bsbProcess.stdout.on("end", () => resolve(buffer));
+        });
 
-      // TEMP EXPERIMENT
-      const bsb = new processes.BuckleScript(this.session).process;
-      const bsbdata = await new Promise<string>((resolve, reject) => {
-        let buffer = "";
-        bsb.stdout.on("error", (error: Error) => reject(error));
-        bsb.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
-        bsb.stdout.on("end", () => resolve(buffer));
-      });
+        const reErrors = /We've found a bug for you!\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
+        let errorMatch;
 
-      const bsbAllDiagnostics: { [key: string]: types.Diagnostic[] } = {};
+        while (errorMatch = reErrors.exec(bsbOutput)) {
+          const fileUri = "file://" + errorMatch[1];
+          const startLine = Number(errorMatch[2]) - 1;
+          const startCharacter = Number(errorMatch[3]);
+          const endLine = Number(errorMatch[4]) - 1;
+          const endCharacter = Number(errorMatch[5]);
+          const message = errorMatch[6].replace(/\n  /g, "\n");
 
-      const reErrors = /We've found a bug for you!\n\s*(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n(?:.|\n)*?\n  \n((?:.|\n)*?)\n  \n/g;
-      let errorMatch;
-
-      while (errorMatch = reErrors.exec(bsbdata)) {
-        const fileUri = "file://" + errorMatch[1];
-        const startLine = Number(errorMatch[2]) - 1;
-        const startCharacter = Number(errorMatch[3]);
-        const endLine = Number(errorMatch[4]) - 1;
-        const endCharacter = Number(errorMatch[5]);
-        const message = errorMatch[6].replace(/\n  /g, "\n");
-
-        const newDiagnostic: types.Diagnostic = {
-          code: "",
-          message,
-          range: {
-            end: {
-              character: endCharacter,
-              line: endLine,
+          const bsbDiagnostic: types.Diagnostic = {
+            code: "",
+            message,
+            range: {
+              end: {
+                character: endCharacter,
+                line: endLine,
+              },
+              start: {
+                character: startCharacter,
+                line: startLine,
+              },
             },
-            start: {
-              character: startCharacter,
-              line: startLine,
-            },
-          },
-          severity: 1,
-          source: "bucklescript",
-        };
+            severity: 1,
+            source: "bucklescript",
+          };
 
-        if (!bsbAllDiagnostics[fileUri]) { bsbAllDiagnostics[fileUri] = []; }
-        bsbAllDiagnostics[fileUri].push(newDiagnostic);
+          if (!this.bsbDiagnostics[fileUri]) { this.bsbDiagnostics[fileUri] = []; }
+          this.bsbDiagnostics[fileUri].push(bsbDiagnostic);
+        }
+        Object.keys(this.bsbDiagnostics).forEach((fileUri) => {
+          this.session.connection.sendDiagnostics({ diagnostics: this.bsbDiagnostics[fileUri], uri: fileUri });
+        });
       }
-      Object.keys(bsbAllDiagnostics).forEach((fileUri) => {
-        this.session.connection.sendDiagnostics({ diagnostics: bsbAllDiagnostics[fileUri], uri: fileUri });
-      });
-      // END - TEMP EXPERIMENT
+      if (syncKind !== server.TextDocumentSyncKind.Full || this.bsbDiagnostics[id.uri].length === 0) {
+        if (syncKind === server.TextDocumentSyncKind.Full) {
+          const document = await command.getTextDocument(this.session, id);
+          if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
+        }
+        const errors = await this.session.merlin.query(merlin.Query.errors(), id);
+        if (errors.class !== "return") return;
+        const diagnostics: types.Diagnostic[] = [];
+        for (const report of errors.value) diagnostics.push(await merlin.IErrorReport.intoCode(this.session, id, report));
+        this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
+      }
     };
   }
 }
