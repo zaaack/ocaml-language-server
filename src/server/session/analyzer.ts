@@ -14,6 +14,7 @@ export default class Analyzer implements rpc.Disposable {
 
   constructor(session: Session) {
     this.session = session;
+    this.bsbDiagnostics = {};
     return this;
   }
 
@@ -46,7 +47,12 @@ export default class Analyzer implements rpc.Disposable {
   public refreshWithKind(syncKind: server.TextDocumentSyncKind): (id: types.TextDocumentIdentifier) => Promise<void> {
     return async (id) => {
 
-      this.bsbDiagnostics = {};
+      // Reset state for every run. This currently can hide valid warnings in some cases
+      // as they are not cached, but the alternative (trying to keep track of them) will
+      // probably be worse. See https://github.com/BuckleScript/bucklescript/issues/2024
+      Object.keys(this.bsbDiagnostics).forEach((fileUri) => {
+        this.bsbDiagnostics[fileUri] = [];
+      });
       this.bsbDiagnostics[id.uri] = [];
 
       if (syncKind === server.TextDocumentSyncKind.Full) {
@@ -63,9 +69,9 @@ export default class Analyzer implements rpc.Disposable {
           /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
           /(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n/, // Capturing file name and lines / indexes
           /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
-          /((?:.|\n)*?)\n/, // Capturing error / warning message
+          /((?:.|\n)*?)/, // Capturing error / warning message
           // TODO: Improve message tail/ending pattern in Bucklescript to ease this detection
-          /(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|ninja: build stopped:)/, // Tail
+          /(?:\n\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|\nninja: build stopped:|(?=Warning number \d+)|$)/, // Tail
         ].map((r) => r.source).join(""), "g");
 
         let errorMatch;
@@ -100,9 +106,10 @@ export default class Analyzer implements rpc.Disposable {
         }
         Object.keys(this.bsbDiagnostics).forEach((fileUri) => {
           this.session.connection.sendDiagnostics({ diagnostics: this.bsbDiagnostics[fileUri], uri: fileUri });
+          if (this.bsbDiagnostics[fileUri].length === 0) { delete this.bsbDiagnostics[fileUri]; }
         });
       }
-      if (syncKind !== server.TextDocumentSyncKind.Full || this.bsbDiagnostics[id.uri].length === 0) {
+      if (syncKind !== server.TextDocumentSyncKind.Full || Object.keys(this.bsbDiagnostics).length === 0) {
         if (syncKind === server.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
           if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
