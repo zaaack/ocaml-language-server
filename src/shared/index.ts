@@ -13,6 +13,7 @@ export interface ISettings {
       linter: number;
     };
     path: {
+      bsb: string;
       ocamlfind: string;
       ocamlmerlin: string;
       opam: string;

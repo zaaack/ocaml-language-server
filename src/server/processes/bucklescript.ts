@@ -4,9 +4,9 @@ import Session from "../session";
 export default class BuckleScript {
   public readonly process: ChildProcess;
   constructor(session: Session, argsOpt?: string[]) {
-    const command = "bsb"; // TODO get from some settings;
+    const command = session.settings.reason.path.bsb;
     const args = argsOpt || [
-      "-make-world", // TODO run incrementally?
+      "-make-world",
     ];
     this.process = session.environment.spawn(command, args);
     return this;
