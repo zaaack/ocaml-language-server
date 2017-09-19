@@ -43,21 +43,30 @@ export function parseTypeErrors(bsbOutput: string): { [key: string]: types.Diagn
   const parsedDiagnostics = {};
   const reTypeErrors = new RegExp ([
     /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
-    /(.*), from l(\d*)-c(\d*) to l(\d*)-c(\d*)\n  \n/, // Capturing file name and lines / indexes
+    /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
     /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
     /((?:.|\n)*?)/, // Capturing error / warning message
-    // TODO: Improve message tail/ending pattern in Bucklescript to ease this detection
-    /(?:\n\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building|\nninja: build stopped:|(?=Warning number \d+)|$)/, // Tail
+    /(?:\n\S|(?=Warning number \d+)|$)/, // Tail
   ].map((r) => r.source).join(""), "g");
 
   let errorMatch;
   while (errorMatch = reTypeErrors.exec(bsbOutput)) {
     const fileUri = "file://" + errorMatch[1];
+    // Suppose most complex case, path/to/file.re 10:20-15:5 message
     const startLine = Number(errorMatch[2]) - 1;
     const startCharacter = Number(errorMatch[3]);
-    const endLine = Number(errorMatch[4]) - 1;
-    const endCharacter = Number(errorMatch[5]);
+    let endLine = Number(errorMatch[4]) - 1;
+    let endCharacter = Number(errorMatch[5]);
     const message = errorMatch[6].replace(/\n  /g, "\n");
+    if (isNaN(endLine)) {
+      // Format path/to/file.re 10:20 message
+      endCharacter = startCharacter;
+      endLine = startLine;
+    } else if (isNaN(endCharacter)) {
+      // Format path/to/file.re 10:20-15 message
+      endCharacter = endLine; // Format is L:SC-EC
+      endLine = startLine;
+    }
 
     const diagnostic: types.Diagnostic = {
       code: "",
