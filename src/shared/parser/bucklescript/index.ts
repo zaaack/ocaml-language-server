@@ -46,7 +46,7 @@ export function parseTypeErrors(bsbOutput: string): { [key: string]: types.Diagn
     /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
     /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
     /((?:.|\n)*?)/, // Capturing error / warning message
-    /(?:\n\S|(?=Warning number \d+)|$)/, // Tail
+    /((?=We've found a bug for you!)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Tail
   ].map((r) => r.source).join(""), "g");
 
   let errorMatch;
