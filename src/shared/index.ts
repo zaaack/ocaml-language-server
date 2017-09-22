@@ -12,6 +12,9 @@ export interface ISettings {
     debounce: {
       linter: number;
     };
+    diagnostics: {
+      tool: Array<"merlin" | "bsb" | "both">;
+    };
     path: {
       bsb: string;
       ocamlfind: string;
@@ -36,6 +39,9 @@ export namespace ISettings {
       },
       debounce: {
         linter: 500,
+      },
+      diagnostics: {
+        tool: ["merlin"],
       },
       path: {
         bsb: "bsb",

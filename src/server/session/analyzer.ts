@@ -47,6 +47,11 @@ export default class Analyzer implements rpc.Disposable {
   public refreshWithKind(syncKind: server.TextDocumentSyncKind): (id: types.TextDocumentIdentifier) => Promise<void> {
     return async (id) => {
 
+      const diagnosticTool: Set<string> = new Set(this.session.settings.reason.diagnostics.tool);
+
+      const bsbEnabled = diagnosticTool.has("bsb") || diagnosticTool.has("both");
+      const merlinEnabled = diagnosticTool.has("merlin") || diagnosticTool.has("both");
+
       // Reset state for every run. This currently can hide valid warnings in some cases
       // as they are not cached, but the alternative (trying to keep track of them) will
       // probably be worse. See https://github.com/BuckleScript/bucklescript/issues/2024
@@ -55,7 +60,7 @@ export default class Analyzer implements rpc.Disposable {
       });
       this.bsbDiagnostics[id.uri] = [];
 
-      if (syncKind === server.TextDocumentSyncKind.Full) {
+      if (bsbEnabled && syncKind === server.TextDocumentSyncKind.Full) {
         this.refreshDebounced.cancel();
         const bsbProcess = new processes.BuckleScript(this.session).process;
         const bsbOutput = await new Promise<string>((resolve, reject) => {
@@ -83,7 +88,7 @@ export default class Analyzer implements rpc.Disposable {
         });
       }
 
-      if (syncKind !== server.TextDocumentSyncKind.Full || Object.keys(this.bsbDiagnostics).length === 0) {
+      if (merlinEnabled && syncKind !== server.TextDocumentSyncKind.Full || Object.keys(this.bsbDiagnostics).length === 0) {
         if (syncKind === server.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
           if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
