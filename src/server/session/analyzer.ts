@@ -70,16 +70,10 @@ export default class Analyzer implements rpc.Disposable {
           bsbProcess.stdout.on("end", () => resolve(buffer));
         });
 
-        const syntaxErrorDiagnostics = parser.bucklescript.parseSyntaxErrors(bsbOutput);
-        Object.keys(syntaxErrorDiagnostics).forEach((fileUri) => {
+        const diagnostics = parser.bucklescript.parseErrors(bsbOutput);
+        Object.keys(diagnostics).forEach((fileUri) => {
           if (!this.bsbDiagnostics[fileUri]) { this.bsbDiagnostics[fileUri] = []; }
-          this.bsbDiagnostics[fileUri] = this.bsbDiagnostics[fileUri].concat(syntaxErrorDiagnostics[fileUri]);
-        });
-
-        const typeErrorDiagnostics = parser.bucklescript.parseTypeErrors(bsbOutput);
-        Object.keys(typeErrorDiagnostics).forEach((fileUri) => {
-          if (!this.bsbDiagnostics[fileUri]) { this.bsbDiagnostics[fileUri] = []; }
-          this.bsbDiagnostics[fileUri] = this.bsbDiagnostics[fileUri].concat(typeErrorDiagnostics[fileUri]);
+          this.bsbDiagnostics[fileUri] = this.bsbDiagnostics[fileUri].concat(diagnostics[fileUri]);
         });
 
         Object.keys(this.bsbDiagnostics).forEach((fileUri) => {

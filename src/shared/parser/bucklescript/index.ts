@@ -1,47 +1,62 @@
 import { types } from "../../../shared";
 
-export function parseSyntaxErrors(bsbOutput: string): { [key: string]: types.Diagnostic[] } {
+function createDiagnostic(
+  message: string,
+  startCharacter: number,
+  startLine: number,
+  endCharacter: number,
+  endLine: number,
+  severity: types.DiagnosticSeverity,
+) {
+  return {
+    code: "",
+    message,
+    range: {
+      end: {
+        character: endCharacter,
+        line: endLine,
+      },
+      start: {
+        character: startCharacter,
+        line: startLine,
+      },
+    },
+    severity,
+    source: "bucklescript",
+  };
+}
+
+export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnostic[] } {
   const parsedDiagnostics = {};
 
-  const reSyntaxErrors = new RegExp ([
+  const reLevel1Errors = new RegExp ([
     /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
     /Error: (.*?)\n[\s\S]*?We've found a bug for you!/,
   ].map((r) => r.source).join(""), "g");
 
   let errorMatch;
-  while (errorMatch = reSyntaxErrors.exec(bsbOutput)) {
+  while (errorMatch = reLevel1Errors.exec(bsbOutput)) {
     const fileUri = "file://" + errorMatch[1];
     const startLine = Number(errorMatch[2]) - 1;
     const endLine = Number(errorMatch[2]) - 1;
     const startCharacter = Number(errorMatch[3]);
     const endCharacter = Number(errorMatch[4]);
     const message = errorMatch[5].trim();
+    const severity = /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error;
 
-    const diagnostic: types.Diagnostic = {
-      code: "",
+    const diagnostic: types.Diagnostic = createDiagnostic(
       message,
-      range: {
-        end: {
-          character: endCharacter,
-          line: endLine,
-        },
-        start: {
-          character: startCharacter,
-          line: startLine,
-        },
-      },
-      severity: /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error,
-      source: "bucklescript",
-    };
+      startCharacter,
+      startLine,
+      endCharacter,
+      endLine,
+      severity,
+    );
     if (!parsedDiagnostics[fileUri]) { parsedDiagnostics[fileUri] = []; }
     parsedDiagnostics[fileUri].push(diagnostic);
   }
-  return parsedDiagnostics;
-}
 
-export function parseTypeErrors(bsbOutput: string): { [key: string]: types.Diagnostic[] } {
-  const parsedDiagnostics = {};
-  const reTypeErrors = new RegExp ([
+  const reLevel2Errors = new RegExp ([
     /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
     /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
     /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
@@ -49,8 +64,7 @@ export function parseTypeErrors(bsbOutput: string): { [key: string]: types.Diagn
     /((?=We've found a bug for you!)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Tail
   ].map((r) => r.source).join(""), "g");
 
-  let errorMatch;
-  while (errorMatch = reTypeErrors.exec(bsbOutput)) {
+  while (errorMatch = reLevel2Errors.exec(bsbOutput)) {
     const fileUri = "file://" + errorMatch[1];
     // Suppose most complex case, path/to/file.re 10:20-15:5 message
     const startLine = Number(errorMatch[2]) - 1;
@@ -67,23 +81,16 @@ export function parseTypeErrors(bsbOutput: string): { [key: string]: types.Diagn
       endCharacter = endLine + 1; // Format is L:SC-EC
       endLine = startLine;
     }
+    const severity = /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error;
 
-    const diagnostic: types.Diagnostic = {
-      code: "",
+    const diagnostic: types.Diagnostic = createDiagnostic(
       message,
-      range: {
-        end: {
-          character: endCharacter,
-          line: endLine,
-        },
-        start: {
-          character: startCharacter,
-          line: startLine,
-        },
-      },
-      severity: /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error,
-      source: "bucklescript",
-    };
+      startCharacter,
+      startLine,
+      endCharacter,
+      endLine,
+      severity,
+    );
     if (!parsedDiagnostics[fileUri]) { parsedDiagnostics[fileUri] = []; }
     parsedDiagnostics[fileUri].push(diagnostic);
   }
