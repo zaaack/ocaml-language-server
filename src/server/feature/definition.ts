@@ -1,4 +1,5 @@
 import * as server from "vscode-languageserver";
+import URI from "vscode-uri";
 import { merlin, types } from "../../shared";
 import Session from "../session";
 
@@ -9,7 +10,7 @@ export default function (session: Session): server.RequestHandler<server.TextDoc
       const response = await session.merlin.query(request, event.textDocument);
       if (response.class !== "return" || response.value.pos == null) return null;
       const value = response.value;
-      const uri = value.file ? `file://${value.file}` : event.textDocument.uri;
+      const uri = value.file ? URI.file(value.file).toString() : event.textDocument.uri;
       const position = merlin.Position.intoCode(value.pos);
       const range = types.Range.create(position, position);
       const location = types.Location.create(uri, range);
