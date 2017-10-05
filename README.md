@@ -41,6 +41,12 @@ See [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml). The
 OCaml Language Server comes bundled with this VS Code extension and no
 additional configuration steps are necessary.
 
+### Sublime Text
+
+Install [Sublime Text LSP](https://github.com/tomv564/LSP). For Reason support,
+see the instructions at
+[sublime-reason](https://github.com/reasonml-editor/sublime-reason).
+
 ### Other Editors
 
 For other editors, see the following list of language client packages. Note that
@@ -49,7 +55,6 @@ yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
 - [Atom](https://github.com/atom/atom-languageclient)
-- [Sublime Text](https://github.com/tomv564/LSP)
 - [Neovim](https://github.com/neovim/neovim/pull/6856)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
