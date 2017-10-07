@@ -1,7 +1,8 @@
 import { types } from "../../shared";
 import Session from "../session";
 
-function isWhitespace(str: string): boolean {
+function isWhitespace(str?: string): boolean {
+  str = str || "";
   return str.trim() === str;
 }
 
