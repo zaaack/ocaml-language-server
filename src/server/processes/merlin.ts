@@ -8,7 +8,7 @@ import { merlin, types } from "../../shared";
 import Session from "../session";
 
 export default class Merlin implements rpc.Disposable {
-  private readonly queue: AsyncPriorityQueue<any>;
+  private readonly queue: async.AsyncPriorityQueue<any>;
   private readline: readline.ReadLine;
   private process: childProcess.ChildProcess;
   private readonly session: Session;
