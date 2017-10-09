@@ -47,7 +47,8 @@ export default class Analyzer implements rpc.Disposable {
   public refreshWithKind(syncKind: server.TextDocumentSyncKind): (id: types.TextDocumentIdentifier) => Promise<void> {
     return async (id) => {
 
-      const bsbEnabled = this.session.settings.reason.bsb.enabled;
+      const tools: Set<string> = new Set(this.session.settings.reason.diagnostics.tools);
+      if (tools.size < 1) return;
 
       // Reset state for every run. This currently can hide valid warnings in some cases
       // as they are not cached, but the alternative (trying to keep track of them) will
@@ -57,7 +58,7 @@ export default class Analyzer implements rpc.Disposable {
       });
       this.bsbDiagnostics[id.uri] = [];
 
-      if (bsbEnabled && syncKind === server.TextDocumentSyncKind.Full) {
+      if (tools.has("bsb") && syncKind === server.TextDocumentSyncKind.Full) {
         this.refreshDebounced.cancel();
         const bsbProcess = new processes.BuckleScript(this.session).process;
         const bsbOutput = await new Promise<string>((resolve, reject) => {
@@ -77,9 +78,7 @@ export default class Analyzer implements rpc.Disposable {
           this.session.connection.sendDiagnostics({ diagnostics: this.bsbDiagnostics[fileUri], uri: fileUri });
           if (this.bsbDiagnostics[fileUri].length === 0) { delete this.bsbDiagnostics[fileUri]; }
         });
-      }
-
-      if (!bsbEnabled || syncKind !== server.TextDocumentSyncKind.Full || Object.keys(this.bsbDiagnostics).length === 0) {
+      } else if (tools.has("merlin")) {
         if (syncKind === server.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
           if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
