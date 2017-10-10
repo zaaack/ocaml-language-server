@@ -60,13 +60,8 @@ export default class Analyzer implements rpc.Disposable {
 
       if (tools.has("bsb") && syncKind === server.TextDocumentSyncKind.Full) {
         this.refreshDebounced.cancel();
-        const bsbProcess = new processes.BuckleScript(this.session).process;
-        const bsbOutput = await new Promise<string>((resolve, reject) => {
-          let buffer = "";
-          bsbProcess.stdout.on("error", (error: Error) => reject(error));
-          bsbProcess.stdout.on("data", (data: Buffer | string) => buffer += data.toString());
-          bsbProcess.stdout.on("end", () => resolve(buffer));
-        });
+        const bsbProcess = new processes.BuckleScript(this.session);
+        const bsbOutput = await bsbProcess.run();
 
         const diagnostics = parser.bucklescript.parseErrors(bsbOutput);
         Object.keys(diagnostics).forEach((fileUri) => {
