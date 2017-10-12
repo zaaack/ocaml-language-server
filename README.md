@@ -35,6 +35,10 @@ server features to work.
 (add-hook 'reason-mode-hook #'lsp-mode)
 ```
 
+### Oni
+
+See the instructions [here](https://github.com/bryphe/oni/wiki/Language-Support#reason-and-ocaml).
+
 ### VS Code
 
 See [vscode-reasonml](https://github.com/freebroccolo/vscode-reasonml). The
@@ -55,7 +59,7 @@ yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
 - [Atom](https://github.com/atom/atom-languageclient)
-- [Neovim](https://github.com/neovim/neovim/pull/6856)
+- [Neovim](https://github.com/autozimu/LanguageClient-neovim)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
 ## Server Capabilities
