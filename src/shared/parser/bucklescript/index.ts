@@ -74,7 +74,7 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
     const message = errorMatch[6].replace(/\n  /g, "\n");
     if (isNaN(endLine)) {
       // Format path/to/file.re 10:20 message
-      endCharacter = startCharacter;
+      endCharacter = startCharacter + 1;
       endLine = startLine;
     } else if (isNaN(endCharacter)) {
       // Format path/to/file.re 10:20-15 message
