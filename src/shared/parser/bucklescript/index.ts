@@ -31,7 +31,7 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
 
   const reLevel1Errors = new RegExp ([
     /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
-    /Error: (.*?)\n[\s\S]*?We've found a bug for you!/,
+    /Error: ([\s\S]*)We've found a bug for you!/,
   ].map((r) => r.source).join(""), "g");
 
   let errorMatch;
@@ -61,7 +61,7 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
     /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
     /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
     /((?:.|\n)*?)/, // Capturing error / warning message
-    /((?=We've found a bug for you!)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Tail
+    /((?=We've found a bug for you!)|(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Possible tails
   ].map((r) => r.source).join(""), "g");
 
   while (errorMatch = reLevel2Errors.exec(bsbOutput)) {
