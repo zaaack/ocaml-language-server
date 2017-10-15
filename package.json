@@ -39,6 +39,7 @@
     "@types/lokijs": "1.2.30",
     "@types/node": "8.0.34",
     "@types/pegjs": "0.10.0",
+    "shx": "0.2.2",
     "tslint": "5.7.0",
     "typescript": "2.5.3"
   },
