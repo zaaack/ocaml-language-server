@@ -1,5 +1,5 @@
 import { types } from "../../shared";
-import * as processes from "../processes";
+import processes from "../processes";
 import Session from "../session";
 
 export async function ocpIndent(session: Session, doc: types.TextDocument): Promise<string> {

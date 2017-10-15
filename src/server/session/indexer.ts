@@ -1,9 +1,9 @@
-import { merlin, types } from "../../shared";
-import * as command from "../command";
-import Session from "./index";
 import Loki = require("lokijs");
-import * as rpc from "vscode-jsonrpc";
-import * as server from "vscode-languageserver";
+import rpc from "vscode-jsonrpc";
+import server from "vscode-languageserver";
+import { merlin, types } from "../../shared";
+import command from "../command";
+import Session from "./index";
 
 export default class Indexer implements rpc.Disposable {
   public populated: boolean = false;

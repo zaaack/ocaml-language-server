@@ -1,6 +1,6 @@
-import * as server from "vscode-languageserver";
+import server from "vscode-languageserver";
 import { types } from "../../shared";
-import * as command from "../command";
+import command from "../command";
 import Session from "../session";
 
 export default function (session: Session): server.RequestHandler<server.DocumentFormattingParams, types.TextEdit[], void> {

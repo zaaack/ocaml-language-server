@@ -1,8 +1,8 @@
-import * as async from "async";
-import * as childProcess from "child_process";
-import * as _ from "lodash";
-import * as readline from "readline";
-import * as rpc from "vscode-jsonrpc";
+import async from "async";
+import childProcess from "child_process";
+import _ from "lodash";
+import readline from "readline";
+import rpc from "vscode-jsonrpc";
 import Uri from "vscode-uri";
 import { merlin, types } from "../../shared";
 import Session from "../session";

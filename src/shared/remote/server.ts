@@ -1,6 +1,6 @@
-import * as rpc from "vscode-jsonrpc";
-import * as merlin from "../merlin";
-import * as types from "../types";
+import rpc from "vscode-jsonrpc";
+import merlin from "../merlin";
+import types from "../types";
 
 export const giveCaseAnalysis =
   new rpc.RequestType<types.ITextDocumentRange, null | merlin.Case.Destruct, void, void>("reason.server.giveCaseAnalysis");

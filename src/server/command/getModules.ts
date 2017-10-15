@@ -1,5 +1,5 @@
 import { Glob } from "glob";
-import * as server from "vscode-languageserver";
+import server from "vscode-languageserver";
 import { merlin } from "../../shared";
 import { default as Session, Environment } from "../session";
 

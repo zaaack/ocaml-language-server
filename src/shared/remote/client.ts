@@ -1,6 +1,6 @@
-import * as rpc from "vscode-jsonrpc";
-import * as client from "vscode-languageclient";
-import * as types from "../types";
+import rpc from "vscode-jsonrpc";
+import client from "vscode-languageclient";
+import types from "../types";
 
 export const givePrefix =
   new rpc.RequestType<client.TextDocumentPositionParams, null | string, void, void>("reason.client.givePrefix");

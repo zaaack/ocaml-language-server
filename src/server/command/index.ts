@@ -1,5 +1,5 @@
 import getDocumentation from "./getDocumentation";
-import * as getFormatted from "./getFormatted";
+import getFormatted from "./getFormatted";
 import getMerlinFiles from "./getMerlinFiles";
 import getModules from "./getModules";
 import getOccurrences from "./getOccurrences";

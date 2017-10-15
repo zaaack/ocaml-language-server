@@ -1,4 +1,4 @@
-import * as server from "vscode-languageserver";
+import server from "vscode-languageserver";
 
 const capabilities: server.ServerCapabilities = {
   codeActionProvider: true,

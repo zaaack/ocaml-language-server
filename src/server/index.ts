@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import { remote } from "../shared";
-import * as feature from "./feature";
-import * as lifecycle from "./lifecycle";
-import * as request from "./request";
+import feature from "./feature";
+import lifecycle from "./lifecycle";
+import request from "./request";
 import Session from "./session";
 
 const session = new Session();

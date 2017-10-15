@@ -1,6 +1,6 @@
-import * as server from "vscode-languageserver";
+import server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
-import * as command from "../command";
+import command from "../command";
 import Session from "../session";
 
 const annotateKinds = new Set<number>([

@@ -1,4 +1,4 @@
-import * as rpc from "vscode-jsonrpc";
+import rpc from "vscode-jsonrpc";
 import { merlin, types } from "../../shared";
 import { TextDocumentContentChangeEvent } from "../../shared/types";
 import Session from "./index";

@@ -1,4 +1,4 @@
-import * as server from "vscode-languageserver";
+import server from "vscode-languageserver";
 import { merlin, types } from "../../shared";
 import Session from "../session";
 
