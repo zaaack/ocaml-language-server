@@ -11,6 +11,10 @@ and [Reason](https://facebook.github.io/reason).
 
 ## Usage
 
+### Atom
+
+See [atom-ide-reason](https://github.com/zaaack/atom-ide-reason).
+
 ### Emacs
 
 See [lsp-mode](https://github.com/emacs-lsp/lsp-mode). Follow the installation
@@ -58,7 +62,6 @@ the OCaml language server has not been tested extensively with other editors
 yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
-- [Atom](https://github.com/atom/atom-languageclient)
 - [Neovim](https://github.com/autozimu/LanguageClient-neovim)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
