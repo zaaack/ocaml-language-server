@@ -41,7 +41,7 @@
     "@types/pegjs": "0.10.0",
     "shx": "0.2.2",
     "tslint": "5.7.0",
-    "typescript": "2.5.3"
+    "typescript": "^2.6.0-dev.20171015"
   },
   "dependencies": {
     "async": "2.5.0",

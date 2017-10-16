@@ -251,9 +251,9 @@ tsutils@^2.8.1:
   dependencies:
     tslib "^1.7.1"
 
-typescript@2.5.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.3.tgz#df3dcdc38f3beb800d4bc322646b04a3f6ca7f0d"
+typescript@^2.6.0-dev.20171015:
+  version "2.6.0-rc"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.0-rc.tgz#6a8022e2dd3e7033f2dcf187cff7925ea3c8ac25"
 
 vscode-jsonrpc@3.4.1, vscode-jsonrpc@^3.4.1:
   version "3.4.1"
