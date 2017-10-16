@@ -17,27 +17,7 @@ See [atom-ide-reason](https://github.com/zaaack/atom-ide-reason).
 
 ### Emacs
 
-See [lsp-mode](https://github.com/emacs-lsp/lsp-mode). Follow the installation
-instructions there then add the following snippet(s) to your
-`~/.emacs.d/init.el`. You will need the `tuareg` package installed and probably
-other packages like `flycheck` and `company-mode` for most of the language
-server features to work.
-
-```elisp
-(lsp-define-stdio-client 'tuareg-mode "ocaml" 'stdio
-	#'(lambda () default-directory)
-	"OCaml Language Server"
-	'("ocaml-language-server" "--stdio"))
-(add-hook 'tuareg-mode-hook #'lsp-mode)
-```
-
-```elisp
-(lsp-define-stdio-client 'reason-mode "reason" 'stdio
-	#'(lambda () default-directory)
-	"OCaml Language Server"
-	'("ocaml-language-server" "--stdio"))
-(add-hook 'reason-mode-hook #'lsp-mode)
-```
+See [lsp-ocaml](https://github.com/emacs-lsp/lsp-ocaml).
 
 ### Oni
 
