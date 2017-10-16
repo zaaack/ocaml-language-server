@@ -31,7 +31,7 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
 
   const reLevel1Errors = new RegExp ([
     /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
-    /Error: ([\s\S]*)We've found a bug for you!/,
+    /Error: ([\s\S]*)(We've found a bug for you!|File "(.*)", line (\d*):\nError: Error while running external preprocessor)/,
   ].map((r) => r.source).join(""), "g");
 
   let errorMatch;
