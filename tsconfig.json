@@ -3,6 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "declaration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
@@ -17,20 +18,19 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "outDir": "out",
     "pretty": true,
     "removeComments": true,
-    "rootDir": ".",
+    "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2015"
   },
-  "exclude": [
-    "node_modules",
-    ".vscode-test"
+  "include": [
+    "src"
   ]
 }

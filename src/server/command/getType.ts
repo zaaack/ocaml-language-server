@@ -1,8 +1,9 @@
-import server from "vscode-languageserver";
+import server, { TextDocumentPositionParams } from "vscode-languageserver";
 import { merlin } from "../../shared";
+import { IColumnLine } from "../../shared/merlin/ordinal";
 import Session from "../session";
 
-export default async (session: Session, event: server.TextDocumentPositionParams, priority: number = 0): Promise<null | {
+export default async (session: Session, event: TextDocumentPositionParams, priority: number = 0): Promise<null | {
   end: merlin.Position;
   start: merlin.Position;
   tail: merlin.TailPosition;
