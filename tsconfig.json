@@ -19,7 +19,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "out",
+    "outDir": ".",
     "pretty": true,
     "removeComments": true,
     "rootDir": "src",
@@ -29,6 +29,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2015"
   },
+  "exclude": [
+  ],
   "include": [
     "src"
   ]

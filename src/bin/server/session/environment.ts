@@ -1,0 +1,48 @@
+import * as childProcess from "child_process";
+import * as path from "path";
+import * as URL from "url";
+import * as rpc from "vscode-jsonrpc";
+import { types } from "../../../lib";
+import Session from "./index";
+
+const fileSchemeLength = "file://".length - 1;
+
+export default class Environment implements rpc.Disposable {
+  public static pathToUri(path: string): types.TextDocumentIdentifier {
+    const uri = URL.format(URL.parse(`file://${path}`));
+    return { uri };
+  }
+
+  public static uriToPath({ uri }: types.TextDocumentIdentifier): string {
+    return uri.substr(fileSchemeLength);
+  }
+
+  private readonly session: Session;
+
+  constructor(session: Session) {
+    this.session = session;
+    return this;
+  }
+
+  public dispose(): void {
+    return;
+  }
+
+  public relativize(id: types.TextDocumentIdentifier): string | undefined {
+    const rootPath = this.workspaceRoot();
+    if (!rootPath) return;
+    return path.relative(rootPath, Environment.uriToPath(id));
+  }
+
+  public spawn(command: string, args: string[] = [], options: childProcess.SpawnOptions = {}): childProcess.ChildProcess {
+    if (process.platform === "win32") {
+      options.shell = true;
+    }
+
+    return childProcess.spawn(command, args, options);
+  }
+
+  public workspaceRoot(): string | null | undefined {
+    return this.session.initConf.rootPath;
+  }
+}

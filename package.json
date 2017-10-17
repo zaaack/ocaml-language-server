@@ -21,17 +21,18 @@
   },
   "scripts": {
     "compile": "npm run ocamldoc:grammar:compile && tsc -p ./",
-    "ocamldoc:grammar:compile": "shx mkdir -p out/shared/parser/ocamldoc && pegjs -o out/shared/parser/ocamldoc/grammar.js src/shared/parser/ocamldoc/grammar.pegjs",
+    "ocamldoc:grammar:compile": "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
     "lint": "tslint --project tsconfig.json --type-check",
     "prepublish": "npm run ocamldoc:grammar:compile && tsc -p ./"
   },
-  "main": "./out/shared/index.js",
-  "typings": "./out/shared/index",
+  "main": "./lib/index.js",
+  "typings": "./lib/index",
   "bin": {
-    "ocaml-language-server": "./out/server/index.js"
+    "ocaml-language-server": "./bin/server/index.js"
   },
   "files": [
-    "out"
+    "bin",
+    "lib"
   ],
   "devDependencies": {
     "@types/async": "2.0.44",

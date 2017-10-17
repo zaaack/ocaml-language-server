@@ -8,14 +8,15 @@
       "port": 6004,
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceRoot}/out/src/**/*.js"
+        "${workspaceRoot}/bin/**/*.js",
+        "${workspaceRoot}/lib/**/*.js"
       ]
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceRoot}/out/src/server/index.js",
+      "program": "${workspaceRoot}/bin/server/index.js",
       "cwd": "${workspaceRoot}"
     }
   ]
