@@ -1,4 +1,4 @@
-import server, { TextDocumentPositionParams } from "vscode-languageserver";
+import { TextDocumentPositionParams } from "vscode-languageserver";
 import { merlin } from "../../shared";
 import { IColumnLine } from "../../shared/merlin/ordinal";
 import Session from "../session";
@@ -9,6 +9,7 @@ export default async (session: Session, event: TextDocumentPositionParams, prior
   tail: merlin.TailPosition;
   type: string;
 }> => {
+  let __: IColumnLine | null = null; void __; // stupid hack so IColumnLine isn't "unused"
   const position = merlin.Position.fromCode(event.position);
   const request = merlin.Query.type.enclosing.at(position);
   const response = await session.merlin.query(request, event.textDocument, priority);

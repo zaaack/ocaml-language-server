@@ -1,7 +1,7 @@
-import merlin from "./merlin";
-import parser from "./parser";
-import remote from "./remote";
-import types from "./types";
+import * as merlin from "./merlin";
+import * as parser from "./parser";
+import * as remote from "./remote";
+import * as types from "./types";
 
 export interface ISettings {
   reason: {

@@ -1,7 +1,7 @@
-import childProcess, { ChildProcess, SpawnOptions } from "child_process";
-import path from "path";
-import URL from "url";
-import rpc from "vscode-jsonrpc";
+import * as childProcess from "child_process";
+import * as path from "path";
+import * as URL from "url";
+import * as rpc from "vscode-jsonrpc";
 import { types } from "../../shared";
 import Session from "./index";
 
@@ -34,7 +34,7 @@ export default class Environment implements rpc.Disposable {
     return path.relative(rootPath, Environment.uriToPath(id));
   }
 
-  public spawn(command: string, args: string[] = [], options: SpawnOptions = {}): ChildProcess {
+  public spawn(command: string, args: string[] = [], options: childProcess.SpawnOptions = {}): childProcess.ChildProcess {
     if (process.platform === "win32") {
       options.shell = true;
     }

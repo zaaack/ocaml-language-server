@@ -1,6 +1,5 @@
 // tslint:disable trailing-comma
-
-import ordinal from "../ordinal";
+import * as ordinal from "../ordinal";
 
 export class Sync<I, O> {
   public sync: I;

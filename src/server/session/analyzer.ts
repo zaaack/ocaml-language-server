@@ -1,9 +1,9 @@
-import _ from "lodash";
-import rpc from "vscode-jsonrpc";
-import server from "vscode-languageserver";
+import * as _ from "lodash";
+import * as rpc from "vscode-jsonrpc";
+import * as server from "vscode-languageserver";
 import { merlin, parser, types } from "../../shared";
-import command from "../command";
-import processes from "../processes";
+import * as command from "../command";
+import * as processes from "../processes";
 import Session from "./index";
 
 export default class Analyzer implements rpc.Disposable {

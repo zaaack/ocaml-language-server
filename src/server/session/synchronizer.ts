@@ -1,6 +1,5 @@
-import rpc from "vscode-jsonrpc";
+import * as rpc from "vscode-jsonrpc";
 import { merlin, types } from "../../shared";
-import { TextDocumentContentChangeEvent } from "../../shared/types";
 import Session from "./index";
 
 export default class Synchronizer implements rpc.Disposable {
@@ -64,7 +63,7 @@ export default class Synchronizer implements rpc.Disposable {
     return document;
   }
 
-  private applyChangesToTextDocumentContent(oldDocument: types.TextDocument, change: TextDocumentContentChangeEvent): null | string {
+  private applyChangesToTextDocumentContent(oldDocument: types.TextDocument, change: types.TextDocumentContentChangeEvent): null | string {
     if (null == change.range) return null;
     const startOffset = oldDocument.offsetAt(change.range.start);
     const endOffset = oldDocument.offsetAt(change.range.end);
@@ -88,7 +87,7 @@ export default class Synchronizer implements rpc.Disposable {
     await this.session.merlin.sync(request, textDocument, Infinity);
   }
 
-  private async doIncrementalSync(oldDocument: types.TextDocument, newDocument: types.VersionedTextDocumentIdentifier, change: TextDocumentContentChangeEvent): Promise<void> {
+  private async doIncrementalSync(oldDocument: types.TextDocument, newDocument: types.VersionedTextDocumentIdentifier, change: types.TextDocumentContentChangeEvent): Promise<void> {
     if (!change || !change.range) return;
 
     const newContent = this.applyChangesToTextDocumentContent(oldDocument, change);

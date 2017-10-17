@@ -1,6 +1,6 @@
 import { RequestType } from "vscode-jsonrpc";
 import { Location, TextDocumentIdentifier, TextDocumentPositionParams } from "vscode-languageclient";
-import types from "../types";
+import * as types from "../types";
 
 export const givePrefix =
   new RequestType<TextDocumentPositionParams, null | string, void, void>("reason.client.givePrefix");

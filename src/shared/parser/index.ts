@@ -1,5 +1,5 @@
-import bucklescript from "./bucklescript";
-import ocamldoc from "./ocamldoc";
+import * as bucklescript from "./bucklescript";
+import * as ocamldoc from "./ocamldoc";
 
 export {
   bucklescript,

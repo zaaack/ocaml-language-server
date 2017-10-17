@@ -1,5 +1,5 @@
-import types from "vscode-languageserver-types";
-import ordinal from "./ordinal";
+import * as types from "vscode-languageserver-types";
+import * as ordinal from "./ordinal";
 
 export namespace Case {
   export type Destruct = [{ end: ordinal.IColumnLine; start: ordinal.IColumnLine }, string];

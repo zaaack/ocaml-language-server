@@ -1,4 +1,4 @@
-import server, { TextDocumentPositionParams } from "vscode-languageserver";
+import { TextDocumentPositionParams } from "vscode-languageserver";
 import { merlin } from "../../shared";
 import Session from "../session";
 

@@ -1,5 +1,5 @@
-import rpc from "vscode-jsonrpc";
-import server from "vscode-languageserver";
+import * as rpc from "vscode-jsonrpc";
+import * as server from "vscode-languageserver";
 import { ISettings } from "../../shared";
 import { Merlin } from "../processes";
 

@@ -1,4 +1,4 @@
-import types from "vscode-languageserver-types";
+import * as types from "vscode-languageserver-types";
 
 export interface IColumnLine {
   col: number;

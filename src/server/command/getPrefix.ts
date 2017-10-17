@@ -1,4 +1,4 @@
-import server from "vscode-languageserver";
+import * as server from "vscode-languageserver";
 import Session from "../session";
 
 export default async function (session: Session, event: server.TextDocumentPositionParams): Promise<null | string> {

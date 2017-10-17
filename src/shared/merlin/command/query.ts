@@ -1,7 +1,7 @@
 // tslint:disable trailing-comma
 
-import data from "../data";
-import json from "../json";
+import * as data from "../data";
+import * as json from "../json";
 import { IColumnLine, ILocation, Position } from "../ordinal";
 
 export class Query<I, O> {

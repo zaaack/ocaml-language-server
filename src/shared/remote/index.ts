@@ -1,5 +1,5 @@
-import client from "./client";
-import server from "./server";
+import * as client from "./client";
+import * as server from "./server";
 
 export {
   client,

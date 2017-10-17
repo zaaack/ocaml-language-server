@@ -1,4 +1,4 @@
-import json from "./json";
+import * as json from "./json";
 
 export interface IMerlinNotification {
   section: string;
