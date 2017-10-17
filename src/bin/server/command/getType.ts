@@ -9,7 +9,7 @@ export default async (session: Session, event: TextDocumentPositionParams, prior
   tail: merlin.TailPosition;
   type: string;
 }> => {
-  let __: IColumnLine | null = null; void __; // stupid hack so IColumnLine isn't "unused"
+  const __: IColumnLine | null = null; void __; // tslint:disable-line no-unused-expression
   const position = merlin.Position.fromCode(event.position);
   const request = merlin.Query.type.enclosing.at(position);
   const response = await session.merlin.query(request, event.textDocument, priority);

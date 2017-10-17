@@ -1,8 +1,8 @@
 import { RequestType } from "vscode-jsonrpc";
+import { TextDocumentIdentifier } from "vscode-languageserver-types";
 import * as merlin from "../merlin";
 import { IColumnLine } from "../merlin/ordinal";
 import * as types from "../types";
-import { TextDocumentIdentifier } from "vscode-languageserver-types";
 
 export const giveCaseAnalysis =
   new RequestType<types.ITextDocumentRange, null | merlin.Case.Destruct, void, void>("reason.server.giveCaseAnalysis");
@@ -13,4 +13,4 @@ export const giveMerlinFiles =
 export const giveFormatted =
   new RequestType<types.IUnformattedTextDocument, null | string, void, void>("reason.server.giveFormatted");
 
-let __: IColumnLine | TextDocumentIdentifier | null = null; void __; // stupid hack so IColumnLine, TextDocumentIdentifier aren't "unused"
+const __: IColumnLine | TextDocumentIdentifier | null = null; void __; // tslint:disable-line no-unused-expression
