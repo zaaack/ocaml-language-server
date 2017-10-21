@@ -19,30 +19,19 @@ export class Resource {
       case Host.Native:
         return this.uri;
       case Host.WSL:
-        const search = /^file:\/\/\/mnt\/([a-zA-Z])\//;
-        const replacer = (_match: string, capture: string, _offset: number, _entire: string): string => {
-          let out = "file:///";
-          out += capture;
-          out += ":";
-          out += "/";
-          return out;
-        };
+        const searcher = /^file:\/\/\/mnt\/([a-zA-Z])\//;
+        const replacer = (_: string, drive: string) => `file:///${drive}:/`;
         const skipEncoding = true;
-        return URI.parse(this.uri.toString(skipEncoding).replace(search, replacer));
+        return URI.parse(this.uri.toString(skipEncoding).replace(searcher, replacer));
     }
   }
   protected readWSL(): URI {
     switch (this.source) {
       case Host.Native:
-        const search = /^file:\/\/\/([a-zA-Z]):\//;
-        const replacer = (_match: string, capture: string, _offset: number, _entire: string): string => {
-          let out = "file:///mnt/";
-          out += capture;
-          out += "/";
-          return out;
-        };
+        const searcher = /^file:\/\/\/([a-zA-Z]):\//;
+        const replacer = (_: string, drive: string) => `file:///mnt/${drive}/`;
         const skipEncoding = true;
-        return URI.parse(this.uri.toString(skipEncoding).replace(search, replacer));
+        return URI.parse(this.uri.toString(skipEncoding).replace(searcher, replacer));
       case Host.WSL:
         return this.uri;
     }
