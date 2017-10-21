@@ -35,10 +35,7 @@ export default class Environment implements rpc.Disposable {
   }
 
   public spawn(command: string, args: string[] = [], options: childProcess.SpawnOptions = {}): childProcess.ChildProcess {
-    if (process.platform === "win32") {
-      options.shell = true;
-    }
-
+    options.shell = true;
     return childProcess.spawn(command, args, options);
   }
 
