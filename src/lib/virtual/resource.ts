@@ -19,38 +19,38 @@ export class Resource {
       case Host.Native:
         return this.uri;
       case Host.WSL:
+        const uri = this.uri.toString(skipEncoding);
         // FIXME: move this check somewhere earlier and do it only once
         const localappdata = process.env.localappdata;
         if (null == localappdata) throw new Error("LOCALAPPDATA must be set in environment to interpret WSL /home");
-        let uri = this.uri.toString(skipEncoding);
         let match: RegExpMatchArray | null = null;
         // rewrite /mnt/…
         if (match = uri.match(/^file:\/\/\/mnt\/([a-zA-Z])\/(.*)$/)) {
           match.shift();
           const drive = match.shift() as string;
           const  rest = match.shift() as string;
-          uri = `file:///${drive}:/${rest}`;
+          return URI.parse(`file:///${drive}:/${rest}`);
         }
         // rewrite /home/…
         if (match = uri.match(/^file:\/\/\/home\/(.+)$/)) {
           match.shift();
           const rest = match.shift() as string;
-          uri = `${URI.file(localappdata).toString(skipEncoding)}/lxss/home/${rest}`;
+          return URI.parse(`${URI.file(localappdata).toString(skipEncoding)}/lxss/home/${rest}`);
         }
-        return match ? this.uri : URI.parse(uri);
+        return this.uri;
     }
   }
   protected readWSL(skipEncoding: boolean): URI {
     switch (this.source) {
       case Host.Native:
-        let uri = this.uri.toString(skipEncoding);
+        const uri = this.uri.toString(skipEncoding);
         let match: RegExpMatchArray | null = null;
         if (match = uri.match(/^file:\/\/\/([a-zA-Z]):\//)) {
           match.shift();
           const drive = match.shift() as string;
-          uri = `file:///mnt/${drive}/`;
+          return URI.parse(`file:///mnt/${drive}/`);
         }
-        return match ? this.uri : URI.parse(uri);
+        return this.uri;
       case Host.WSL:
         return this.uri;
     }
