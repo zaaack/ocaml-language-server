@@ -37,7 +37,7 @@ export class Resource {
           const rest = match.shift() as string;
           uri = `${URI.file(localappdata).toString(skipEncoding)}/lxss/home/${rest}`;
         }
-        return URI.parse(uri);
+        return match ? this.uri : URI.parse(uri);
     }
   }
   protected readWSL(skipEncoding: boolean): URI {
@@ -50,7 +50,7 @@ export class Resource {
           const drive = match.shift() as string;
           uri = `file:///mnt/${drive}/`;
         }
-        return URI.parse(uri);
+        return match ? this.uri : URI.parse(uri);
       case Host.WSL:
         return this.uri;
     }
