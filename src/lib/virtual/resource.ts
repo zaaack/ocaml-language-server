@@ -21,8 +21,10 @@ export class Resource {
       case Host.WSL:
         const uri = this.uri.toString(skipEncoding);
         // FIXME: move this check somewhere earlier and do it only once
-        const localappdata = process.env.localappdata;
-        if (null == localappdata) throw new Error("LOCALAPPDATA must be set in environment to interpret WSL /home");
+        const localappdataFile = process.env.localappdata;
+        if (null == localappdataFile) throw new Error("LOCALAPPDATA must be set in environment to interpret WSL /home");
+        // FIXME: compute localappdata earlier and do it only once
+        const localappdata = URI.file(localappdataFile).toString(skipEncoding);
         let match: RegExpMatchArray | null = null;
         // rewrite /mnt/…
         if (match = uri.match(/^file:\/\/\/mnt\/([a-zA-Z])\/(.*)$/)) {
@@ -35,9 +37,9 @@ export class Resource {
         if (match = uri.match(/^file:\/\/\/home\/(.+)$/)) {
           match.shift();
           const rest = match.shift() as string;
-          return URI.parse(`${URI.file(localappdata).toString(skipEncoding)}/lxss/home/${rest}`);
+          return URI.parse(`${localappdata}/lxss/home/${rest}`);
         }
-        return this.uri;
+        throw new Error("unreachable");
     }
   }
   protected readWSL(skipEncoding: boolean): URI {
@@ -45,12 +47,13 @@ export class Resource {
       case Host.Native:
         const uri = this.uri.toString(skipEncoding);
         let match: RegExpMatchArray | null = null;
-        if (match = uri.match(/^file:\/\/\/([a-zA-Z]):\//)) {
+        if (match = uri.match(/^file:\/\/\/([a-zA-Z]):(.*)$/)) {
           match.shift();
           const drive = match.shift() as string;
-          return URI.parse(`file:///mnt/${drive}/`);
+          const  rest = match.shift() as string;
+          return URI.parse(`file:///mnt/${drive}/${rest}`);
         }
-        return this.uri;
+        throw new Error("unreachable");
       case Host.WSL:
         return this.uri;
     }
