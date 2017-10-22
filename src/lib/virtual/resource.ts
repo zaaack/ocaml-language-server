@@ -6,21 +6,19 @@ export class Resource {
     return new this(source, uri);
   }
   protected constructor(readonly source: Host, readonly uri: URI) { }
-  public into(target: Host): URI {
+  public into(target: Host, skipEncoding: boolean = true): URI {
     switch (target) {
       case Host.Native:
-        return this.readNative();
+        return this.readNative(skipEncoding);
       case Host.WSL:
-        return this.readWSL();
+        return this.readWSL(skipEncoding);
     }
   }
-  protected readNative(): URI {
+  protected readNative(skipEncoding: boolean): URI {
     switch (this.source) {
       case Host.Native:
         return this.uri;
       case Host.WSL:
-        const skipEncoding = true;
-
         // FIXME: move this check somewhere earlier and do it only once
         const localappdata = process.env.localappdata;
         if (null == localappdata) throw new Error("LOCALAPPDATA must be set in environment to interpret WSL /home");
@@ -42,10 +40,9 @@ export class Resource {
         return uri;
     }
   }
-  protected readWSL(): URI {
+  protected readWSL(skipEncoding: boolean): URI {
     switch (this.source) {
       case Host.Native:
-        const skipEncoding = true;
         const searcher = /^file:\/\/\/([a-zA-Z]):\//;
         const replacer = (_: string, drive: string) => `file:///mnt/${drive}/`;
         return URI.parse(this.uri.toString(skipEncoding).replace(searcher, replacer));
