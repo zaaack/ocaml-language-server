@@ -51,7 +51,7 @@ export class Resource {
           match.shift();
           const drive = match.shift() as string;
           const  rest = match.shift() as string;
-          return URI.parse(`file:///mnt/${drive}/${rest}`);
+          return URI.parse(`file:///mnt/${drive}${rest}`);
         }
         throw new Error("unreachable");
       case Host.WSL:
