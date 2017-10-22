@@ -23,19 +23,16 @@ export class Resource {
         const localappdata = process.env.localappdata;
         if (null == localappdata) throw new Error("LOCALAPPDATA must be set in environment to interpret WSL /home");
         let uri = this.uri.toString(skipEncoding);
-        let searcher: RegExp;
         let match: RegExpMatchArray | null = null;
         // rewrite /mnt/…
-        searcher = /^file:\/\/\/mnt\/([a-zA-Z])\/(.*)$/;
-        if (match = uri.match(searcher)) {
+        if (match = uri.match(/^file:\/\/\/mnt\/([a-zA-Z])\/(.*)$/)) {
           match.shift();
           const drive = match.shift() as string;
           const  rest = match.shift() as string;
           uri = `file:///${drive}:/${rest}`;
         }
         // rewrite /home/…
-        searcher = /^file:\/\/\/home\/(.+)$/;
-        if (match = uri.match(searcher)) {
+        if (match = uri.match(/^file:\/\/\/home\/(.+)$/)) {
           match.shift();
           const rest = match.shift() as string;
           uri = `${URI.file(localappdata).toString(skipEncoding)}/lxss/home/${rest}`;
@@ -47,10 +44,8 @@ export class Resource {
     switch (this.source) {
       case Host.Native:
         let uri = this.uri.toString(skipEncoding);
-        let searcher: RegExp;
         let match: RegExpMatchArray | null = null;
-        searcher = /^file:\/\/\/([a-zA-Z]):\//;
-        if (match = uri.match(searcher)) {
+        if (match = uri.match(/^file:\/\/\/([a-zA-Z]):\//)) {
           match.shift();
           const drive = match.shift() as string;
           uri = `file:///mnt/${drive}/`;
