@@ -35,16 +35,16 @@
     "lib"
   ],
   "devDependencies": {
-    "@types/async": "2.0.44",
+    "@types/async": "2.0.45",
     "@types/glob": "5.0.33",
-    "@types/lodash": "4.14.77",
+    "@types/lodash": "4.14.80",
     "@types/lokijs": "1.2.30",
-    "@types/node": "8.0.34",
+    "@types/node": "8.0.47",
     "@types/pegjs": "0.10.0",
     "shx": "0.2.2",
-    "ts-node": "^3.3.0",
-    "tslint": "5.7.0",
-    "typescript": "^2.6.0-dev.20171015"
+    "ts-node": "3.3.0",
+    "tslint": "5.8.0",
+    "typescript": "2.6.1"
   },
   "dependencies": {
     "async": "2.5.0",
