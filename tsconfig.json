@@ -25,7 +25,7 @@
     "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
-    "strictNullChecks": true,
+    "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2015"
   },
