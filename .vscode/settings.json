@@ -1,11 +1,11 @@
 {
     "files.exclude": {
-        "bin": false,
-        "lib": false
+        "/bin": false,
+        "/lib": false
     },
     "search.exclude": {
-        "bin": true,
-        "lib": true
+        "/bin": true,
+        "/lib": true
     },
     "typescript.tsdk": "./node_modules/typescript/lib"
 }
