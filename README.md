@@ -42,6 +42,7 @@ the OCaml language server has not been tested extensively with other editors
 yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
+- [Intellij IDEA](https://github.com/gtache/intellij-lsp)
 - [Neovim](https://github.com/autozimu/LanguageClient-neovim)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
