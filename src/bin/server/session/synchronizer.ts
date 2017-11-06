@@ -25,9 +25,7 @@ export default class Synchronizer implements rpc.Disposable {
     this.session.connection.onDidOpenTextDocument(async (event): Promise<void> => {
       await this.doFullSync(event.textDocument, event.textDocument.languageId, event.textDocument.text);
       this.session.analyzer.refreshImmediate(event.textDocument);
-      // this.session.indexer.refreshSymbols(event.textDocument);
       await this.session.indexer.populate(event.textDocument);
-      // this.session.analyzer.refreshWorkspace(event.textDocument);
     });
 
     this.session.connection.onDidChangeTextDocument(async (event): Promise<void> => {
@@ -46,7 +44,6 @@ export default class Synchronizer implements rpc.Disposable {
 
     this.session.connection.onDidSaveTextDocument(async (event): Promise<void> => {
       this.session.analyzer.refreshImmediate(event.textDocument);
-      // this.session.analyzer.refreshWorkspace(event.textDocument);
     });
   }
 
