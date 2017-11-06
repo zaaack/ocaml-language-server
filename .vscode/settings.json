@@ -1,11 +1,14 @@
 {
-    "files.exclude": {
-        "/bin": false,
-        "/lib": false
-    },
-    "search.exclude": {
-        "/bin": true,
-        "/lib": true
-    },
-    "typescript.tsdk": "./node_modules/typescript/lib"
+  "files.exclude": {
+    "bin": true,
+    "lib": true
+  },
+  "search.exclude": {
+    "bin": false,
+    "lib": false,
+    "**/*.js": true,
+    "**/*.js.map": true,
+    "**/*.d.ts": true
+  },
+  "typescript.tsdk": "./node_modules/typescript/lib"
 }
