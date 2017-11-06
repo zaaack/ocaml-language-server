@@ -6,6 +6,5 @@ export default class OcpIdent {
   constructor(session: Session, args: string[] = []) {
     const command = "ocp-indent";
     this.process = session.environment.spawn(command, args);
-    return this;
   }
 }

@@ -5,11 +5,8 @@ import * as json from "../json";
 import { IColumnLine, ILocation, Position } from "../ordinal";
 
 export class Query<I, O> {
-  public query: I;
-  constructor(query: I) {
+  constructor(public readonly query: I) {
     void null as any as O; // tslint:disable-line:no-unused-expression
-    this.query = query;
-    return this;
   }
 }
 

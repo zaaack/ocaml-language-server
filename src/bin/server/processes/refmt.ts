@@ -13,6 +13,5 @@ export default class ReFMT {
       "--interface", `${/\.rei$/.test(uri)}`,
     ];
     this.process = session.environment.spawn(command, args);
-    return this;
   }
 }

@@ -3,12 +3,9 @@ import { merlin, types } from "../../../lib";
 import Session from "./index";
 
 export default class Synchronizer implements rpc.Disposable {
-  private session: Session;
-  private textDocuments: Map<string, types.TextDocument> = new Map();
+  public readonly textDocuments: Map<string, types.TextDocument> = new Map();
 
-  constructor(session: Session) {
-    this.session = session;
-    return this;
+  constructor(private readonly session: Session) {
   }
 
   public dispose(): void {

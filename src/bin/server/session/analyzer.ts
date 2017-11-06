@@ -7,15 +7,11 @@ import * as processes from "../processes";
 import Session from "./index";
 
 export default class Analyzer implements rpc.Disposable {
-  public refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
-  public refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
-  private session: Session;
-  private bsbDiagnostics: { [key: string]: types.Diagnostic[] };
+  public readonly refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
+  public readonly refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
+  private readonly bsbDiagnostics: { [key: string]: types.Diagnostic[] } = {};
 
-  constructor(session: Session) {
-    this.session = session;
-    this.bsbDiagnostics = {};
-    return this;
+  constructor(private readonly session: Session) {
   }
 
   public clear(event: types.TextDocumentIdentifier): void {
@@ -36,8 +32,8 @@ export default class Analyzer implements rpc.Disposable {
   }
 
   public onDidChangeConfiguration(): void {
-    this.refreshImmediate = this.refreshWithKind(server.TextDocumentSyncKind.Full);
-    this.refreshDebounced = _.debounce(
+    (this.refreshImmediate as any) = this.refreshWithKind(server.TextDocumentSyncKind.Full);
+    (this.refreshDebounced as any) = _.debounce(
       this.refreshWithKind(server.TextDocumentSyncKind.Incremental),
       this.session.settings.reason.debounce.linter,
       { trailing: true },

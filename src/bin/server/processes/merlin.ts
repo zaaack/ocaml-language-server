@@ -11,14 +11,11 @@ export default class Merlin implements rpc.Disposable {
   private readonly queue: async.AsyncPriorityQueue<any>;
   private readline: readline.ReadLine;
   private process: childProcess.ChildProcess;
-  private readonly session: Session;
 
-  constructor(session: Session) {
-    this.session = session;
+  constructor(private readonly session: Session) {
     this.queue = async.priorityQueue((task, callback) => {
       this.readline.question(JSON.stringify(task), _.flow(JSON.parse, callback));
     }, 1);
-    return this;
   }
 
   public dispose(): void {

@@ -17,11 +17,7 @@ export default class Environment implements rpc.Disposable {
     return uri.substr(fileSchemeLength);
   }
 
-  private readonly session: Session;
-
-  constructor(session: Session) {
-    this.session = session;
-    return this;
+  constructor(private readonly session: Session) {
   }
 
   public dispose(): void {

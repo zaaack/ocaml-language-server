@@ -1,12 +1,7 @@
-import { ChildProcess } from "child_process";
 import Session from "../session";
 
 export default class BuckleScript {
-  public readonly process: ChildProcess;
-  private readonly session: Session;
-  constructor(session: Session) {
-    this.session = session;
-    return this;
+  constructor(private readonly session: Session) {
   }
 
   public run(): Promise<string> {

@@ -5,7 +5,8 @@ export class Resource {
   public static from(source: Host, uri: URI): Resource {
     return new this(source, uri);
   }
-  protected constructor(readonly source: Host, readonly uri: URI) { }
+  protected constructor(readonly source: Host, readonly uri: URI) {
+  }
   public into(target: Host, skipEncoding: boolean = true): URI {
     switch (target) {
       case Host.Native:

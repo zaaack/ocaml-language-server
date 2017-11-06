@@ -13,7 +13,7 @@ export {
 };
 
 export default class Session implements rpc.Disposable {
-  public initConf: server.InitializeParams;
+  public readonly initConf: server.InitializeParams;
   public settings: ISettings = ({} as any);
   public readonly connection: server.IConnection = server.createConnection();
   public readonly analyzer: Analyzer;
@@ -28,7 +28,6 @@ export default class Session implements rpc.Disposable {
     this.indexer = new Indexer(this);
     this.merlin = new Merlin(this);
     this.synchronizer = new Synchronizer(this);
-    return this;
   }
 
   public dispose(): void {

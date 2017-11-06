@@ -9,14 +9,11 @@ export default class Indexer implements rpc.Disposable {
   public populated: boolean = false;
   private readonly db: Loki = new Loki(".vscode.reasonml.loki");
   private readonly symbols: LokiCollection<types.SymbolInformation>;
-  private session: Session;
 
-  constructor(session: Session) {
-    this.session = session;
+  constructor(private readonly session: Session) {
     this.symbols = this.db.addCollection<types.SymbolInformation>("symbols", {
       indices: ["name"],
     });
-    return this;
   }
 
   public dispose(): void {
