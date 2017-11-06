@@ -48,6 +48,8 @@ open an issue about it.
 
 ## Server Capabilities
 
+Every editor using this plugin should, theoretically, have all the following features:
+
 - [x] OCaml support
 - [x] Reason support
 - [x] compiler diagnostics
@@ -63,6 +65,8 @@ open an issue about it.
 - [x] hover provider
 - [x] references provider
 - [x] workspace symbol provider
+
+The keyboard shortcuts for these depends on the editor's implementation, naturally.
 
 ## Installing the Server
 
