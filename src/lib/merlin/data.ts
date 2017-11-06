@@ -39,7 +39,6 @@ export namespace Completion {
         case "Type": return types.CompletionItemKind.Class;
         case "Value": return types.CompletionItemKind.Value;
         case "Variant": return types.CompletionItemKind.Enum;
-        default: throw new Error(`<unreachable>: ${kind}`);
       }
     }
   }
@@ -71,6 +70,7 @@ export interface IErrorReport {
 export namespace IErrorReport {
   export type Type
     = "env"
+    | "error"
     | "parser"
     | "type"
     | "unknown"
@@ -80,11 +80,11 @@ export namespace IErrorReport {
     export function intoCode(type: Type): types.DiagnosticSeverity {
       switch (type) {
         case "env": return types.DiagnosticSeverity.Error;
+        case "error": return types.DiagnosticSeverity.Error;
         case "parser": return types.DiagnosticSeverity.Error;
         case "type": return types.DiagnosticSeverity.Error;
         case "unknown": return types.DiagnosticSeverity.Error;
         case "warning": return types.DiagnosticSeverity.Warning;
-        default: throw new Error(`<unreachable>: ${type}`);
       }
     }
   }
@@ -144,7 +144,6 @@ export namespace Outline {
         case "Signature": return types.SymbolKind.Interface;
         case "Type": return types.SymbolKind.Class;
         case "Value": return types.SymbolKind.Variable;
-        default: throw new Error(`<unreachable>: ${kind}`);
       }
     }
   }
@@ -192,7 +191,6 @@ export namespace TailPosition {
       case "call": return position("tail (call)");
       case "no": return position("normal");
       case "position": return position("tail");
-      default: throw new Error(`<unreachable>: ${info}`);
     }
   }
 }
