@@ -35,6 +35,12 @@ Install [Sublime Text LSP](https://github.com/tomv564/LSP). For Reason support,
 see the instructions at
 [sublime-reason](https://github.com/reasonml-editor/sublime-reason).
 
+### NeoVim
+
+Install [LanguageClient-neovim](https://github.com/autozimu/LanguageClient-neovim).
+For Reason support, see the instructions at
+[vim-reason-plus](https://github.com/reasonml-editor/vim-reason-plus).
+
 ### Other Editors
 
 For other editors, see the following list of language client packages. Note that
@@ -43,7 +49,6 @@ yet. If you try to use one of these packages and encounter a problem, please
 open an issue about it.
 
 - [Intellij IDEA](https://github.com/gtache/intellij-lsp)
-- [Neovim](https://github.com/autozimu/LanguageClient-neovim)
 - [Vim](https://github.com/prabirshrestha/vim-lsp)
 
 ## Server Capabilities
