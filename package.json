@@ -21,7 +21,9 @@
   },
   "scripts": {
     "compile": "npm run ocamldoc:grammar:compile && tsc -p ./",
-    "ocamldoc:grammar:compile": "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
+    "ocamldoc:grammar:compile":
+      "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
+    "format": "./node_modules/.bin/prettier --write \"src/**/*.ts\"",
     "lint": "tslint --project tsconfig.json",
     "prepublish": "npm run ocamldoc:grammar:compile && tsc -p ./"
   },
@@ -30,10 +32,7 @@
   "bin": {
     "ocaml-language-server": "./bin/server/index.js"
   },
-  "files": [
-    "bin",
-    "lib"
-  ],
+  "files": ["bin", "lib"],
   "devDependencies": {
     "@types/async": "2.0.45",
     "@types/glob": "5.0.33",
