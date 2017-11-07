@@ -22,17 +22,24 @@ export default class Indexer implements server.Disposable {
   public findSymbols(query: LokiQuery): types.SymbolInformation[] {
     let result: types.SymbolInformation[] = [];
     try {
-      result = this.symbols.chain().find(query).simplesort("name").data();
+      result = this.symbols
+        .chain()
+        .find(query)
+        .simplesort("name")
+        .data();
     } catch (err) {
       //
     }
     return result;
   }
 
-  public async indexSymbols(id: types.TextDocumentIdentifier): Promise<void | server.ResponseError<void>> {
+  public async indexSymbols(
+    id: types.TextDocumentIdentifier,
+  ): Promise<void | server.ResponseError<void>> {
     const request = merlin.Query.outline();
     const response = await this.session.merlin.query(request, id);
-    if (response.class !== "return") return new server.ResponseError(-1, "indexSymbols: failed", undefined);
+    if (response.class !== "return")
+      return new server.ResponseError(-1, "indexSymbols: failed", undefined);
     for (const item of merlin.Outline.intoCode(response.value, id)) {
       const prefix = item.containerName ? `${item.containerName}.` : "";
       item.name = `${prefix}${item.name}`;
@@ -53,14 +60,19 @@ export default class Indexer implements server.Disposable {
         if (/\.(ml|re)i$/.test(id.uri)) continue;
         const document = await command.getTextDocument(this.session, id);
         if (null != document) {
-          await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
+          await this.session.merlin.sync(
+            merlin.Sync.tell("start", "end", document.getText()),
+            id,
+          );
           await this.refreshSymbols(id);
         }
       }
     }
   }
 
-  public refreshSymbols(id: types.TextDocumentIdentifier): Promise<void | server.ResponseError<void>> {
+  public refreshSymbols(
+    id: types.TextDocumentIdentifier,
+  ): Promise<void | server.ResponseError<void>> {
     this.removeSymbols(id);
     return this.indexSymbols(id);
   }
@@ -68,7 +80,7 @@ export default class Indexer implements server.Disposable {
   public removeSymbols({ uri }: types.TextDocumentIdentifier): void {
     this.symbols
       .chain()
-      .where((item) => item.location.uri === uri)
+      .where(item => item.location.uri === uri)
       .remove();
   }
 }

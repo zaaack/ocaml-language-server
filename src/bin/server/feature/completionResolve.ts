@@ -2,14 +2,17 @@ import * as server from "vscode-languageserver";
 import { parser, types } from "../../../lib";
 import Session from "../session";
 
-export default function (session: Session): server.RequestHandler<types.CompletionItem, types.CompletionItem, void> {
+export default function(
+  session: Session,
+): server.RequestHandler<types.CompletionItem, types.CompletionItem, void> {
   void session; // tslint:disable-line
-  return (event) => {
+  return event => {
     // FIXME: might want to make a separate parser to just strip ocamldoc
     const documentation: string = event.data.documentation
       .replace(/\{\{:.*?\}(.*?)\}/g, "$1")
       .replace(/\{!(.*?)\}/g, "$1");
-    const markedDoc = parser.ocamldoc.intoMarkdown(documentation)
+    const markedDoc = parser.ocamldoc
+      .intoMarkdown(documentation)
       .replace(/`(.*?)`/g, "$1")
       .replace(/\s+/g, " ")
       .replace(/\n/g, "");

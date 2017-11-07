@@ -3,7 +3,11 @@ import * as server from "vscode-languageserver";
 import { merlin } from "../../../lib";
 import { default as Session, Environment } from "../session";
 
-export default async function (session: Session, event: server.TextDocumentIdentifier, priority: number = 0): Promise<server.TextDocumentIdentifier[]> {
+export default async function(
+  session: Session,
+  event: server.TextDocumentIdentifier,
+  priority: number = 0,
+): Promise<server.TextDocumentIdentifier[]> {
   const request = merlin.Query.path.list.source();
   const response = await session.merlin.query(request, event, priority);
   if (response.class !== "return") return [];
@@ -12,7 +16,11 @@ export default async function (session: Session, event: server.TextDocumentIdent
   for (const cwd of response.value) {
     if (cwd && !(/\.opam\b/.test(cwd) || srcDirs.has(cwd))) {
       srcDirs.add(cwd);
-      const cwdMods = new Glob("*.@(ml|re)?(i)", { cwd, realpath: true, sync: true }).found;
+      const cwdMods = new Glob("*.@(ml|re)?(i)", {
+        cwd,
+        realpath: true,
+        sync: true,
+      }).found;
       for (const path of cwdMods) srcMods.push(Environment.pathToUri(path));
     }
   }

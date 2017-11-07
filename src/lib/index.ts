@@ -14,7 +14,7 @@ export interface ISettings {
       linter: number;
     };
     diagnostics: {
-      tools: Array<"merlin" | "bsb">,
+      tools: Array<"merlin" | "bsb">;
     };
     path: {
       bsb: string;
@@ -55,19 +55,10 @@ export namespace ISettings {
         rtop: "rtop",
       },
       server: {
-        languages: [
-          "ocaml",
-          "reason",
-        ],
+        languages: ["ocaml", "reason"],
       },
     },
   };
 }
 
-export {
-  merlin,
-  parser,
-  remote,
-  types,
-  virtual,
-};
+export { merlin, parser, remote, types, virtual };

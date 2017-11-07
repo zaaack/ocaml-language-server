@@ -7,13 +7,11 @@ import Environment from "./environment";
 import Indexer from "./indexer";
 import Synchronizer from "./synchronizer";
 
-export {
-  Environment,
-};
+export { Environment };
 
 export default class Session implements server.Disposable {
   public readonly initConf: server.InitializeParams;
-  public settings: ISettings = ({} as any);
+  public settings: ISettings = {} as any;
   public readonly connection: server.IConnection = server.createConnection();
   public readonly analyzer: Analyzer;
   public readonly environment: Environment;
@@ -53,7 +51,9 @@ export default class Session implements server.Disposable {
     this.connection.console.log(JSON.stringify(data, null as any, 2)); // tslint:disable-line
   }
 
-  public onDidChangeConfiguration({ settings }: server.DidChangeConfigurationParams): void {
+  public onDidChangeConfiguration({
+    settings,
+  }: server.DidChangeConfigurationParams): void {
     this.settings = settings;
     this.analyzer.onDidChangeConfiguration();
     this.synchronizer.onDidChangeConfiguration();

@@ -5,7 +5,10 @@ export interface ILocatedPosition {
   uri: string;
 }
 export namespace LocatedPosition {
-  export function create(uri: string, position: types.Position): ILocatedPosition {
+  export function create(
+    uri: string,
+    position: types.Position,
+  ): ILocatedPosition {
     return { position, uri };
   }
 }

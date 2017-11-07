@@ -4,13 +4,26 @@ import * as merlin from "../merlin";
 import { IColumnLine } from "../merlin/ordinal";
 import * as types from "../types";
 
-export const giveCaseAnalysis =
-  new RequestType<types.ITextDocumentRange, null | merlin.Case.Destruct, void, void>("reason.server.giveCaseAnalysis");
+export const giveCaseAnalysis = new RequestType<
+  types.ITextDocumentRange,
+  null | merlin.Case.Destruct,
+  void,
+  void
+>("reason.server.giveCaseAnalysis");
 
-export const giveMerlinFiles =
-  new RequestType<types.TextDocumentIdentifier, string[], void, void>("reason.server.giveMerlinFiles");
+export const giveMerlinFiles = new RequestType<
+  types.TextDocumentIdentifier,
+  string[],
+  void,
+  void
+>("reason.server.giveMerlinFiles");
 
-export const giveFormatted =
-  new RequestType<types.IUnformattedTextDocument, null | string, void, void>("reason.server.giveFormatted");
+export const giveFormatted = new RequestType<
+  types.IUnformattedTextDocument,
+  null | string,
+  void,
+  void
+>("reason.server.giveFormatted");
 
-const __: IColumnLine | TextDocumentIdentifier | null = null; void __; // tslint:disable-line no-unused-expression
+const __: IColumnLine | TextDocumentIdentifier | null = null;
+void __; // tslint:disable-line no-unused-expression

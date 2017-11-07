@@ -2,7 +2,10 @@ import * as types from "vscode-languageserver-types";
 import * as ordinal from "./ordinal";
 
 export namespace Case {
-  export type Destruct = [{ end: ordinal.IColumnLine; start: ordinal.IColumnLine }, string];
+  export type Destruct = [
+    { end: ordinal.IColumnLine; start: ordinal.IColumnLine },
+    string
+  ];
 }
 
 export namespace Completion {
@@ -10,11 +13,11 @@ export namespace Completion {
     name: string;
     type: string;
   }
-  export type Context
-    = null
+  export type Context =
+    | null
     | ["application", { argument_type: string; labels: ILabel[] }];
-  export type Kind
-    = "#"
+  export type Kind =
+    | "#"
     | "Class"
     | "Constructor"
     | "Exn"
@@ -28,17 +31,28 @@ export namespace Completion {
   export namespace Kind {
     export function intoCode(kind: Kind): types.CompletionItemKind {
       switch (kind) {
-        case "#": return types.CompletionItemKind.Method;
-        case "Class": return types.CompletionItemKind.Class;
-        case "Constructor": return types.CompletionItemKind.Constructor;
-        case "Exn": return types.CompletionItemKind.Constructor;
-        case "Label": return types.CompletionItemKind.Field;
-        case "Method": return types.CompletionItemKind.Function;
-        case "Module": return types.CompletionItemKind.Module;
-        case "Signature": return types.CompletionItemKind.Interface;
-        case "Type": return types.CompletionItemKind.Class;
-        case "Value": return types.CompletionItemKind.Value;
-        case "Variant": return types.CompletionItemKind.Enum;
+        case "#":
+          return types.CompletionItemKind.Method;
+        case "Class":
+          return types.CompletionItemKind.Class;
+        case "Constructor":
+          return types.CompletionItemKind.Constructor;
+        case "Exn":
+          return types.CompletionItemKind.Constructor;
+        case "Label":
+          return types.CompletionItemKind.Field;
+        case "Method":
+          return types.CompletionItemKind.Function;
+        case "Module":
+          return types.CompletionItemKind.Module;
+        case "Signature":
+          return types.CompletionItemKind.Interface;
+        case "Type":
+          return types.CompletionItemKind.Class;
+        case "Value":
+          return types.CompletionItemKind.Value;
+        case "Variant":
+          return types.CompletionItemKind.Enum;
       }
     }
   }
@@ -48,7 +62,12 @@ export namespace Completion {
     desc: string;
     info: string;
   }
-  export function intoCode({ name: label, kind, desc: detail, info: documentation }: IEntry): types.CompletionItem {
+  export function intoCode({
+    name: label,
+    kind,
+    desc: detail,
+    info: documentation,
+  }: IEntry): types.CompletionItem {
     return {
       data: {
         documentation,
@@ -68,27 +87,36 @@ export interface IErrorReport {
   type: IErrorReport.Type;
 }
 export namespace IErrorReport {
-  export type Type
-    = "env"
+  export type Type =
+    | "env"
     | "error"
     | "parser"
     | "type"
     | "unknown"
-    | "warning"
-    ;
+    | "warning";
   export namespace Type {
     export function intoCode(type: Type): types.DiagnosticSeverity {
       switch (type) {
-        case "env": return types.DiagnosticSeverity.Error;
-        case "error": return types.DiagnosticSeverity.Error;
-        case "parser": return types.DiagnosticSeverity.Error;
-        case "type": return types.DiagnosticSeverity.Error;
-        case "unknown": return types.DiagnosticSeverity.Error;
-        case "warning": return types.DiagnosticSeverity.Warning;
+        case "env":
+          return types.DiagnosticSeverity.Error;
+        case "error":
+          return types.DiagnosticSeverity.Error;
+        case "parser":
+          return types.DiagnosticSeverity.Error;
+        case "type":
+          return types.DiagnosticSeverity.Error;
+        case "unknown":
+          return types.DiagnosticSeverity.Error;
+        case "warning":
+          return types.DiagnosticSeverity.Warning;
       }
     }
   }
-  async function improveMessage(session: any, { uri }: types.Location, original: string): Promise<string> {
+  async function improveMessage(
+    session: any,
+    { uri }: types.Location,
+    original: string,
+  ): Promise<string> {
     if (original === "Invalid statement") {
       const document = session.synchronizer.getText(uri);
       if (document && document.getText() === "=") {
@@ -104,7 +132,11 @@ export namespace IErrorReport {
     const codeMatch = /^Warning\s*(\d+)?:/.exec(message);
     return codeMatch && codeMatch.length > 1 ? codeMatch[1] : "";
   }
-  export async function intoCode(session: any, { uri }: types.TextDocumentIdentifier, { end, message: original, start, type }: IErrorReport): Promise<types.Diagnostic> {
+  export async function intoCode(
+    session: any,
+    { uri }: types.TextDocumentIdentifier,
+    { end, message: original, start, type }: IErrorReport,
+  ): Promise<types.Diagnostic> {
     const range = {
       end: ordinal.Position.intoCode(end),
       start: ordinal.Position.intoCode(start),
@@ -119,8 +151,8 @@ export namespace IErrorReport {
 }
 
 export namespace Outline {
-  export type Kind
-    = "Class"
+  export type Kind =
+    | "Class"
     | "Constructor"
     | "Exn"
     | "Label"
@@ -129,21 +161,30 @@ export namespace Outline {
     | "Module"
     | "Signature" // FIXME
     | "Type"
-    | "Value"
-    ;
+    | "Value";
   export namespace Kind {
     export function intoCode(kind: Kind): types.SymbolKind {
       switch (kind) {
-        case "Class": return types.SymbolKind.Class;
-        case "Constructor": return types.SymbolKind.Constructor;
-        case "Exn": return types.SymbolKind.Constructor;
-        case "Label": return types.SymbolKind.Field;
-        case "Method": return types.SymbolKind.Method;
-        case "Modtype": return types.SymbolKind.Interface;
-        case "Module": return types.SymbolKind.Module;
-        case "Signature": return types.SymbolKind.Interface;
-        case "Type": return types.SymbolKind.Class;
-        case "Value": return types.SymbolKind.Variable;
+        case "Class":
+          return types.SymbolKind.Class;
+        case "Constructor":
+          return types.SymbolKind.Constructor;
+        case "Exn":
+          return types.SymbolKind.Constructor;
+        case "Label":
+          return types.SymbolKind.Field;
+        case "Method":
+          return types.SymbolKind.Method;
+        case "Modtype":
+          return types.SymbolKind.Interface;
+        case "Module":
+          return types.SymbolKind.Module;
+        case "Signature":
+          return types.SymbolKind.Interface;
+        case "Type":
+          return types.SymbolKind.Class;
+        case "Value":
+          return types.SymbolKind.Variable;
       }
     }
   }
@@ -154,7 +195,10 @@ export namespace Outline {
     kind: Kind;
     children: IItem[];
   }
-  export function intoCode(outline: IItem[], id: types.TextDocumentIdentifier): types.SymbolInformation[] {
+  export function intoCode(
+    outline: IItem[],
+    id: types.TextDocumentIdentifier,
+  ): types.SymbolInformation[] {
     const symbols: types.SymbolInformation[] = [];
     function traverse(children: IItem[], scope: string): void {
       for (const item of children) {
@@ -166,7 +210,13 @@ export namespace Outline {
           };
           const thisParent = scope === "" ? undefined : scope;
           const nextParent = `${scope}${scope === "" ? "" : "."}${item.name}`;
-          const info = types.SymbolInformation.create(item.name, kind, range, id.uri, thisParent);
+          const info = types.SymbolInformation.create(
+            item.name,
+            kind,
+            range,
+            id.uri,
+            thisParent,
+          );
           symbols.push(info);
           traverse(item.children, nextParent);
         }
@@ -178,19 +228,18 @@ export namespace Outline {
 }
 export type Outline = Outline.IItem[];
 
-export type TailPosition
-  = "call"
-  | "no"
-  | "position"
-  ;
+export type TailPosition = "call" | "no" | "position";
 export namespace TailPosition {
   export function intoCode(info: TailPosition): types.MarkedString {
     const language = "reason.hover.info";
     const position = (arg: string) => ({ language, value: `position: ${arg}` });
     switch (info) {
-      case "call": return position("tail (call)");
-      case "no": return position("normal");
-      case "position": return position("tail");
+      case "call":
+        return position("tail (call)");
+      case "no":
+        return position("normal");
+      case "position":
+        return position("tail");
     }
   }
 }

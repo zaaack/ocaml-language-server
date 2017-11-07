@@ -5,8 +5,7 @@ import Session from "./index";
 export default class Synchronizer implements server.Disposable {
   public readonly textDocuments: Map<string, types.TextDocument> = new Map();
 
-  constructor(private readonly session: Session) {
-  }
+  constructor(private readonly session: Session) {}
 
   public dispose(): void {
     return;
@@ -17,24 +16,36 @@ export default class Synchronizer implements server.Disposable {
   }
 
   public listen(): void {
-    this.session.connection.onDidCloseTextDocument((event) => {
+    this.session.connection.onDidCloseTextDocument(event => {
       this.textDocuments.delete(event.textDocument.uri);
       this.session.analyzer.clear(event.textDocument);
     });
 
-    this.session.connection.onDidOpenTextDocument(async (event): Promise<void> => {
-      await this.doFullSync(event.textDocument, event.textDocument.languageId, event.textDocument.text);
+    this.session.connection.onDidOpenTextDocument(async (event): Promise<
+      void
+    > => {
+      await this.doFullSync(
+        event.textDocument,
+        event.textDocument.languageId,
+        event.textDocument.text,
+      );
       this.session.analyzer.refreshImmediate(event.textDocument);
       await this.session.indexer.populate(event.textDocument);
     });
 
-    this.session.connection.onDidChangeTextDocument(async (event): Promise<void> => {
+    this.session.connection.onDidChangeTextDocument(async (event): Promise<
+      void
+    > => {
       for (const change of event.contentChanges) {
         if (!change) continue;
         const oldDocument = this.textDocuments.get(event.textDocument.uri);
         if (!oldDocument) continue;
         if (!change.range) {
-          await this.doFullSync(event.textDocument, oldDocument.languageId, change.text);
+          await this.doFullSync(
+            event.textDocument,
+            oldDocument.languageId,
+            change.text,
+          );
         } else {
           await this.doIncrementalSync(oldDocument, event.textDocument, change);
         }
@@ -42,7 +53,9 @@ export default class Synchronizer implements server.Disposable {
       }
     });
 
-    this.session.connection.onDidSaveTextDocument(async (event): Promise<void> => {
+    this.session.connection.onDidSaveTextDocument(async (event): Promise<
+      void
+    > => {
       this.session.analyzer.refreshImmediate(event.textDocument);
     });
   }
@@ -57,7 +70,10 @@ export default class Synchronizer implements server.Disposable {
     return document;
   }
 
-  private applyChangesToTextDocumentContent(oldDocument: types.TextDocument, change: types.TextDocumentContentChangeEvent): null | string {
+  private applyChangesToTextDocumentContent(
+    oldDocument: types.TextDocument,
+    change: types.TextDocumentContentChangeEvent,
+  ): null | string {
     if (null == change.range) return null;
     const startOffset = oldDocument.offsetAt(change.range.start);
     const endOffset = oldDocument.offsetAt(change.range.end);
@@ -66,7 +82,11 @@ export default class Synchronizer implements server.Disposable {
     return `${before}${change.text}${after}`;
   }
 
-  private async doFullSync(textDocument: types.VersionedTextDocumentIdentifier, languageId: string, content: string): Promise<void> {
+  private async doFullSync(
+    textDocument: types.VersionedTextDocumentIdentifier,
+    languageId: string,
+    content: string,
+  ): Promise<void> {
     this.textDocuments.set(
       textDocument.uri,
       types.TextDocument.create(
@@ -81,10 +101,17 @@ export default class Synchronizer implements server.Disposable {
     await this.session.merlin.sync(request, textDocument, Infinity);
   }
 
-  private async doIncrementalSync(oldDocument: types.TextDocument, newDocument: types.VersionedTextDocumentIdentifier, change: types.TextDocumentContentChangeEvent): Promise<void> {
+  private async doIncrementalSync(
+    oldDocument: types.TextDocument,
+    newDocument: types.VersionedTextDocumentIdentifier,
+    change: types.TextDocumentContentChangeEvent,
+  ): Promise<void> {
     if (!change || !change.range) return;
 
-    const newContent = this.applyChangesToTextDocumentContent(oldDocument, change);
+    const newContent = this.applyChangesToTextDocumentContent(
+      oldDocument,
+      change,
+    );
     if (null != newContent) {
       this.textDocuments.set(
         newDocument.uri,

@@ -6,15 +6,23 @@ import * as processes from "../processes";
 import Session from "./index";
 
 export default class Analyzer implements server.Disposable {
-  public readonly refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
-  public readonly refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
+  public readonly refreshImmediate: ((
+    event: types.TextDocumentIdentifier,
+  ) => Promise<void>);
+  public readonly refreshDebounced: ((
+    event: types.TextDocumentIdentifier,
+  ) => Promise<void>) &
+    _.Cancelable;
   private readonly bsbDiagnostics: { [key: string]: types.Diagnostic[] } = {};
 
-  constructor(private readonly session: Session) {
-  }
+  constructor(private readonly session: Session) {}
 
   public clear(event: types.TextDocumentIdentifier): void {
-    if (this.bsbDiagnostics[event.uri] && this.bsbDiagnostics[event.uri][0] && this.bsbDiagnostics[event.uri][0].source !== "bucklescript") {
+    if (
+      this.bsbDiagnostics[event.uri] &&
+      this.bsbDiagnostics[event.uri][0] &&
+      this.bsbDiagnostics[event.uri][0].source !== "bucklescript"
+    ) {
       this.session.connection.sendDiagnostics({
         diagnostics: [],
         uri: event.uri,
@@ -31,7 +39,9 @@ export default class Analyzer implements server.Disposable {
   }
 
   public onDidChangeConfiguration(): void {
-    (this.refreshImmediate as any) = this.refreshWithKind(server.TextDocumentSyncKind.Full);
+    (this.refreshImmediate as any) = this.refreshWithKind(
+      server.TextDocumentSyncKind.Full,
+    );
     (this.refreshDebounced as any) = _.debounce(
       this.refreshWithKind(server.TextDocumentSyncKind.Incremental),
       this.session.settings.reason.debounce.linter,
@@ -39,16 +49,19 @@ export default class Analyzer implements server.Disposable {
     );
   }
 
-  public refreshWithKind(syncKind: server.TextDocumentSyncKind): (id: types.TextDocumentIdentifier) => Promise<void> {
-    return async (id) => {
-
-      const tools: Set<string> = new Set(this.session.settings.reason.diagnostics.tools);
+  public refreshWithKind(
+    syncKind: server.TextDocumentSyncKind,
+  ): (id: types.TextDocumentIdentifier) => Promise<void> {
+    return async id => {
+      const tools: Set<string> = new Set(
+        this.session.settings.reason.diagnostics.tools,
+      );
       if (tools.size < 1) return;
 
       // Reset state for every run. This currently can hide valid warnings in some cases
       // as they are not cached, but the alternative (trying to keep track of them) will
       // probably be worse. See https://github.com/BuckleScript/bucklescript/issues/2024
-      Object.keys(this.bsbDiagnostics).forEach((fileUri) => {
+      Object.keys(this.bsbDiagnostics).forEach(fileUri => {
         this.bsbDiagnostics[fileUri] = [];
       });
       this.bsbDiagnostics[id.uri] = [];
@@ -59,24 +72,43 @@ export default class Analyzer implements server.Disposable {
         const bsbOutput = await bsbProcess.run();
 
         const diagnostics = parser.bucklescript.parseErrors(bsbOutput);
-        Object.keys(diagnostics).forEach((fileUri) => {
-          if (!this.bsbDiagnostics[fileUri]) { this.bsbDiagnostics[fileUri] = []; }
-          this.bsbDiagnostics[fileUri] = this.bsbDiagnostics[fileUri].concat(diagnostics[fileUri]);
+        Object.keys(diagnostics).forEach(fileUri => {
+          if (!this.bsbDiagnostics[fileUri]) {
+            this.bsbDiagnostics[fileUri] = [];
+          }
+          this.bsbDiagnostics[fileUri] = this.bsbDiagnostics[fileUri].concat(
+            diagnostics[fileUri],
+          );
         });
 
-        Object.keys(this.bsbDiagnostics).forEach((fileUri) => {
-          this.session.connection.sendDiagnostics({ diagnostics: this.bsbDiagnostics[fileUri], uri: fileUri });
-          if (this.bsbDiagnostics[fileUri].length === 0) { delete this.bsbDiagnostics[fileUri]; }
+        Object.keys(this.bsbDiagnostics).forEach(fileUri => {
+          this.session.connection.sendDiagnostics({
+            diagnostics: this.bsbDiagnostics[fileUri],
+            uri: fileUri,
+          });
+          if (this.bsbDiagnostics[fileUri].length === 0) {
+            delete this.bsbDiagnostics[fileUri];
+          }
         });
       } else if (tools.has("merlin")) {
         if (syncKind === server.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
-          if (null != document) await this.session.merlin.sync(merlin.Sync.tell("start", "end", document.getText()), id);
+          if (null != document)
+            await this.session.merlin.sync(
+              merlin.Sync.tell("start", "end", document.getText()),
+              id,
+            );
         }
-        const errors = await this.session.merlin.query(merlin.Query.errors(), id);
+        const errors = await this.session.merlin.query(
+          merlin.Query.errors(),
+          id,
+        );
         if (errors.class !== "return") return;
         const diagnostics: types.Diagnostic[] = [];
-        for (const report of errors.value) diagnostics.push(await merlin.IErrorReport.intoCode(this.session, id, report));
+        for (const report of errors.value)
+          diagnostics.push(
+            await merlin.IErrorReport.intoCode(this.session, id, report),
+          );
         this.session.connection.sendDiagnostics({ diagnostics, uri: id.uri });
       }
     };

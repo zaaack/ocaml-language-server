@@ -26,23 +26,32 @@ function createDiagnostic(
   };
 }
 
-export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnostic[] } {
+export function parseErrors(
+  bsbOutput: string,
+): { [key: string]: types.Diagnostic[] } {
   const parsedDiagnostics = {};
 
-  const reLevel1Errors = new RegExp ([
-    /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
-    /Error: ([\s\S]*)(We've found a bug for you!|File "(.*)", line (\d*):\nError: Error while running external preprocessor)/,
-  ].map((r) => r.source).join(""), "g");
+  const reLevel1Errors = new RegExp(
+    [
+      /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
+      /Error: ([\s\S]*)(We've found a bug for you!|File "(.*)", line (\d*):\nError: Error while running external preprocessor)/,
+    ]
+      .map(r => r.source)
+      .join(""),
+    "g",
+  );
 
   let errorMatch;
-  while (errorMatch = reLevel1Errors.exec(bsbOutput)) {
+  while ((errorMatch = reLevel1Errors.exec(bsbOutput))) {
     const fileUri = "file://" + errorMatch[1];
     const startLine = Number(errorMatch[2]) - 1;
     const endLine = Number(errorMatch[2]) - 1;
     const startCharacter = Number(errorMatch[3]);
     const endCharacter = Number(errorMatch[4]);
     const message = errorMatch[5].trim();
-    const severity = /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error;
+    const severity = /^Warning number \d+/.exec(errorMatch[0])
+      ? types.DiagnosticSeverity.Warning
+      : types.DiagnosticSeverity.Error;
 
     const diagnostic: types.Diagnostic = createDiagnostic(
       message,
@@ -52,19 +61,26 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
       endLine,
       severity,
     );
-    if (!parsedDiagnostics[fileUri]) { parsedDiagnostics[fileUri] = []; }
+    if (!parsedDiagnostics[fileUri]) {
+      parsedDiagnostics[fileUri] = [];
+    }
     parsedDiagnostics[fileUri].push(diagnostic);
   }
 
-  const reLevel2Errors = new RegExp ([
-    /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
-    /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
-    /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
-    /((?:.|\n)*?)/, // Capturing error / warning message
-    /((?=We've found a bug for you!)|(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Possible tails
-  ].map((r) => r.source).join(""), "g");
+  const reLevel2Errors = new RegExp(
+    [
+      /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
+      /(.*) (\d+):(\d+)(?:-(\d+)(?::(\d+))?)?\n  \n/, // Capturing file name and lines / indexes
+      /(?:.|\n)*?\n  \n/, // Ignoring actual lines content being printed
+      /((?:.|\n)*?)/, // Capturing error / warning message
+      /((?=We've found a bug for you!)|(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Possible tails
+    ]
+      .map(r => r.source)
+      .join(""),
+    "g",
+  );
 
-  while (errorMatch = reLevel2Errors.exec(bsbOutput)) {
+  while ((errorMatch = reLevel2Errors.exec(bsbOutput))) {
     const fileUri = "file://" + errorMatch[1];
     // Suppose most complex case, path/to/file.re 10:20-15:5 message
     const startLine = Number(errorMatch[2]) - 1;
@@ -81,7 +97,9 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
       endCharacter = endLine + 1; // Format is L:SC-EC
       endLine = startLine;
     }
-    const severity = /^Warning number \d+/.exec(errorMatch[0]) ? types.DiagnosticSeverity.Warning : types.DiagnosticSeverity.Error;
+    const severity = /^Warning number \d+/.exec(errorMatch[0])
+      ? types.DiagnosticSeverity.Warning
+      : types.DiagnosticSeverity.Error;
 
     const diagnostic: types.Diagnostic = createDiagnostic(
       message,
@@ -91,7 +109,9 @@ export function parseErrors(bsbOutput: string): { [key: string]: types.Diagnosti
       endLine,
       severity,
     );
-    if (!parsedDiagnostics[fileUri]) { parsedDiagnostics[fileUri] = []; }
+    if (!parsedDiagnostics[fileUri]) {
+      parsedDiagnostics[fileUri] = [];
+    }
     parsedDiagnostics[fileUri].push(diagnostic);
   }
   return parsedDiagnostics;

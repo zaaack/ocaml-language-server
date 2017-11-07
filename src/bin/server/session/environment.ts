@@ -17,8 +17,7 @@ export default class Environment implements server.Disposable {
     return uri.substr(fileSchemeLength);
   }
 
-  constructor(private readonly session: Session) {
-  }
+  constructor(private readonly session: Session) {}
 
   public dispose(): void {
     return;
@@ -30,7 +29,11 @@ export default class Environment implements server.Disposable {
     return path.relative(rootPath, Environment.uriToPath(id));
   }
 
-  public spawn(command: string, args: string[] = [], options: childProcess.SpawnOptions = {}): childProcess.ChildProcess {
+  public spawn(
+    command: string,
+    args: string[] = [],
+    options: childProcess.SpawnOptions = {},
+  ): childProcess.ChildProcess {
     options.shell = process.platform === "win32" ? true : options.shell;
     return childProcess.spawn(command, args, options);
   }

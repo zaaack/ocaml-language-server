@@ -3,7 +3,13 @@ import { merlin, types } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
-export default function(session: Session): server.RequestHandler<server.TextDocumentPositionParams, types.CompletionItem[], void> {
+export default function(
+  session: Session,
+): server.RequestHandler<
+  server.TextDocumentPositionParams,
+  types.CompletionItem[],
+  void
+> {
   return async (event, token) => {
     let prefix: null | string = null;
     try {
@@ -14,8 +20,15 @@ export default function(session: Session): server.RequestHandler<server.TextDocu
     }
     if (prefix == null) return [];
     const position = merlin.Position.fromCode(event.position);
-    const request = merlin.Query.complete.prefix(prefix).at(position).with.doc();
-    const response = await session.merlin.query(request, event.textDocument, Infinity);
+    const request = merlin.Query.complete
+      .prefix(prefix)
+      .at(position)
+      .with.doc();
+    const response = await session.merlin.query(
+      request,
+      event.textDocument,
+      Infinity,
+    );
     if (token.isCancellationRequested) return [];
     if (response.class !== "return") return [];
     const entries = response.value.entries || [];

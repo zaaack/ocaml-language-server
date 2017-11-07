@@ -14,7 +14,10 @@ export default class Merlin implements server.Disposable {
 
   constructor(private readonly session: Session) {
     this.queue = async.priorityQueue((task, callback) => {
-      this.readline.question(JSON.stringify(task), _.flow(JSON.parse, callback));
+      this.readline.question(
+        JSON.stringify(task),
+        _.flow(JSON.parse, callback),
+      );
     }, 1);
   }
 
@@ -32,14 +35,18 @@ export default class Merlin implements server.Disposable {
       if (error.code === "ENOENT") {
         const msg = `Cannot find merlin binary at "${ocamlmerlin}".`;
         this.session.connection.window.showWarningMessage(msg);
-        this.session.connection.window.showWarningMessage(`Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`);
+        this.session.connection.window.showWarningMessage(
+          `Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`,
+        );
         this.dispose();
         throw error;
       }
     });
 
     this.process.stderr.on("data", (data: string) => {
-      this.session.connection.window.showErrorMessage(`ocamlmerlin error: ${data}`);
+      this.session.connection.window.showErrorMessage(
+        `ocamlmerlin error: ${data}`,
+      );
     });
 
     this.readline = readline.createInterface({
@@ -49,15 +56,31 @@ export default class Merlin implements server.Disposable {
     });
   }
 
-  public query<I, O>({ query }: merlin.Query<I, O>, id?: types.TextDocumentIdentifier, priority: number = 0): merlin.Response<O> {
-    const context: ["auto", string] | undefined = id ? ["auto", id.uri] : undefined;
+  public query<I, O>(
+    { query }: merlin.Query<I, O>,
+    id?: types.TextDocumentIdentifier,
+    priority: number = 0,
+  ): merlin.Response<O> {
+    const context: ["auto", string] | undefined = id
+      ? ["auto", id.uri]
+      : undefined;
     const request = context ? { context, query } : query;
-    return new Promise((resolve) => this.queue.push([request], priority, resolve));
+    return new Promise(resolve =>
+      this.queue.push([request], priority, resolve),
+    );
   }
 
-  public sync<I, O>({ sync: query }: merlin.Sync<I, O>, id?: types.TextDocumentIdentifier, priority: number = 0): merlin.Response<O> {
-    const context: ["auto", string] | undefined = id ? ["auto", id.uri] : undefined;
+  public sync<I, O>(
+    { sync: query }: merlin.Sync<I, O>,
+    id?: types.TextDocumentIdentifier,
+    priority: number = 0,
+  ): merlin.Response<O> {
+    const context: ["auto", string] | undefined = id
+      ? ["auto", id.uri]
+      : undefined;
     const request = context ? { context, query } : query;
-    return new Promise((resolve) => this.queue.push([request], priority, resolve));
+    return new Promise(resolve =>
+      this.queue.push([request], priority, resolve),
+    );
   }
 }

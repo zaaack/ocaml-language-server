@@ -5,17 +5,18 @@ export interface IColumnLine {
   line: number;
 }
 
-export type Position
-  = "start"
-  | "end"
-  | number
-  | IColumnLine
-  ;
+export type Position = "start" | "end" | number | IColumnLine;
 export namespace Position {
-  export function fromCode({ character: col, line }: types.Position): IColumnLine {
+  export function fromCode({
+    character: col,
+    line,
+  }: types.Position): IColumnLine {
     return { col, line: line + 1 };
   }
-  export function intoCode({ col: character, line }: IColumnLine): types.Position {
+  export function intoCode({
+    col: character,
+    line,
+  }: IColumnLine): types.Position {
     return { character, line: line - 1 };
   }
 }
