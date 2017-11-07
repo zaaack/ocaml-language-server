@@ -26,7 +26,7 @@ export default function(session: Session): server.RequestHandler<server.CodeLens
     const response = await session.merlin.query(request, textDocument, 1);
     if (token.isCancellationRequested) return [];
 
-    if (response.class !== "return") return []; // new rpc.ResponseError(-1, "onCodeLens: failed", undefined);
+    if (response.class !== "return") return [];
     const document = await command.getTextDocument(session, textDocument);
     if (null == document) return [];
     if (token.isCancellationRequested) return [];

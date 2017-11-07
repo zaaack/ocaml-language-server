@@ -2,12 +2,12 @@ import * as async from "async";
 import * as childProcess from "child_process";
 import * as _ from "lodash";
 import * as readline from "readline";
-import * as rpc from "vscode-jsonrpc";
+import * as server from "vscode-languageserver";
 import Uri from "vscode-uri";
 import { merlin, types } from "../../../lib";
 import Session from "../session";
 
-export default class Merlin implements rpc.Disposable {
+export default class Merlin implements server.Disposable {
   private readonly queue: async.AsyncPriorityQueue<any>;
   private readline: readline.ReadLine;
   private process: childProcess.ChildProcess;

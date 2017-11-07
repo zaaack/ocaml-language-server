@@ -1,11 +1,10 @@
 import Loki = require("lokijs");
-import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { merlin, types } from "../../../lib";
 import * as command from "../command";
 import Session from "./index";
 
-export default class Indexer implements rpc.Disposable {
+export default class Indexer implements server.Disposable {
   public populated: boolean = false;
   private readonly db: Loki = new Loki(".vscode.reasonml.loki");
   private readonly symbols: LokiCollection<types.SymbolInformation>;
@@ -33,7 +32,7 @@ export default class Indexer implements rpc.Disposable {
   public async indexSymbols(id: types.TextDocumentIdentifier): Promise<void | server.ResponseError<void>> {
     const request = merlin.Query.outline();
     const response = await this.session.merlin.query(request, id);
-    if (response.class !== "return") return new rpc.ResponseError(-1, "indexSymbols: failed", undefined);
+    if (response.class !== "return") return new server.ResponseError(-1, "indexSymbols: failed", undefined);
     for (const item of merlin.Outline.intoCode(response.value, id)) {
       const prefix = item.containerName ? `${item.containerName}.` : "";
       item.name = `${prefix}${item.name}`;

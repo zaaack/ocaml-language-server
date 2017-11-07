@@ -18,7 +18,6 @@ export default function(session: Session): server.RequestHandler<server.TextDocu
     const response = await session.merlin.query(request, event.textDocument, Infinity);
     if (token.isCancellationRequested) return [];
     if (response.class !== "return") return [];
-    // new rpc.ResponseError(-1, "onCompletion: failed", undefined);
     const entries = response.value.entries || [];
     return entries.map(merlin.Completion.intoCode);
   };

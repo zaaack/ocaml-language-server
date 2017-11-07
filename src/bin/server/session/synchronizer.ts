@@ -1,8 +1,8 @@
-import * as rpc from "vscode-jsonrpc";
+import * as server from "vscode-languageserver";
 import { merlin, types } from "../../../lib";
 import Session from "./index";
 
-export default class Synchronizer implements rpc.Disposable {
+export default class Synchronizer implements server.Disposable {
   public readonly textDocuments: Map<string, types.TextDocument> = new Map();
 
   constructor(private readonly session: Session) {

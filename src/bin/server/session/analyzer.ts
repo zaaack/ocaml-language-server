@@ -1,12 +1,11 @@
 import * as _ from "lodash";
-import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { merlin, parser, types } from "../../../lib";
 import * as command from "../command";
 import * as processes from "../processes";
 import Session from "./index";
 
-export default class Analyzer implements rpc.Disposable {
+export default class Analyzer implements server.Disposable {
   public readonly refreshImmediate: ((event: types.TextDocumentIdentifier) => Promise<void>);
   public readonly refreshDebounced: ((event: types.TextDocumentIdentifier) => Promise<void>) & _.Cancelable;
   private readonly bsbDiagnostics: { [key: string]: types.Diagnostic[] } = {};

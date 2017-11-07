@@ -1,4 +1,3 @@
-import * as rpc from "vscode-jsonrpc";
 import * as server from "vscode-languageserver";
 import { ISettings } from "../../../lib";
 import { Merlin } from "../processes";
@@ -12,7 +11,7 @@ export {
   Environment,
 };
 
-export default class Session implements rpc.Disposable {
+export default class Session implements server.Disposable {
   public readonly initConf: server.InitializeParams;
   public settings: ISettings = ({} as any);
   public readonly connection: server.IConnection = server.createConnection();
