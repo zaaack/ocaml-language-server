@@ -22,7 +22,7 @@
   "scripts": {
     "compile": "npm run ocamldoc:grammar:compile && tsc -p ./",
     "ocamldoc:grammar:compile": "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
-    "lint": "tslint --project tsconfig.json --type-check",
+    "lint": "tslint --project tsconfig.json",
     "prepublish": "npm run ocamldoc:grammar:compile && tsc -p ./"
   },
   "main": "./lib/index.js",
