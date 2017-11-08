@@ -115,6 +115,7 @@ is the most efficient approach. Clients written in other languages should use
 Clone the repo and do:
 
 ```sh
-yarn install
-yarn run compile
+yarn install                     # install dependencies
+yarn run compile                 # compile and generate ./bin and ./lib
+./bin/server/index.js --stdio    # start the server
 ```
