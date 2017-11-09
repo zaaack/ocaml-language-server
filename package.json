@@ -20,7 +20,7 @@
     "node": ">=6.9.1"
   },
   "scripts": {
-    "compile": "npm run ocamldoc:grammar:compile && tsc -p ./",
+    "compile": "npm run ocamldoc:grammar:compile && npm run lint && tsc -p ./",
     "ocamldoc:grammar:compile":
       "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
     "format": "./node_modules/.bin/prettier --write \"src/**/*.ts\"",
