@@ -62,7 +62,7 @@ export default class Merlin implements server.Disposable {
     priority: number = 0,
   ): merlin.Response<O> {
     const context: ["auto", string] | undefined = id
-      ? ["auto", id.uri]
+      ? ["auto", Uri.parse(id.uri).fsPath]
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
@@ -76,7 +76,7 @@ export default class Merlin implements server.Disposable {
     priority: number = 0,
   ): merlin.Response<O> {
     const context: ["auto", string] | undefined = id
-      ? ["auto", id.uri]
+      ? ["auto", Uri.parse(id.uri).fsPath]
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
