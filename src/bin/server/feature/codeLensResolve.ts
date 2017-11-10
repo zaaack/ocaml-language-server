@@ -7,6 +7,8 @@ export default function(
   session: Session,
 ): server.RequestHandler<types.CodeLens, types.CodeLens, void> {
   return async (event, token) => {
+    if (token.isCancellationRequested) return event;
+
     const data: types.SymbolInformation & {
       event: server.TextDocumentPositionParams;
       fileKind: "ml" | "re";
@@ -15,9 +17,11 @@ export default function(
     const itemType = await command.getType(session, data.event, 1);
     if (token.isCancellationRequested) return event;
     if (itemType == null) return event;
+
     event.command = { command: "", title: itemType.type };
     if ("re" === data.fileKind)
       event.command.title = event.command.title.replace(/ : /g, ": ");
+
     if (!session.settings.reason.codelens.unicode) return event;
     if ("ml" === data.fileKind)
       event.command.title = event.command.title.replace(/->/g, "→");
@@ -25,6 +29,7 @@ export default function(
       event.command.title = event.command.title.replace(/\*/g, "×");
     if ("re" === data.fileKind)
       event.command.title = event.command.title.replace(/=>/g, "⇒");
+
     return event;
   };
 }

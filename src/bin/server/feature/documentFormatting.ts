@@ -11,15 +11,19 @@ export default function(
   void
 > {
   return async (event, token) => {
+    if (token.isCancellationRequested) return [];
+
     const result = await command.getTextDocument(session, event.textDocument);
+    if (token.isCancellationRequested) return [];
     if (null == result) return [];
+
     const document = types.TextDocument.create(
       event.textDocument.uri,
       result.languageId,
       result.version,
       result.getText(),
     );
-    if (token.isCancellationRequested) return [];
+
     let otxt: null | string = null;
     if (document.languageId === "ocaml")
       otxt = await command.getFormatted.ocpIndent(session, document);
@@ -27,6 +31,7 @@ export default function(
       otxt = await command.getFormatted.refmt(session, document);
     if (token.isCancellationRequested) return [];
     if (otxt == null) return [];
+
     const edits: types.TextEdit[] = [];
     edits.push(
       types.TextEdit.replace(

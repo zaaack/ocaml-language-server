@@ -11,6 +11,7 @@ export default async (
   const request = merlin.Query.document(null).at(position);
   const response = await session.merlin.query(
     request,
+    null,
     event.textDocument,
     priority,
   );

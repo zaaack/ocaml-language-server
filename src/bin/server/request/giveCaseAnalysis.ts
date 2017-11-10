@@ -13,7 +13,10 @@ export default function(
     const start = merlin.Position.fromCode(event.range.start);
     const end = merlin.Position.fromCode(event.range.end);
     const request = merlin.Query.kase.analysis.from(start).to(end);
-    const response = await session.merlin.query(request, event.textDocument);
+    const response = await session.merlin.query(
+      request,
+      token,
+      event.textDocument);
     if (token.isCancellationRequested) return null;
     if (response.class !== "return") throw response.value;
     return response.value;

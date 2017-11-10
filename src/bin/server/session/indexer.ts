@@ -37,7 +37,7 @@ export default class Indexer implements server.Disposable {
     id: types.TextDocumentIdentifier,
   ): Promise<void | server.ResponseError<void>> {
     const request = merlin.Query.outline();
-    const response = await this.session.merlin.query(request, id);
+    const response = await this.session.merlin.query(request, null, id);
     if (response.class !== "return")
       return new server.ResponseError(-1, "indexSymbols: failed", undefined);
     for (const item of merlin.Outline.intoCode(response.value, id)) {

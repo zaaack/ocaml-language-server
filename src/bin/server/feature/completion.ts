@@ -11,6 +11,8 @@ export default function(
   void
 > {
   return async (event, token) => {
+    if (token.isCancellationRequested) return [];
+
     let prefix: null | string = null;
     try {
       prefix = await command.getPrefix(session, event);
@@ -19,6 +21,7 @@ export default function(
       // ignore errors from completing ' .'
     }
     if (prefix == null) return [];
+
     const position = merlin.Position.fromCode(event.position);
     const request = merlin.Query.complete
       .prefix(prefix)
@@ -26,11 +29,13 @@ export default function(
       .with.doc();
     const response = await session.merlin.query(
       request,
+      token,
       event.textDocument,
       Infinity,
     );
     if (token.isCancellationRequested) return [];
     if (response.class !== "return") return [];
+
     const entries = response.value.entries || [];
     return entries.map(merlin.Completion.intoCode);
   };

@@ -11,9 +11,12 @@ export default function(
   void
 > {
   return async (event, token) => {
+    if (token.isCancellationRequested) return [];
+
     const occurrences = await command.getOccurrences(session, event);
     if (token.isCancellationRequested) return [];
     if (occurrences == null) return [];
+
     const highlights = occurrences.map(loc => {
       const range = merlin.Location.intoCode(loc);
       const kind = types.DocumentHighlightKind.Write;

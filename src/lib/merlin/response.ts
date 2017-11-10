@@ -25,6 +25,10 @@ export type MerlinResponse<T> =
       class: "exception";
       value: json.Value;
       notifications: IMerlinNotification;
-    };
+    }
+  | {
+      class: "canceled";
+      value: string;
+  };
 
 export type Response<T> = Promise<MerlinResponse<T>>;

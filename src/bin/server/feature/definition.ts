@@ -11,12 +11,18 @@ export default function(
   void
 > {
   return async (event, token) => {
+    if (token.isCancellationRequested) return [];
+
     const find = async (kind: "ml" | "mli"): Promise<null | types.Location> => {
       // tslint:disable-line arrow-parens
       const request = merlin.Query.locate(null, kind).at(
         merlin.Position.fromCode(event.position),
       );
-      const response = await session.merlin.query(request, event.textDocument);
+      const response = await session.merlin.query(
+        request,
+        token,
+        event.textDocument,
+      );
       if (response.class !== "return" || response.value.pos == null)
         return null;
       const value = response.value;
@@ -28,12 +34,16 @@ export default function(
       const location = types.Location.create(uri, range);
       return location;
     };
+
     const locML = await find("ml");
     if (token.isCancellationRequested) return [];
+
     // const locMLI = await find("mli"");
+
     const locations: types.Location[] = [];
     if (locML != null) locations.push(locML);
     // if (locMLI != null) locations.push(locMLI);
+
     return locations;
   };
 }

@@ -6,16 +6,24 @@ import * as server from "vscode-languageserver";
 import Uri from "vscode-uri";
 import { merlin, types } from "../../../lib";
 import Session from "../session";
+import QueueTask from "./queueTask";
 
 export default class Merlin implements server.Disposable {
-  private readonly queue: async.AsyncPriorityQueue<any>;
+  private readonly queue: async.AsyncPriorityQueue<QueueTask>;
   private readline: readline.ReadLine;
   private process: childProcess.ChildProcess;
 
   constructor(private readonly session: Session) {
     this.queue = async.priorityQueue((task, callback) => {
+      if (task.token && task.token.isCancellationRequested) {
+        return callback({
+          class: "canceled",
+          value: "Request has been canceled.",
+        });
+      }
+
       this.readline.question(
-        JSON.stringify(task),
+        JSON.stringify(task.task),
         _.flow(JSON.parse, callback),
       );
     }, 1);
@@ -58,6 +66,7 @@ export default class Merlin implements server.Disposable {
 
   public query<I, O>(
     { query }: merlin.Query<I, O>,
+    token: server.CancellationToken | null,
     id?: types.TextDocumentIdentifier,
     priority: number = 0,
   ): merlin.Response<O> {
@@ -66,7 +75,7 @@ export default class Merlin implements server.Disposable {
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
-      this.queue.push([request], priority, resolve),
+      this.queue.push(new QueueTask(request, token), priority, resolve),
     );
   }
 
@@ -80,7 +89,7 @@ export default class Merlin implements server.Disposable {
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
-      this.queue.push([request], priority, resolve),
+      this.queue.push(new QueueTask(request), priority, resolve),
     );
   }
 }

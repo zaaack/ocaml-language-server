@@ -9,6 +9,7 @@ export default function(
   session: Session,
 ): server.RequestHandler<server.CodeLensParams, types.CodeLens[], void> {
   return async ({ textDocument }, token) => {
+    if (token.isCancellationRequested) return [];
     if (!session.settings.reason.codelens.enabled) return [];
 
     const languages: Set<string> = new Set(
@@ -27,13 +28,17 @@ export default function(
     const fileKind = fileKindMatch[1];
 
     const request = merlin.Query.outline();
-    const response = await session.merlin.query(request, textDocument, 1);
+    const response = await session.merlin.query(
+      request,
+      token,
+      textDocument,
+      1);
     if (token.isCancellationRequested) return [];
 
     if (response.class !== "return") return [];
     const document = await command.getTextDocument(session, textDocument);
-    if (null == document) return [];
     if (token.isCancellationRequested) return [];
+    if (null == document) return [];
 
     const symbols = merlin.Outline.intoCode(response.value, textDocument);
     const codeLenses: types.CodeLens[] = [];

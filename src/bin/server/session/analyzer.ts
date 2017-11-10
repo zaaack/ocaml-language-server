@@ -101,6 +101,7 @@ export default class Analyzer implements server.Disposable {
         }
         const errors = await this.session.merlin.query(
           merlin.Query.errors(),
+          null,
           id,
         );
         if (errors.class !== "return") return;

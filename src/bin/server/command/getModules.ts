@@ -9,7 +9,7 @@ export default async function(
   priority: number = 0,
 ): Promise<server.TextDocumentIdentifier[]> {
   const request = merlin.Query.path.list.source();
-  const response = await session.merlin.query(request, event, priority);
+  const response = await session.merlin.query(request, null, event, priority);
   if (response.class !== "return") return [];
   const srcDirs: Set<string> = new Set();
   const srcMods: server.TextDocumentIdentifier[] = [];

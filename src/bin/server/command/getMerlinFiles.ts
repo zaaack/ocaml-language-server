@@ -8,7 +8,7 @@ export default async function(
   priority: number = 0,
 ): Promise<string[]> {
   const request = merlin.Query.project.get();
-  const response = await session.merlin.query(request, event, priority);
+  const response = await session.merlin.query(request, null, event, priority);
   if (response.class !== "return") return [];
   return response.value.result;
 }
