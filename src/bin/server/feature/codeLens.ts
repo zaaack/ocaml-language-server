@@ -32,7 +32,8 @@ export default function(
       request,
       token,
       textDocument,
-      1);
+      1,
+    );
     if (token.isCancellationRequested) return [];
 
     if (response.class !== "return") return [];

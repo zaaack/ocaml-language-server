@@ -16,7 +16,8 @@ export default function(
     const response = await session.merlin.query(
       request,
       token,
-      event.textDocument);
+      event.textDocument,
+    );
     if (token.isCancellationRequested) return null;
     if (response.class !== "return") throw response.value;
     return response.value;

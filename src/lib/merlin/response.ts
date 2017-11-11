@@ -29,6 +29,6 @@ export type MerlinResponse<T> =
   | {
       class: "canceled";
       value: string;
-  };
+    };
 
 export type Response<T> = Promise<MerlinResponse<T>>;
