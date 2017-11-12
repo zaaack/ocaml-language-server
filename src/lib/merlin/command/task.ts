@@ -1,6 +1,6 @@
 import * as server from "vscode-languageserver";
 
-export default class QueueTask {
+export class Task {
   constructor(
     readonly task: any,
     readonly token: server.CancellationToken | null = null,
