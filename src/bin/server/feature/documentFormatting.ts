@@ -30,7 +30,7 @@ export default function(
     if (document.languageId === "reason")
       otxt = await command.getFormatted.refmt(session, document);
     if (token.isCancellationRequested) return [];
-    if (otxt == null) return [];
+    if (otxt == null || otxt === "") return [];
 
     const edits: types.TextEdit[] = [];
     edits.push(
