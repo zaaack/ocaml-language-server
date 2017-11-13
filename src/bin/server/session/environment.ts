@@ -37,7 +37,10 @@ export default class Environment implements server.Disposable {
     if (process.platform === "win32") {
       options.shell = true;
     } else {
-      args = ["-lc", `${command} ${args.join(" ")}`];
+      args = [
+        "-lc",
+        `${command}${args.length > 0 ? " " : ""}${args.join(" ")}`,
+      ];
       command = process.env.SHELL || "sh";
     }
     return childProcess.spawn(command, args, options);
