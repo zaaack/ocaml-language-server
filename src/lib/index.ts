@@ -14,6 +14,7 @@ export interface ISettings {
       linter: number;
     };
     diagnostics: {
+      merlinPerfLogging: boolean;
       tools: Array<"merlin" | "bsb">;
     };
     path: {
@@ -42,6 +43,7 @@ export namespace ISettings {
         linter: 500,
       },
       diagnostics: {
+        merlinPerfLogging: false,
         tools: ["merlin"],
       },
       path: {
