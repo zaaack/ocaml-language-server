@@ -33,6 +33,15 @@ export default class Merlin implements server.Disposable {
       };
 
       if (task.token && task.token.isCancellationRequested) {
+        if (this.session.settings.reason.diagnostics.merlinPerfLogging) {
+          const queueDuration =
+            begunProcessing.getTime() - task.enqueuedAt.getTime();
+          this.session.log(
+            `(${this.queue.length()}) Task ${JSON.stringify(
+              task.task,
+            )} was in the queue for ${queueDuration} ms and was cancelled.`,
+          );
+        }
         return callback({
           class: "canceled",
           value: "Request has been canceled.",
