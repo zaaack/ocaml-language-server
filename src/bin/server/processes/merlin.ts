@@ -14,7 +14,34 @@ export default class Merlin implements server.Disposable {
 
   constructor(private readonly session: Session) {
     this.queue = async.priorityQueue((task, callback) => {
+      const begunProcessing = new Date();
+      const logMessage = (result: any) => {
+        if (this.session.settings.reason.diagnostics.merlinPerfLogging) {
+          const queueDuration =
+            begunProcessing.getTime() - task.enqueuedAt.getTime();
+          const merlinDuration =
+            new Date().getTime() - begunProcessing.getTime();
+          this.session.log(
+            `(${this.queue.length()}) Task ${JSON.stringify(
+              task.task,
+            )} was in the queue for ${queueDuration} ms and took ${
+              merlinDuration
+            } ms to process.`,
+          );
+        }
+        return result;
+      };
+
       if (task.token && task.token.isCancellationRequested) {
+        if (this.session.settings.reason.diagnostics.merlinPerfLogging) {
+          const queueDuration =
+            begunProcessing.getTime() - task.enqueuedAt.getTime();
+          this.session.log(
+            `(${this.queue.length()}) Task ${JSON.stringify(
+              task.task,
+            )} was in the queue for ${queueDuration} ms and was cancelled.`,
+          );
+        }
         return callback({
           class: "canceled",
           value: "Request has been canceled.",
@@ -22,7 +49,7 @@ export default class Merlin implements server.Disposable {
       }
       this.readline.question(
         JSON.stringify(task.task),
-        _.flow(JSON.parse, callback),
+        _.flow(JSON.parse, logMessage, callback),
       );
     }, 1);
   }
