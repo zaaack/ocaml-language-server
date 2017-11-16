@@ -39,7 +39,7 @@
     "@types/glob": "5.0.33",
     "@types/lodash": "4.14.85",
     "@types/lokijs": "1.2.30",
-    "@types/node": "8.0.51",
+    "@types/node": "8.0.53",
     "@types/pegjs": "0.10.0",
     "prettier": "1.8.2",
     "shx": "0.2.2",
