@@ -14,7 +14,7 @@ export default function(
     if (token.isCancellationRequested) return { contents: [] };
 
     const markedStrings: types.MarkedString[] = [];
-    const itemType = await command.getType(session, event);
+    const itemType = await command.getType(session, event, token);
     if (token.isCancellationRequested) return { contents: [] };
 
     const itemDocs = await command.getDocumentation(session, event);

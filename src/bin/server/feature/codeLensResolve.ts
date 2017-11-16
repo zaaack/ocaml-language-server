@@ -14,7 +14,7 @@ export default function(
       fileKind: "ml" | "re";
     } =
       event.data;
-    const itemType = await command.getType(session, data.event, 1);
+    const itemType = await command.getType(session, data.event, token, 1);
     if (token.isCancellationRequested) return event;
     if (itemType == null) return event;
 

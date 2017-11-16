@@ -1,4 +1,7 @@
-import { TextDocumentPositionParams } from "vscode-languageserver";
+import {
+  CancellationToken,
+  TextDocumentPositionParams,
+} from "vscode-languageserver";
 import { merlin } from "../../../lib";
 import { IColumnLine } from "../../../lib/merlin/ordinal";
 import Session from "../session";
@@ -6,6 +9,7 @@ import Session from "../session";
 export default async (
   session: Session,
   event: TextDocumentPositionParams,
+  token: CancellationToken,
   priority: number = 0,
 ): Promise<null | {
   end: merlin.Position;
@@ -19,7 +23,7 @@ export default async (
   const request = merlin.Query.type.enclosing.at(position);
   const response = await session.merlin.query(
     request,
-    null,
+    token,
     event.textDocument,
     priority,
   );

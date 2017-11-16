@@ -9,7 +9,7 @@ export default function(
   return async (event, token) => {
     if (token.isCancellationRequested) return { changes: {} };
 
-    const occurrences = await command.getOccurrences(session, event);
+    const occurrences = await command.getOccurrences(session, event, token);
     if (token.isCancellationRequested) return { changes: {} };
     if (occurrences == null) return { changes: {} };
 

@@ -13,7 +13,7 @@ export default function(
   return async (event, token) => {
     if (token.isCancellationRequested) return [];
 
-    const occurrences = await command.getOccurrences(session, event);
+    const occurrences = await command.getOccurrences(session, event, token);
     if (token.isCancellationRequested) return [];
     if (occurrences == null) return [];
 
