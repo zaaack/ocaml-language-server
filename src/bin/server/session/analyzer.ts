@@ -18,15 +18,15 @@ export default class Analyzer implements server.Disposable {
 
   constructor(private readonly session: Session) {}
 
-  public clear(event: types.TextDocumentIdentifier): void {
+  public clear({ uri }: types.TextDocumentIdentifier): void {
     if (
-      this.bsbDiagnostics[event.uri] &&
-      this.bsbDiagnostics[event.uri][0] &&
-      this.bsbDiagnostics[event.uri][0].source !== "bucklescript"
+      this.bsbDiagnostics[uri] &&
+      this.bsbDiagnostics[uri][0] &&
+      this.bsbDiagnostics[uri][0].source !== "bucklescript"
     ) {
       this.session.connection.sendDiagnostics({
         diagnostics: [],
-        uri: event.uri,
+        uri,
       });
     }
   }
