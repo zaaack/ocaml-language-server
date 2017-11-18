@@ -8,8 +8,10 @@ import getText from "./getText";
 import getTextDocument from "./getTextDocument";
 import getType from "./getType";
 import getWordAtPosition from "./getWordAtPosition";
+import restartMerlin from "./restartMerlin";
 
 export {
+  restartMerlin,
   getDocumentation,
   getFormatted,
   getMerlinFiles,
