@@ -50,7 +50,7 @@ export async function ocpIndentRange(
   const indents: number[] = [];
   const pattern = /\d+/g;
   let match: null | RegExpExecArray = null;
-  while ((match = pattern.exec(output)) != null) {
+  while ((match = pattern.exec(output))) {
     const digits = match.shift() as string;
     const indent = parseInt(digits, 10);
     indents.push(indent);
@@ -63,7 +63,7 @@ export async function refmt(
   doc: types.TextDocument,
   range?: types.Range,
 ): Promise<null | string> {
-  if (range != null) {
+  if (range) {
     session.connection.console.warn(
       "Selection formatting not support for Reason",
     );

@@ -112,7 +112,7 @@ export default class Synchronizer implements server.Disposable {
       oldDocument,
       change,
     );
-    if (null != newContent) {
+    if (newContent) {
       this.textDocuments.set(
         newDocument.uri,
         types.TextDocument.create(

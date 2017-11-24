@@ -20,7 +20,7 @@ export default function(
     const itemDocs = await command.getDocumentation(session, event);
     if (token.isCancellationRequested) return { contents: [] };
 
-    if (itemType != null) {
+    if (itemType) {
       let language = "plaintext";
       if (/\.mli?/.test(event.textDocument.uri)) language = "ocaml.hover.type";
       if (/\.rei?/.test(event.textDocument.uri))
@@ -28,7 +28,7 @@ export default function(
           ? "reason.hover.signature"
           : "reason.hover.type";
       markedStrings.push({ language, value: itemType.type });
-      if (itemDocs != null && !parser.ocamldoc.ignore.test(itemDocs))
+      if (itemDocs && !parser.ocamldoc.ignore.test(itemDocs))
         markedStrings.push(parser.ocamldoc.intoMarkdown(itemDocs));
     }
     return { contents: markedStrings };

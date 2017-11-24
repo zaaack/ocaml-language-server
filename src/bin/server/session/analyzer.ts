@@ -94,7 +94,7 @@ export default class Analyzer implements server.Disposable {
       } else if (tools.has("merlin")) {
         if (syncKind === server.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
-          if (null != document)
+          if (document)
             await this.session.merlin.sync(
               merlin.Sync.tell("start", "end", document.getText()),
               id,

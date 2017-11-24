@@ -40,8 +40,8 @@ export default function(
     // const locMLI = await find("mli"");
 
     const locations: types.Location[] = [];
-    if (locML != null) locations.push(locML);
-    // if (locMLI != null) locations.push(locMLI);
+    if (locML) locations.push(locML);
+    // if (locMLI) locations.push(locMLI);
 
     return locations;
   };

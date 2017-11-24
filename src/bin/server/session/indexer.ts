@@ -59,7 +59,7 @@ export default class Indexer implements server.Disposable {
       for (const id of modules) {
         if (/\.(ml|re)i$/.test(id.uri)) continue;
         const document = await command.getTextDocument(this.session, id);
-        if (null != document) {
+        if (document) {
           await this.session.merlin.sync(
             merlin.Sync.tell("start", "end", document.getText()),
             id,

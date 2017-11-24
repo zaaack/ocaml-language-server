@@ -55,21 +55,19 @@ export default function(
         const event = { position, textDocument };
         // reason requires computing some offsets first
         if (
-          null !=
-            (textLine = document
-              .getText()
-              .substring(document.offsetAt(start), document.offsetAt(end))) &&
-          null !=
-            (matches = textLine.match(
-              /^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m,
-            ))
+          (textLine = document
+            .getText()
+            .substring(document.offsetAt(start), document.offsetAt(end))) &&
+          (matches = textLine.match(
+            /^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m,
+          ))
         ) {
           event.position.character += matches[1].length;
           event.position.character += matches[2].length;
           event.position.character += matches[3] ? matches[3].length : 0;
           event.position.character += matches[4].length;
         }
-        if (null != matches)
+        if (matches)
           codeLenses.push({
             data: { containerName, event, fileKind, kind, location, name },
             range,

@@ -32,7 +32,7 @@ export default function(
       if (
         (matches = message.match(
           /Warning (?:26|27): unused variable\s+\b(\w+)\b/,
-        )) != null
+        ))
       ) {
         const title = "ignore unused variable";
         const command = "reason.codeAction.fixUnusedVariable";
