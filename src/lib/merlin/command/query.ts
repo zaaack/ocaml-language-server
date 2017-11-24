@@ -1,13 +1,9 @@
-// tslint:disable trailing-comma
-
 import * as data from "../data";
 import * as json from "../json";
 import { IColumnLine, ILocation, Position } from "../ordinal";
 
 export class Query<I, O> {
-  constructor(public readonly query: I) {
-    (void null as any) as O; // tslint:disable-line:no-unused-expression
-  }
+  constructor(public readonly query: I) {}
 }
 
 export namespace Query {

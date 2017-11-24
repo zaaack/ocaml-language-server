@@ -49,11 +49,11 @@ export default class Session implements server.Disposable {
   }
 
   public log(data: any): void {
-    this.connection.console.log(JSON.stringify(data, null as any, 2)); // tslint:disable-line
+    this.connection.console.log(JSON.stringify(data, null as any, 2));
   }
 
   public error(data: any): void {
-    this.connection.console.error(JSON.stringify(data, null as any, 2)); // tslint:disable-line
+    this.connection.console.error(JSON.stringify(data, null as any, 2));
   }
 
   public onDidChangeConfiguration({

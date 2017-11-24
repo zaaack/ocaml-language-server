@@ -1,10 +1,7 @@
-// tslint:disable trailing-comma
 import * as ordinal from "../ordinal";
 
 export class Sync<I, O> {
-  constructor(public readonly sync: I) {
-    (void null as any) as O; // tslint:disable-line:no-unused-expression
-  }
+  constructor(public readonly sync: I) {}
 }
 
 export namespace Sync {

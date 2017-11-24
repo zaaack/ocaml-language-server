@@ -3,7 +3,7 @@ import {
   TextDocumentPositionParams,
 } from "vscode-languageserver";
 import { merlin } from "../../../lib";
-import { IColumnLine } from "../../../lib/merlin/ordinal";
+import { Position } from "../../../lib/merlin/ordinal";
 import Session from "../session";
 
 export default async (
@@ -12,13 +12,11 @@ export default async (
   token: CancellationToken,
   priority: number = 0,
 ): Promise<null | {
-  end: merlin.Position;
-  start: merlin.Position;
+  end: Position;
+  start: Position;
   tail: merlin.TailPosition;
   type: string;
 }> => {
-  const __: IColumnLine | null = null;
-  void __; // tslint:disable-line no-unused-expression
   const position = merlin.Position.fromCode(event.position);
   const request = merlin.Query.type.enclosing.at(position);
   const response = await session.merlin.query(

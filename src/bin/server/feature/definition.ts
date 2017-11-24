@@ -14,7 +14,6 @@ export default function(
     if (token.isCancellationRequested) return [];
 
     const find = async (kind: "ml" | "mli"): Promise<null | types.Location> => {
-      // tslint:disable-line arrow-parens
       const request = merlin.Query.locate(null, kind).at(
         merlin.Position.fromCode(event.position),
       );

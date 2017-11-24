@@ -11,9 +11,7 @@ export default async (
   event: TextDocumentPositionParams,
   token: CancellationToken,
   priority: number = 0,
-): Promise<null | merlin.ILocation[]> => {
-  const __: ILocation | null = null;
-  void __; // tslint:disable-line no-unused-expression
+): Promise<null | ILocation[]> => {
   const position = merlin.Position.fromCode(event.position);
   const request = merlin.Query.occurrences.ident.at(position);
   const response = await session.merlin.query(

@@ -34,7 +34,6 @@ export default function(
           /Warning (?:26|27): unused variable\s+\b(\w+)\b/,
         )) != null
       ) {
-        // tslint:disable-line
         const title = "ignore unused variable";
         const command = "reason.codeAction.fixUnusedVariable";
         const location = types.Location.create(uri, range);

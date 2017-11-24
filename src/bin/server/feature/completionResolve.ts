@@ -3,9 +3,8 @@ import { parser, types } from "../../../lib";
 import Session from "../session";
 
 export default function(
-  session: Session,
+  _session: Session,
 ): server.RequestHandler<types.CompletionItem, types.CompletionItem, void> {
-  void session; // tslint:disable-line
   return event => {
     // FIXME: might want to make a separate parser to just strip ocamldoc
     const documentation: string = event.data.documentation
