@@ -3,7 +3,7 @@ import * as childProcess from "child_process";
 import * as _ from "lodash";
 import * as readline from "readline";
 import * as server from "vscode-languageserver";
-import Uri from "vscode-uri";
+import URI from "vscode-uri";
 import { merlin, types } from "../../../lib";
 import Session from "../session";
 
@@ -35,7 +35,7 @@ export default class Merlin implements server.Disposable {
   public initialize(): void {
     const ocamlmerlin = this.session.settings.reason.path.ocamlmerlin;
     const cwd = this.session.initConf.rootUri || this.session.initConf.rootPath;
-    const options = cwd ? { cwd: Uri.parse(cwd).fsPath } : {};
+    const options = cwd ? { cwd: URI.parse(cwd).fsPath } : {};
     this.process = this.session.environment.spawn(ocamlmerlin, [], options);
 
     this.process.on("error", (error: Error & { code: string }) => {
@@ -70,7 +70,7 @@ export default class Merlin implements server.Disposable {
     priority: number = 0,
   ): merlin.Response<O> {
     const context: ["auto", string] | undefined = id
-      ? ["auto", Uri.parse(id.uri).fsPath]
+      ? ["auto", URI.parse(id.uri).fsPath]
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
@@ -84,7 +84,7 @@ export default class Merlin implements server.Disposable {
     priority: number = 0,
   ): merlin.Response<O> {
     const context: ["auto", string] | undefined = id
-      ? ["auto", Uri.parse(id.uri).fsPath]
+      ? ["auto", URI.parse(id.uri).fsPath]
       : undefined;
     const request = context ? { context, query } : query;
     return new Promise(resolve =>
