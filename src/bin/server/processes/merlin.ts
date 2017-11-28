@@ -98,7 +98,7 @@ export default class Merlin implements server.Disposable {
         const queueDuration =
           begunProcessing.getTime() - task.enqueuedAt.getTime();
         const merlinDuration = new Date().getTime() - begunProcessing.getTime();
-        this.session.log(
+        this.session.connection.telemetry.logEvent(
           `(${this.queue.length()}) Task ${JSON.stringify(
             task.task,
           )} was in the queue for ${queueDuration} ms and took ${
