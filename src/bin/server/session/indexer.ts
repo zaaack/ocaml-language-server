@@ -55,7 +55,7 @@ export default class Indexer implements server.Disposable {
   public async populate(origin: types.TextDocumentIdentifier): Promise<void> {
     if (!this.populated) {
       this.populated = true;
-      const modules = await command.getModules(this.session, origin);
+      const modules = await command.getModules(this.session, null, origin);
       for (const id of modules) {
         if (/\.(ml|re)i$/.test(id.uri)) continue;
         const document = await command.getTextDocument(this.session, id);

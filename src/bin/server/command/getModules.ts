@@ -5,11 +5,12 @@ import { default as Session, Environment } from "../session";
 
 export default async function(
   session: Session,
+  token: server.CancellationToken | null,
   event: server.TextDocumentIdentifier,
   priority: number = 0,
 ): Promise<server.TextDocumentIdentifier[]> {
   const request = merlin.Query.path.list.source();
-  const response = await session.merlin.query(request, null, event, priority);
+  const response = await session.merlin.query(request, token, event, priority);
   if (response.class !== "return") return [];
   const srcDirs: Set<string> = new Set();
   const srcMods: server.TextDocumentIdentifier[] = [];

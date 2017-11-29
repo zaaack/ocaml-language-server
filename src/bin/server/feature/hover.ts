@@ -17,7 +17,7 @@ export default function(
     const itemType = await command.getType(session, event, token);
     if (token.isCancellationRequested) return { contents: [] };
 
-    const itemDocs = await command.getDocumentation(session, event);
+    const itemDocs = await command.getDocumentation(session, token, event);
     if (token.isCancellationRequested) return { contents: [] };
 
     if (itemType) {

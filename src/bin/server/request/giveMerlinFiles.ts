@@ -6,5 +6,5 @@ import Session from "../session";
 export default function(
   session: Session,
 ): server.RequestHandler<types.TextDocumentIdentifier, string[], void> {
-  return event => command.getMerlinFiles(session, event);
+  return event => command.getMerlinFiles(session, null, event);
 }
