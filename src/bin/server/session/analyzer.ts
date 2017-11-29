@@ -14,7 +14,6 @@ export default class Analyzer implements server.Disposable {
   ) => Promise<void>) &
     _.Cancelable;
   private readonly bsbDiagnostics: { [key: string]: types.Diagnostic[] } = {};
-  private _refreshCancellationTokenSource: server.CancellationTokenSource = new server.CancellationTokenSource();
 
   constructor(private readonly session: Session) {}
 
@@ -100,12 +99,10 @@ export default class Analyzer implements server.Disposable {
               id,
             );
         }
-
-        this._refreshCancellationTokenSource.cancel();
-        this._refreshCancellationTokenSource = new server.CancellationTokenSource();
+        this.session.cancelTokens("analyzer/refreshWithKind");
         const errors = await this.session.merlin.query(
           merlin.Query.errors(),
-          this._refreshCancellationTokenSource.token,
+          this.session.cancellationSources["analyzer/refreshWithKind"].token,
           id,
         );
         if (errors.class !== "return") return;

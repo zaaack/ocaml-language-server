@@ -9,14 +9,21 @@ import Synchronizer from "./synchronizer";
 
 export { Environment };
 
+export type CancellationSources = "analyzer/refreshWithKind";
+
 export default class Session implements server.Disposable {
-  public readonly initConf: server.InitializeParams;
-  public settings: ISettings = {} as any;
-  public readonly connection: server.IConnection = server.createConnection();
   public readonly analyzer: Analyzer;
+  public readonly cancellationSources: {
+    readonly [S in CancellationSources]: server.CancellationTokenSource
+  } = {
+    "analyzer/refreshWithKind": new server.CancellationTokenSource(),
+  };
+  public readonly connection: server.IConnection = server.createConnection();
   public readonly environment: Environment;
   public readonly indexer: Indexer;
+  public readonly initConf: server.InitializeParams;
   public readonly merlin: Merlin;
+  public readonly settings: ISettings = {} as any;
   public readonly synchronizer: Synchronizer;
 
   constructor() {
@@ -27,12 +34,24 @@ export default class Session implements server.Disposable {
     this.synchronizer = new Synchronizer(this);
   }
 
+  public cancelTokens<S extends CancellationSources>(sourceName: S): void {
+    this.cancellationSources[sourceName].cancel();
+    (this.cancellationSources[
+      sourceName
+    ] as any) = new server.CancellationTokenSource();
+    return;
+  }
+
   public dispose(): void {
     this.analyzer.dispose();
     this.environment.dispose();
     this.indexer.dispose();
     this.merlin.dispose();
     this.synchronizer.dispose();
+  }
+
+  public error(data: any): void {
+    this.connection.console.error(JSON.stringify(data, null, 2));
   }
 
   public async initialize(): Promise<void> {
@@ -49,17 +68,13 @@ export default class Session implements server.Disposable {
   }
 
   public log(data: any): void {
-    this.connection.console.log(JSON.stringify(data, null as any, 2));
-  }
-
-  public error(data: any): void {
-    this.connection.console.error(JSON.stringify(data, null as any, 2));
+    this.connection.console.log(JSON.stringify(data, null, 2));
   }
 
   public onDidChangeConfiguration({
     settings,
   }: server.DidChangeConfigurationParams): void {
-    this.settings = settings;
+    (this.settings as any) = settings;
     this.analyzer.onDidChangeConfiguration();
     this.synchronizer.onDidChangeConfiguration();
   }
