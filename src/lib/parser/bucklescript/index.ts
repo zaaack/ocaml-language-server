@@ -1,4 +1,5 @@
 import { types } from "../../../lib";
+import { Diagnostic } from "../../types";
 
 function createDiagnostic(
   message: string,
@@ -29,7 +30,7 @@ function createDiagnostic(
 export function parseErrors(
   bsbOutput: string,
 ): { [key: string]: types.Diagnostic[] } {
-  const parsedDiagnostics = {};
+  const parsedDiagnostics: { [uri: string]: Diagnostic[] } = {};
 
   const reLevel1Errors = new RegExp(
     [
