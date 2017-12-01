@@ -74,7 +74,7 @@ export default class Session implements server.Disposable {
   public onDidChangeConfiguration({
     settings,
   }: server.DidChangeConfigurationParams): void {
-    (this.settings as any) = settings;
+    (this.settings as any) = { ...this.settings, ...settings };
     this.analyzer.onDidChangeConfiguration();
     this.synchronizer.onDidChangeConfiguration();
   }
