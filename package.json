@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/async": "2.0.45",
     "@types/glob": "5.0.33",
-    "@types/lodash": "4.14.85",
+    "@types/lodash": "4.14.86",
     "@types/lokijs": "1.2.30",
     "@types/node": "8.0.53",
     "@types/pegjs": "0.10.0",
