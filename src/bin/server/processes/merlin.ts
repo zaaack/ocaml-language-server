@@ -2,12 +2,12 @@ import * as async from "async";
 import * as childProcess from "child_process";
 import * as _ from "lodash";
 import * as readline from "readline";
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import URI from "vscode-uri";
-import { merlin, types } from "../../../lib";
+import { merlin } from "../../../lib";
 import Session from "../session";
 
-export default class Merlin implements server.Disposable {
+export default class Merlin implements LSP.Disposable {
   private readonly queue: async.AsyncPriorityQueue<merlin.Task>;
   private readonly readline: readline.ReadLine;
   private readonly process: childProcess.ChildProcess;
@@ -85,8 +85,8 @@ export default class Merlin implements server.Disposable {
 
   public query<I, O>(
     { query }: merlin.Query<I, O>,
-    token: server.CancellationToken | null,
-    id?: types.TextDocumentIdentifier,
+    token: LSP.CancellationToken | null,
+    id?: LSP.TextDocumentIdentifier,
     priority: number = 0,
   ): merlin.Response<O> {
     // this.session.connection.console.log(
@@ -119,7 +119,7 @@ export default class Merlin implements server.Disposable {
 
   public sync<I, O>(
     { sync: query }: merlin.Sync<I, O>,
-    id?: types.TextDocumentIdentifier,
+    id?: LSP.TextDocumentIdentifier,
     priority: number = 0,
   ): merlin.Response<O> {
     // this.session.connection.console.log(

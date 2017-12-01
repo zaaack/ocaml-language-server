@@ -1,10 +1,10 @@
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import * as processes from "../processes";
 import Session from "../session";
 
 export async function ocpIndent(
   session: Session,
-  doc: types.TextDocument,
+  doc: LSP.TextDocument,
 ): Promise<string> {
   const text = doc.getText();
   const ocpIndent = new processes.OcpIndent(session, []).process;
@@ -25,8 +25,8 @@ export async function ocpIndent(
 
 export async function ocpIndentRange(
   session: Session,
-  doc: types.TextDocument,
-  range: types.Range,
+  doc: LSP.TextDocument,
+  range: LSP.Range,
 ): Promise<number[]> {
   const text = doc.getText();
   const args: string[] = [
@@ -60,8 +60,8 @@ export async function ocpIndentRange(
 
 export async function refmt(
   session: Session,
-  doc: types.TextDocument,
-  range?: types.Range,
+  doc: LSP.TextDocument,
+  range?: LSP.Range,
 ): Promise<null | string> {
   if (range) {
     session.connection.console.warn(

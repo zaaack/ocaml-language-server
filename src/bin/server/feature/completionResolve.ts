@@ -1,10 +1,10 @@
-import * as server from "vscode-languageserver";
-import { parser, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { parser } from "../../../lib";
 import Session from "../session";
 
 export default function(
   _session: Session,
-): server.RequestHandler<types.CompletionItem, types.CompletionItem, void> {
+): LSP.RequestHandler<LSP.CompletionItem, LSP.CompletionItem, void> {
   return event => {
     // FIXME: might want to make a separate parser to just strip ocamldoc
     const documentation: string = event.data.documentation

@@ -1,13 +1,13 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
-  server.TextDocumentPositionParams,
-  types.DocumentHighlight[],
+): LSP.RequestHandler<
+  LSP.TextDocumentPositionParams,
+  LSP.DocumentHighlight[],
   void
 > {
   return async (event, token) => {
@@ -19,8 +19,8 @@ export default function(
 
     const highlights = occurrences.map(loc => {
       const range = merlin.Location.intoCode(loc);
-      const kind = types.DocumentHighlightKind.Write;
-      return types.DocumentHighlight.create(range, kind);
+      const kind = LSP.DocumentHighlightKind.Write;
+      return LSP.DocumentHighlight.create(range, kind);
     });
     return highlights;
   };

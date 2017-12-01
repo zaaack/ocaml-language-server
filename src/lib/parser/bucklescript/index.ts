@@ -1,5 +1,4 @@
-import { types } from "../../../lib";
-import { Diagnostic } from "../../types";
+import * as LSP from "vscode-languageserver-protocol";
 
 function createDiagnostic(
   message: string,
@@ -7,7 +6,7 @@ function createDiagnostic(
   startLine: number,
   endCharacter: number,
   endLine: number,
-  severity: types.DiagnosticSeverity,
+  severity: LSP.DiagnosticSeverity,
 ) {
   return {
     code: "",
@@ -29,8 +28,8 @@ function createDiagnostic(
 
 export function parseErrors(
   bsbOutput: string,
-): { [key: string]: types.Diagnostic[] } {
-  const parsedDiagnostics: { [uri: string]: Diagnostic[] } = {};
+): { [key: string]: LSP.Diagnostic[] } {
+  const parsedDiagnostics: { [uri: string]: LSP.Diagnostic[] } = {};
 
   const reLevel1Errors = new RegExp(
     [
@@ -51,10 +50,10 @@ export function parseErrors(
     const endCharacter = Number(errorMatch[4]);
     const message = errorMatch[5].trim();
     const severity = /^Warning number \d+/.exec(errorMatch[0])
-      ? types.DiagnosticSeverity.Warning
-      : types.DiagnosticSeverity.Error;
+      ? LSP.DiagnosticSeverity.Warning
+      : LSP.DiagnosticSeverity.Error;
 
-    const diagnostic: types.Diagnostic = createDiagnostic(
+    const diagnostic: LSP.Diagnostic = createDiagnostic(
       message,
       startCharacter,
       startLine,
@@ -99,10 +98,10 @@ export function parseErrors(
       endLine = startLine;
     }
     const severity = /^Warning number \d+/.exec(errorMatch[0])
-      ? types.DiagnosticSeverity.Warning
-      : types.DiagnosticSeverity.Error;
+      ? LSP.DiagnosticSeverity.Warning
+      : LSP.DiagnosticSeverity.Error;
 
-    const diagnostic: types.Diagnostic = createDiagnostic(
+    const diagnostic: LSP.Diagnostic = createDiagnostic(
       message,
       startCharacter,
       startLine,

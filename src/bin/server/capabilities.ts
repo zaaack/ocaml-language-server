@@ -1,6 +1,6 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 
-const capabilities: server.ServerCapabilities = {
+const capabilities: LSP.ServerCapabilities = {
   codeActionProvider: true,
   codeLensProvider: {
     resolveProvider: true,
@@ -16,7 +16,7 @@ const capabilities: server.ServerCapabilities = {
   hoverProvider: true,
   referencesProvider: true,
   renameProvider: true,
-  textDocumentSync: server.TextDocumentSyncKind.Incremental,
+  textDocumentSync: LSP.TextDocumentSyncKind.Incremental,
   workspaceSymbolProvider: true,
 };
 

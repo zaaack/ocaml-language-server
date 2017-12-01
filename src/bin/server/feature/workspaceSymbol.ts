@@ -1,12 +1,11 @@
-import * as server from "vscode-languageserver";
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
-  server.WorkspaceSymbolParams,
-  types.SymbolInformation[],
+): LSP.RequestHandler<
+  LSP.WorkspaceSymbolParams,
+  LSP.SymbolInformation[],
   void
 > {
   return event => {

@@ -1,7 +1,7 @@
 import {
   CancellationToken,
   TextDocumentPositionParams,
-} from "vscode-languageserver";
+} from "vscode-languageserver-protocol";
 import { merlin } from "../../../lib";
 import { Position } from "../../../lib/merlin/ordinal";
 import Session from "../session";

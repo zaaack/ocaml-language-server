@@ -1,15 +1,10 @@
-import * as server from "vscode-languageserver";
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
-  server.DocumentFormattingParams,
-  types.TextEdit[],
-  void
-> {
+): LSP.RequestHandler<LSP.DocumentFormattingParams, LSP.TextEdit[], void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return [];
 
@@ -17,7 +12,7 @@ export default function(
     if (token.isCancellationRequested) return [];
     if (!result) return [];
 
-    const document = types.TextDocument.create(
+    const document = LSP.TextDocument.create(
       event.textDocument.uri,
       result.languageId,
       result.version,
@@ -32,10 +27,10 @@ export default function(
     if (token.isCancellationRequested) return [];
     if (otxt == null || otxt === "") return [];
 
-    const edits: types.TextEdit[] = [];
+    const edits: LSP.TextEdit[] = [];
     edits.push(
-      types.TextEdit.replace(
-        types.Range.create(
+      LSP.TextEdit.replace(
+        LSP.Range.create(
           document.positionAt(0),
           document.positionAt(result.getText().length),
         ),

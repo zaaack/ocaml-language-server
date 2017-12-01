@@ -1,12 +1,11 @@
-import * as server from "vscode-languageserver";
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
 export default function(
   _: Session,
-): server.RequestHandler<server.CodeActionParams, types.Command[], void> {
+): LSP.RequestHandler<LSP.CodeActionParams, LSP.Command[], void> {
   return async ({ context, textDocument: { uri } }) => {
-    const actions: types.Command[] = [];
+    const actions: LSP.Command[] = [];
     let matches: null | RegExpMatchArray = null;
     for (const { message, range } of context.diagnostics) {
       if (
@@ -14,18 +13,18 @@ export default function(
       ) {
         const title = "change = to =>";
         const command = "reason.codeAction.fixEqualsShouldBeArrow";
-        const location = types.Location.create(uri, range);
+        const location = LSP.Location.create(uri, range);
         const args = [location];
-        const action = types.Command.create(title, command, args);
+        const action = LSP.Command.create(title, command, args);
         actions.push(action);
         continue;
       }
       if (message === "Statements must be terminated with a semicolon.") {
         const title = "insert missing semicolon";
         const command = "reason.codeAction.fixMissingSemicolon";
-        const location = types.Location.create(uri, range);
+        const location = LSP.Location.create(uri, range);
         const args = [location];
-        const action = types.Command.create(title, command, args);
+        const action = LSP.Command.create(title, command, args);
         actions.push(action);
         continue;
       }
@@ -36,9 +35,9 @@ export default function(
       ) {
         const title = "ignore unused variable";
         const command = "reason.codeAction.fixUnusedVariable";
-        const location = types.Location.create(uri, range);
+        const location = LSP.Location.create(uri, range);
         const args = [location, matches[1]];
-        const action = types.Command.create(title, command, args);
+        const action = LSP.Command.create(title, command, args);
         actions.push(action);
         continue;
       }

@@ -1,10 +1,10 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import * as processes from "../processes";
 import Session from "../session";
 
 export default async function(
   session: Session,
-  _: server.TextDocumentIdentifier,
+  _: LSP.TextDocumentIdentifier,
 ): Promise<string[]> {
   const env = new processes.Env(session).process;
   env.stdin.end();

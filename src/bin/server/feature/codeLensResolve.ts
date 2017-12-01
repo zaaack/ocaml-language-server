@@ -1,16 +1,15 @@
-import * as server from "vscode-languageserver";
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<types.CodeLens, types.CodeLens, void> {
+): LSP.RequestHandler<LSP.CodeLens, LSP.CodeLens, void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return event;
 
-    const data: types.SymbolInformation & {
-      event: server.TextDocumentPositionParams;
+    const data: LSP.SymbolInformation & {
+      event: LSP.TextDocumentPositionParams;
       fileKind: "ml" | "re";
     } =
       event.data;

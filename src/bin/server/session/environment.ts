@@ -2,19 +2,18 @@ import * as childProcess from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import * as URL from "url";
-import * as server from "vscode-languageserver";
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "./index";
 
 const fileSchemeLength = "file://".length - 1;
 
-export default class Environment implements server.Disposable {
-  public static pathToUri(path: string): types.TextDocumentIdentifier {
+export default class Environment implements LSP.Disposable {
+  public static pathToUri(path: string): LSP.TextDocumentIdentifier {
     const uri = URL.format(URL.parse(`file://${path}`));
     return { uri };
   }
 
-  public static uriToPath({ uri }: types.TextDocumentIdentifier): string {
+  public static uriToPath({ uri }: LSP.TextDocumentIdentifier): string {
     return uri.substr(fileSchemeLength);
   }
 
@@ -39,7 +38,7 @@ export default class Environment implements server.Disposable {
     return;
   }
 
-  public relativize(id: types.TextDocumentIdentifier): string | undefined {
+  public relativize(id: LSP.TextDocumentIdentifier): string | undefined {
     const rootPath = this.workspaceRoot();
     if (!rootPath) return;
     return path.relative(rootPath, Environment.uriToPath(id));

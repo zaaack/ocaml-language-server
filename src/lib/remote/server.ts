@@ -1,5 +1,5 @@
 import { RequestType } from "vscode-jsonrpc";
-import { TextDocumentIdentifier } from "vscode-languageserver-types";
+import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
 import * as merlin from "../merlin";
 import * as ordinal from "../merlin/ordinal";
 import { ITextDocumentRange, IUnformattedTextDocument } from "../types";

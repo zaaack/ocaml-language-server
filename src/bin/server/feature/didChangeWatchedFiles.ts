@@ -1,12 +1,12 @@
 import * as path from "path";
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import URI from "vscode-uri";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.NotificationHandler<server.DidChangeWatchedFilesParams> {
+): LSP.NotificationHandler<LSP.DidChangeWatchedFilesParams> {
   return async event => {
     for (const id of event.changes) {
       const p = path.parse(URI.parse(id.uri).path);

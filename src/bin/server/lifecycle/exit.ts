@@ -1,7 +1,7 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
-export default function(_: Session): server.NotificationHandler0 {
+export default function(_: Session): LSP.NotificationHandler0 {
   return () => {
     // session.dispose();
   };

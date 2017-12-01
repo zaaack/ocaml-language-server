@@ -1,13 +1,13 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
-const annotateKinds = new Set<number>([types.SymbolKind.Variable]);
+const annotateKinds = new Set<number>([LSP.SymbolKind.Variable]);
 
 export default function(
   session: Session,
-): server.RequestHandler<server.CodeLensParams, types.CodeLens[], void> {
+): LSP.RequestHandler<LSP.CodeLensParams, LSP.CodeLens[], void> {
   return async ({ textDocument }, token) => {
     if (token.isCancellationRequested) return [];
     if (!session.settings.reason.codelens.enabled) return [];
@@ -42,16 +42,16 @@ export default function(
     if (!document) return [];
 
     const symbols = merlin.Outline.intoCode(response.value, textDocument);
-    const codeLenses: types.CodeLens[] = [];
+    const codeLenses: LSP.CodeLens[] = [];
     let matches: null | RegExpMatchArray = null;
     let textLine: null | string = null;
     for (const { containerName, kind, location, name } of symbols) {
       if (annotateKinds.has(kind)) {
         const { range } = location;
         const { start } = range;
-        const end = types.Position.create(start.line + 1, 0);
+        const end = LSP.Position.create(start.line + 1, 0);
         const { character, line } = start;
-        const position = types.Position.create(line, character);
+        const position = LSP.Position.create(line, character);
         const event = { position, textDocument };
         // reason requires computing some offsets first
         if (

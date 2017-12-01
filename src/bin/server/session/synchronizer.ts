@@ -1,9 +1,9 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import Session from "./index";
 
-export default class Synchronizer implements server.Disposable {
-  public readonly documents: Map<string, types.TextDocument> = new Map();
+export default class Synchronizer implements LSP.Disposable {
+  public readonly documents: Map<string, LSP.TextDocument> = new Map();
 
   constructor(private readonly session: Session) {}
 
@@ -34,14 +34,14 @@ export default class Synchronizer implements server.Disposable {
     return;
   }
 
-  public getTextDocument(uri: string): null | types.TextDocument {
+  public getTextDocument(uri: string): null | LSP.TextDocument {
     const document = this.documents.get(uri);
     return document ? document : null;
   }
 
   private applyChangesToTextDocumentContent(
-    oldDocument: types.TextDocument,
-    change: types.TextDocumentContentChangeEvent,
+    oldDocument: LSP.TextDocument,
+    change: LSP.TextDocumentContentChangeEvent,
   ): null | string {
     if (!change.range) return null;
     const startOffset = oldDocument.offsetAt(change.range.start);
@@ -52,13 +52,13 @@ export default class Synchronizer implements server.Disposable {
   }
 
   private async doFullSync(
-    document: types.VersionedTextDocumentIdentifier,
+    document: LSP.VersionedTextDocumentIdentifier,
     languageId: string,
     content: string,
   ): Promise<void> {
     this.documents.set(
       document.uri,
-      types.TextDocument.create(
+      LSP.TextDocument.create(
         document.uri,
         languageId,
         document.version,
@@ -71,9 +71,9 @@ export default class Synchronizer implements server.Disposable {
   }
 
   private async doIncrementalSync(
-    oldDocument: types.TextDocument,
-    newDocument: types.VersionedTextDocumentIdentifier,
-    change: types.TextDocumentContentChangeEvent,
+    oldDocument: LSP.TextDocument,
+    newDocument: LSP.VersionedTextDocumentIdentifier,
+    change: LSP.TextDocumentContentChangeEvent,
   ): Promise<void> {
     if (!change || !change.range) return;
 
@@ -84,7 +84,7 @@ export default class Synchronizer implements server.Disposable {
     if (newContent) {
       this.documents.set(
         newDocument.uri,
-        types.TextDocument.create(
+        LSP.TextDocument.create(
           oldDocument.uri,
           oldDocument.languageId,
           newDocument.version,
@@ -100,7 +100,7 @@ export default class Synchronizer implements server.Disposable {
   }
 
   private async onDidChangeTextDocument(
-    event: server.DidChangeTextDocumentParams,
+    event: LSP.DidChangeTextDocumentParams,
   ): Promise<void> {
     for (const change of event.contentChanges) {
       if (!change) continue;
@@ -120,7 +120,7 @@ export default class Synchronizer implements server.Disposable {
   }
 
   private async onDidOpenTextDocument(
-    event: server.DidOpenTextDocumentParams,
+    event: LSP.DidOpenTextDocumentParams,
   ): Promise<void> {
     await this.doFullSync(
       event.textDocument,
@@ -131,15 +131,13 @@ export default class Synchronizer implements server.Disposable {
     await this.session.indexer.populate(event.textDocument);
   }
 
-  private onDidCloseTextDocument(
-    event: server.DidCloseTextDocumentParams,
-  ): void {
+  private onDidCloseTextDocument(event: LSP.DidCloseTextDocumentParams): void {
     this.documents.delete(event.textDocument.uri);
     this.session.analyzer.clear(event.textDocument);
   }
 
   private async onDidSaveTextDocument(
-    event: server.DidSaveTextDocumentParams,
+    event: LSP.DidSaveTextDocumentParams,
   ): Promise<void> {
     await this.session.analyzer.refreshImmediate(event.textDocument);
   }

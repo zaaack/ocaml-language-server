@@ -1,10 +1,10 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import { merlin, types } from "../../../lib";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
+): LSP.RequestHandler<
   types.ITextDocumentRange,
   null | merlin.Case.Destruct,
   void

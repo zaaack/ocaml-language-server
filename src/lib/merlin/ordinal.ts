@@ -1,4 +1,4 @@
-import * as types from "vscode-languageserver-types";
+import * as LSP from "vscode-languageserver-protocol";
 
 export interface IColumnLine {
   col: number;
@@ -10,13 +10,13 @@ export namespace Position {
   export function fromCode({
     character: col,
     line,
-  }: types.Position): IColumnLine {
+  }: LSP.Position): IColumnLine {
     return { col, line: line + 1 };
   }
   export function intoCode({
     col: character,
     line,
-  }: IColumnLine): types.Position {
+  }: IColumnLine): LSP.Position {
     return { character, line: line - 1 };
   }
 }
@@ -26,12 +26,12 @@ export interface ILocation {
   end: IColumnLine;
 }
 export namespace Location {
-  export function fromCode(range: types.Range): ILocation {
+  export function fromCode(range: LSP.Range): ILocation {
     const start = Position.fromCode(range.start);
     const end = Position.fromCode(range.end);
     return { start, end };
   }
-  export function intoCode(location: ILocation): types.Range {
+  export function intoCode(location: ILocation): LSP.Range {
     const start = Position.intoCode(location.start);
     const end = Position.intoCode(location.end);
     return { start, end };

@@ -1,9 +1,9 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 
 export class Task {
   constructor(
     readonly task: any,
-    readonly token: server.CancellationToken | null = null,
+    readonly token: LSP.CancellationToken | null = null,
     readonly enqueuedAt: Date = new Date(),
   ) {}
 }

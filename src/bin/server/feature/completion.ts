@@ -1,13 +1,13 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
-  server.TextDocumentPositionParams,
-  types.CompletionItem[],
+): LSP.RequestHandler<
+  LSP.TextDocumentPositionParams,
+  LSP.CompletionItem[],
   void
 > {
   return async (event, token) => {

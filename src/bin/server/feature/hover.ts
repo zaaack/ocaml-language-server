@@ -1,11 +1,11 @@
-import * as server from "vscode-languageserver";
-import { parser, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { parser } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<server.TextDocumentPositionParams, types.Hover, void> {
+): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Hover, void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return { contents: [] };
 
@@ -13,7 +13,7 @@ export default function(
     const word = await command.getWordAtPosition(session, position);
     if (token.isCancellationRequested) return { contents: [] };
 
-    const markedStrings: types.MarkedString[] = [];
+    const markedStrings: LSP.MarkedString[] = [];
     const itemType = await command.getType(session, event, token);
     if (token.isCancellationRequested) return { contents: [] };
 

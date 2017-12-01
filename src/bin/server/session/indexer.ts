@@ -1,16 +1,16 @@
 import Loki = require("lokijs");
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "./index";
 
-export default class Indexer implements server.Disposable {
+export default class Indexer implements LSP.Disposable {
   public populated: boolean = false;
   private readonly db: Loki = new Loki(".vscode.reasonml.loki");
-  private readonly symbols: LokiCollection<types.SymbolInformation>;
+  private readonly symbols: LokiCollection<LSP.SymbolInformation>;
 
   constructor(private readonly session: Session) {
-    this.symbols = this.db.addCollection<types.SymbolInformation>("symbols", {
+    this.symbols = this.db.addCollection<LSP.SymbolInformation>("symbols", {
       indices: ["name"],
     });
   }
@@ -19,8 +19,8 @@ export default class Indexer implements server.Disposable {
     return;
   }
 
-  public findSymbols(query: LokiQuery): types.SymbolInformation[] {
-    let result: types.SymbolInformation[] = [];
+  public findSymbols(query: LokiQuery): LSP.SymbolInformation[] {
+    let result: LSP.SymbolInformation[] = [];
     try {
       result = this.symbols
         .chain()
@@ -34,12 +34,12 @@ export default class Indexer implements server.Disposable {
   }
 
   public async indexSymbols(
-    id: types.TextDocumentIdentifier,
-  ): Promise<void | server.ResponseError<void>> {
+    id: LSP.TextDocumentIdentifier,
+  ): Promise<void | LSP.ResponseError<void>> {
     const request = merlin.Query.outline();
     const response = await this.session.merlin.query(request, null, id);
     if (response.class !== "return")
-      return new server.ResponseError(-1, "indexSymbols: failed", undefined);
+      return new LSP.ResponseError(-1, "indexSymbols: failed", undefined);
     for (const item of merlin.Outline.intoCode(response.value, id)) {
       const prefix = item.containerName ? `${item.containerName}.` : "";
       item.name = `${prefix}${item.name}`;
@@ -52,7 +52,7 @@ export default class Indexer implements server.Disposable {
     return;
   }
 
-  public async populate(origin: types.TextDocumentIdentifier): Promise<void> {
+  public async populate(origin: LSP.TextDocumentIdentifier): Promise<void> {
     if (!this.populated) {
       this.populated = true;
       const modules = await command.getModules(this.session, null, origin);
@@ -71,13 +71,13 @@ export default class Indexer implements server.Disposable {
   }
 
   public refreshSymbols(
-    id: types.TextDocumentIdentifier,
-  ): Promise<void | server.ResponseError<void>> {
+    id: LSP.TextDocumentIdentifier,
+  ): Promise<void | LSP.ResponseError<void>> {
     this.removeSymbols(id);
     return this.indexSymbols(id);
   }
 
-  public removeSymbols({ uri }: types.TextDocumentIdentifier): void {
+  public removeSymbols({ uri }: LSP.TextDocumentIdentifier): void {
     this.symbols
       .chain()
       .where(item => item.location.uri === uri)

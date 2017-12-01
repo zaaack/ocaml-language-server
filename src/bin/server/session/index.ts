@@ -1,4 +1,5 @@
 import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import { ISettings } from "../../../lib";
 import { Merlin } from "../processes";
 
@@ -11,17 +12,17 @@ export { Environment };
 
 export type CancellationSources = "analyzer/refreshWithKind";
 
-export default class Session implements server.Disposable {
+export default class Session implements LSP.Disposable {
   public readonly analyzer: Analyzer;
   public readonly cancellationSources: {
-    readonly [S in CancellationSources]: server.CancellationTokenSource
+    readonly [S in CancellationSources]: LSP.CancellationTokenSource
   } = {
-    "analyzer/refreshWithKind": new server.CancellationTokenSource(),
+    "analyzer/refreshWithKind": new LSP.CancellationTokenSource(),
   };
   public readonly connection: server.IConnection = server.createConnection();
   public readonly environment: Environment;
   public readonly indexer: Indexer;
-  public readonly initConf: server.InitializeParams;
+  public readonly initConf: LSP.InitializeParams;
   public readonly merlin: Merlin;
   public readonly settings: ISettings = {} as any;
   public readonly synchronizer: Synchronizer;
@@ -38,7 +39,7 @@ export default class Session implements server.Disposable {
     this.cancellationSources[sourceName].cancel();
     (this.cancellationSources[
       sourceName
-    ] as any) = new server.CancellationTokenSource();
+    ] as any) = new LSP.CancellationTokenSource();
     return;
   }
 
@@ -73,7 +74,7 @@ export default class Session implements server.Disposable {
 
   public onDidChangeConfiguration({
     settings,
-  }: server.DidChangeConfigurationParams): void {
+  }: LSP.DidChangeConfigurationParams): void {
     (this.settings as any) = { ...this.settings, ...settings };
     this.analyzer.onDidChangeConfiguration();
     this.synchronizer.onDidChangeConfiguration();

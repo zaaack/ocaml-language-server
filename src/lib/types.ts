@@ -1,23 +1,23 @@
-import * as types from "vscode-languageserver-types";
+import * as LSP from "vscode-languageserver-protocol";
 
 export interface ILocatedPosition {
-  position: types.Position;
+  position: LSP.Position;
   uri: string;
 }
 export namespace LocatedPosition {
   export function create(
     uri: string,
-    position: types.Position,
+    position: LSP.Position,
   ): ILocatedPosition {
     return { position, uri };
   }
 }
 
-export type LocatedRange = types.Location;
+export type LocatedRange = LSP.Location;
 
 export interface ITextDocumentRange {
-  range: types.Range;
-  textDocument: types.TextDocumentIdentifier;
+  range: LSP.Range;
+  textDocument: LSP.TextDocumentIdentifier;
 }
 
 export interface ITextDocumentData {
@@ -32,5 +32,3 @@ export interface IUnformattedTextDocument {
   version: number;
   content: string;
 }
-
-export * from "vscode-languageserver-types";

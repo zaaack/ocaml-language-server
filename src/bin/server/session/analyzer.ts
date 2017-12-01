@@ -1,23 +1,23 @@
 import * as _ from "lodash";
-import * as server from "vscode-languageserver";
-import { merlin, parser, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin, parser } from "../../../lib";
 import * as command from "../command";
 import * as processes from "../processes";
 import Session from "./index";
 
-export default class Analyzer implements server.Disposable {
+export default class Analyzer implements LSP.Disposable {
   public readonly refreshImmediate: ((
-    event: types.TextDocumentIdentifier,
+    event: LSP.TextDocumentIdentifier,
   ) => Promise<void>);
   public readonly refreshDebounced: ((
-    event: types.TextDocumentIdentifier,
+    event: LSP.TextDocumentIdentifier,
   ) => Promise<void>) &
     _.Cancelable;
-  private readonly bsbDiagnostics: { [key: string]: types.Diagnostic[] } = {};
+  private readonly bsbDiagnostics: { [key: string]: LSP.Diagnostic[] } = {};
 
   constructor(private readonly session: Session) {}
 
-  public clear({ uri }: types.TextDocumentIdentifier): void {
+  public clear({ uri }: LSP.TextDocumentIdentifier): void {
     if (
       this.bsbDiagnostics[uri] &&
       this.bsbDiagnostics[uri][0] &&
@@ -40,18 +40,18 @@ export default class Analyzer implements server.Disposable {
 
   public onDidChangeConfiguration(): void {
     (this.refreshImmediate as any) = this.refreshWithKind(
-      server.TextDocumentSyncKind.Full,
+      LSP.TextDocumentSyncKind.Full,
     );
     (this.refreshDebounced as any) = _.debounce(
-      this.refreshWithKind(server.TextDocumentSyncKind.Incremental),
+      this.refreshWithKind(LSP.TextDocumentSyncKind.Incremental),
       this.session.settings.reason.debounce.linter,
       { trailing: true },
     );
   }
 
   public refreshWithKind(
-    syncKind: server.TextDocumentSyncKind,
-  ): (id: types.TextDocumentIdentifier) => Promise<void> {
+    syncKind: LSP.TextDocumentSyncKind,
+  ): (id: LSP.TextDocumentIdentifier) => Promise<void> {
     return async id => {
       const tools: Set<string> = new Set(
         this.session.settings.reason.diagnostics.tools,
@@ -66,7 +66,7 @@ export default class Analyzer implements server.Disposable {
       });
       this.bsbDiagnostics[id.uri] = [];
 
-      if (tools.has("bsb") && syncKind === server.TextDocumentSyncKind.Full) {
+      if (tools.has("bsb") && syncKind === LSP.TextDocumentSyncKind.Full) {
         this.refreshDebounced.cancel();
         const bsbProcess = new processes.BuckleScript(this.session);
         const bsbOutput = await bsbProcess.run();
@@ -91,7 +91,7 @@ export default class Analyzer implements server.Disposable {
           }
         });
       } else if (tools.has("merlin")) {
-        if (syncKind === server.TextDocumentSyncKind.Full) {
+        if (syncKind === LSP.TextDocumentSyncKind.Full) {
           const document = await command.getTextDocument(this.session, id);
           if (document)
             await this.session.merlin.sync(
@@ -106,7 +106,7 @@ export default class Analyzer implements server.Disposable {
           id,
         );
         if (errors.class !== "return") return;
-        const diagnostics: types.Diagnostic[] = [];
+        const diagnostics: LSP.Diagnostic[] = [];
         for (const report of errors.value)
           diagnostics.push(
             await merlin.IErrorReport.intoCode(this.session, id, report),

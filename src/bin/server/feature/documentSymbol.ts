@@ -1,14 +1,10 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<
-  server.DocumentSymbolParams,
-  types.SymbolInformation[],
-  void
-> {
+): LSP.RequestHandler<LSP.DocumentSymbolParams, LSP.SymbolInformation[], void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return [];
 

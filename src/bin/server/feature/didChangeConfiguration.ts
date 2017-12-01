@@ -1,8 +1,8 @@
-import * as server from "vscode-languageserver";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.NotificationHandler<server.DidChangeConfigurationParams> {
+): LSP.NotificationHandler<LSP.DidChangeConfigurationParams> {
   return session.onDidChangeConfiguration.bind(session);
 }

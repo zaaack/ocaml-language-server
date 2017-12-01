@@ -1,11 +1,11 @@
-import * as server from "vscode-languageserver";
-import { merlin, types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
+import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
 export default function(
   session: Session,
-): server.RequestHandler<server.RenameParams, types.WorkspaceEdit, void> {
+): LSP.RequestHandler<LSP.RenameParams, LSP.WorkspaceEdit, void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return { changes: {} };
 
@@ -14,16 +14,16 @@ export default function(
     if (occurrences == null) return { changes: {} };
 
     const renamings = occurrences.map(loc =>
-      types.TextEdit.replace(merlin.Location.intoCode(loc), event.newName),
+      LSP.TextEdit.replace(merlin.Location.intoCode(loc), event.newName),
     );
     // FIXME: versioning
     const documentChanges = [
-      types.TextDocumentEdit.create(
-        types.VersionedTextDocumentIdentifier.create(event.textDocument.uri, 0),
+      LSP.TextDocumentEdit.create(
+        LSP.VersionedTextDocumentIdentifier.create(event.textDocument.uri, 0),
         renamings,
       ),
     ];
-    const edit: types.WorkspaceEdit = { documentChanges };
+    const edit: LSP.WorkspaceEdit = { documentChanges };
     return edit;
   };
 }

@@ -1,4 +1,4 @@
-import * as types from "vscode-languageserver-types";
+import * as LSP from "vscode-languageserver-protocol";
 import * as ordinal from "./ordinal";
 
 export namespace Case {
@@ -29,30 +29,30 @@ export namespace Completion {
     | "Value"
     | "Variant";
   export namespace Kind {
-    export function intoCode(kind: Kind): types.CompletionItemKind {
+    export function intoCode(kind: Kind): LSP.CompletionItemKind {
       switch (kind) {
         case "#":
-          return types.CompletionItemKind.Method;
+          return LSP.CompletionItemKind.Method;
         case "Class":
-          return types.CompletionItemKind.Class;
+          return LSP.CompletionItemKind.Class;
         case "Constructor":
-          return types.CompletionItemKind.Constructor;
+          return LSP.CompletionItemKind.Constructor;
         case "Exn":
-          return types.CompletionItemKind.Constructor;
+          return LSP.CompletionItemKind.Constructor;
         case "Label":
-          return types.CompletionItemKind.Field;
+          return LSP.CompletionItemKind.Field;
         case "Method":
-          return types.CompletionItemKind.Function;
+          return LSP.CompletionItemKind.Function;
         case "Module":
-          return types.CompletionItemKind.Module;
+          return LSP.CompletionItemKind.Module;
         case "Signature":
-          return types.CompletionItemKind.Interface;
+          return LSP.CompletionItemKind.Interface;
         case "Type":
-          return types.CompletionItemKind.Class;
+          return LSP.CompletionItemKind.Class;
         case "Value":
-          return types.CompletionItemKind.Value;
+          return LSP.CompletionItemKind.Value;
         case "Variant":
-          return types.CompletionItemKind.Enum;
+          return LSP.CompletionItemKind.Enum;
       }
     }
   }
@@ -67,7 +67,7 @@ export namespace Completion {
     kind,
     desc: detail,
     info: documentation,
-  }: IEntry): types.CompletionItem {
+  }: IEntry): LSP.CompletionItem {
     return {
       data: {
         documentation,
@@ -95,26 +95,26 @@ export namespace IErrorReport {
     | "unknown"
     | "warning";
   export namespace Type {
-    export function intoCode(type: Type): types.DiagnosticSeverity {
+    export function intoCode(type: Type): LSP.DiagnosticSeverity {
       switch (type) {
         case "env":
-          return types.DiagnosticSeverity.Error;
+          return LSP.DiagnosticSeverity.Error;
         case "error":
-          return types.DiagnosticSeverity.Error;
+          return LSP.DiagnosticSeverity.Error;
         case "parser":
-          return types.DiagnosticSeverity.Error;
+          return LSP.DiagnosticSeverity.Error;
         case "type":
-          return types.DiagnosticSeverity.Error;
+          return LSP.DiagnosticSeverity.Error;
         case "unknown":
-          return types.DiagnosticSeverity.Error;
+          return LSP.DiagnosticSeverity.Error;
         case "warning":
-          return types.DiagnosticSeverity.Warning;
+          return LSP.DiagnosticSeverity.Warning;
       }
     }
   }
   async function improveMessage(
     session: any,
-    { uri }: types.Location,
+    { uri }: LSP.Location,
     original: string,
   ): Promise<string> {
     if (original === "Invalid statement") {
@@ -134,9 +134,9 @@ export namespace IErrorReport {
   }
   export async function intoCode(
     session: any,
-    { uri }: types.TextDocumentIdentifier,
+    { uri }: LSP.TextDocumentIdentifier,
     { end, message: original, start, type }: IErrorReport,
-  ): Promise<types.Diagnostic> {
+  ): Promise<LSP.Diagnostic> {
     const range = {
       end: ordinal.Position.intoCode(end),
       start: ordinal.Position.intoCode(start),
@@ -146,7 +146,7 @@ export namespace IErrorReport {
     const code = getCode(original);
     const severity = Type.intoCode(type);
     const source = "merlin";
-    return types.Diagnostic.create(range, message, severity, code, source);
+    return LSP.Diagnostic.create(range, message, severity, code, source);
   }
 }
 
@@ -163,28 +163,28 @@ export namespace Outline {
     | "Type"
     | "Value";
   export namespace Kind {
-    export function intoCode(kind: Kind): types.SymbolKind {
+    export function intoCode(kind: Kind): LSP.SymbolKind {
       switch (kind) {
         case "Class":
-          return types.SymbolKind.Class;
+          return LSP.SymbolKind.Class;
         case "Constructor":
-          return types.SymbolKind.Constructor;
+          return LSP.SymbolKind.Constructor;
         case "Exn":
-          return types.SymbolKind.Constructor;
+          return LSP.SymbolKind.Constructor;
         case "Label":
-          return types.SymbolKind.Field;
+          return LSP.SymbolKind.Field;
         case "Method":
-          return types.SymbolKind.Method;
+          return LSP.SymbolKind.Method;
         case "Modtype":
-          return types.SymbolKind.Interface;
+          return LSP.SymbolKind.Interface;
         case "Module":
-          return types.SymbolKind.Module;
+          return LSP.SymbolKind.Module;
         case "Signature":
-          return types.SymbolKind.Interface;
+          return LSP.SymbolKind.Interface;
         case "Type":
-          return types.SymbolKind.Class;
+          return LSP.SymbolKind.Class;
         case "Value":
-          return types.SymbolKind.Variable;
+          return LSP.SymbolKind.Variable;
       }
     }
   }
@@ -197,9 +197,9 @@ export namespace Outline {
   }
   export function intoCode(
     outline: IItem[],
-    id: types.TextDocumentIdentifier,
-  ): types.SymbolInformation[] {
-    const symbols: types.SymbolInformation[] = [];
+    id: LSP.TextDocumentIdentifier,
+  ): LSP.SymbolInformation[] {
+    const symbols: LSP.SymbolInformation[] = [];
     function traverse(children: IItem[], scope: string): void {
       for (const item of children) {
         if (item) {
@@ -210,7 +210,7 @@ export namespace Outline {
           };
           const thisParent = scope === "" ? undefined : scope;
           const nextParent = `${scope}${scope === "" ? "" : "."}${item.name}`;
-          const info = types.SymbolInformation.create(
+          const info = LSP.SymbolInformation.create(
             item.name,
             kind,
             range,
@@ -230,7 +230,7 @@ export type Outline = Outline.IItem[];
 
 export type TailPosition = "call" | "no" | "position";
 export namespace TailPosition {
-  export function intoCode(info: TailPosition): types.MarkedString {
+  export function intoCode(info: TailPosition): LSP.MarkedString {
     const language = "reason.hover.info";
     const position = (arg: string) => ({ language, value: `position: ${arg}` });
     switch (info) {
