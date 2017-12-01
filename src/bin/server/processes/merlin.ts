@@ -100,7 +100,7 @@ export default class Merlin implements server.Disposable {
     );
   }
 
-  public restart(): void {
+  public async restart(): Promise<void> {
     if (this.queue) {
       this.queue.kill();
       (this.queue as any) = null;
@@ -113,7 +113,7 @@ export default class Merlin implements server.Disposable {
       this.process.kill();
       (this.process as any) = null;
     }
-    this.initialize();
+    await this.initialize();
   }
 
   public sync<I, O>(
