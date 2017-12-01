@@ -80,7 +80,7 @@ export default class Merlin implements server.Disposable {
     };
     (this.queue as any) = async.priorityQueue(worker, 1);
 
-    this.establishProtocol();
+    await this.establishProtocol();
   }
 
   public query<I, O>(

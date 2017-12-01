@@ -11,16 +11,16 @@ export default function(
     for (const id of event.changes) {
       const p = path.parse(URI.parse(id.uri).path);
       if (".ml" === p.ext) {
-        await session.indexer.refreshSymbols(id);
+        return session.indexer.refreshSymbols(id);
       }
       if (".re" === p.ext) {
-        await session.indexer.refreshSymbols(id);
+        return session.indexer.refreshSymbols(id);
       }
       if (".merlin" === p.base) {
-        await command.restartMerlin(session);
+        return command.restartMerlin(session);
       }
       if ("command-exec" === p.name) {
-        await command.restartMerlin(session);
+        return command.restartMerlin(session);
       }
     }
   };
