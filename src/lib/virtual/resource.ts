@@ -22,7 +22,7 @@ export class Resource {
         const uri = this.uri.toString(skipEncoding);
         // FIXME: move this check somewhere earlier and do it only once
         const localappdataFile = process.env.localappdata;
-        if (null == localappdataFile)
+        if (!localappdataFile)
           throw new Error(
             "LOCALAPPDATA must be set in environment to interpret WSL /home",
           );

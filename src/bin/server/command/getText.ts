@@ -6,6 +6,6 @@ export default async function(
   event: types.Location,
 ): Promise<null | string> {
   const textDocument = session.synchronizer.getTextDocument(event.uri);
-  if (null == textDocument) return null;
+  if (!textDocument) return null;
   return textDocument.getText();
 }

@@ -39,7 +39,7 @@ export default function(
     if (response.class !== "return") return [];
     const document = await command.getTextDocument(session, textDocument);
     if (token.isCancellationRequested) return [];
-    if (null == document) return [];
+    if (!document) return [];
 
     const symbols = merlin.Outline.intoCode(response.value, textDocument);
     const codeLenses: types.CodeLens[] = [];

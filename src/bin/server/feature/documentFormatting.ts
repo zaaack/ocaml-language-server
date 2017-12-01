@@ -15,7 +15,7 @@ export default function(
 
     const result = await command.getTextDocument(session, event.textDocument);
     if (token.isCancellationRequested) return [];
-    if (null == result) return [];
+    if (!result) return [];
 
     const document = types.TextDocument.create(
       event.textDocument.uri,

@@ -10,7 +10,7 @@ export default async function(
   event: types.ILocatedPosition,
 ): Promise<string> {
   const textDocument = session.synchronizer.getTextDocument(event.uri);
-  if (null == textDocument) return "";
+  if (!textDocument) return "";
   const text = textDocument.getText();
   const offset = textDocument.offsetAt(event.position);
   let start = offset;
