@@ -40,8 +40,8 @@ export default class Merlin implements server.Disposable {
         this.session.connection.window.showWarningMessage(
           `Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`,
         );
-        throw error;
       }
+        throw error;
     });
     this.process.stderr.on("data", (data: string) => {
       this.session.connection.window.showErrorMessage(
