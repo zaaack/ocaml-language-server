@@ -28,6 +28,7 @@ export default class Merlin implements server.Disposable {
       [],
       options,
     );
+
     // this.process.on("exit", (code, signal) => {
     //   this.session.connection.console.log(JSON.stringify({ code, signal }));
     // });
@@ -41,7 +42,7 @@ export default class Merlin implements server.Disposable {
           `Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`,
         );
       }
-        throw error;
+      throw error;
     });
     this.process.stderr.on("data", (data: string) => {
       this.session.connection.window.showErrorMessage(
