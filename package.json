@@ -20,8 +20,10 @@
     "node": ">=6.9.1"
   },
   "scripts": {
-    "build":
-      "npm run build:pegjs:ocamldoc && npm run format && npm run lint && tsc -p ./",
+    "prebuild":
+      "npm run build:pegjs:ocamldoc && npm run format && npm run lint",
+    "watch": "npm run prebuild && tsc -watch -p ./",
+    "build": "npm run prebuild && tsc -p ./",
     "build:pegjs:ocamldoc":
       "shx mkdir -p lib/parser/ocamldoc && pegjs -o lib/parser/ocamldoc/grammar.js src/lib/parser/ocamldoc/grammar.pegjs",
     "format": "./node_modules/.bin/prettier --write \"src/**/*.ts\"",
