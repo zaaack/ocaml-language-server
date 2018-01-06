@@ -2,32 +2,25 @@ import * as LSP from "vscode-languageserver-protocol";
 import URI from "vscode-uri";
 import { merlin } from "../../../lib";
 import Session from "../session";
+import * as support from "../support";
 
-export default function(session: Session): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Definition, void> {
-  return async (event, token) => {
-    if (token.isCancellationRequested) return [];
-
+export default function(session: Session): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Definition, never> {
+  return support.cancellableHandler(session, async (event, token) => {
     const find = async (kind: "ml" | "mli"): Promise<null | LSP.Location> => {
-      const request = merlin.Query.locate(null, kind).at(merlin.Position.fromCode(event.position));
+      const colLine = merlin.Position.fromCode(event.position);
+      const request = merlin.Query.locate(null, kind).at(colLine);
       const response = await session.merlin.query(request, token, event.textDocument);
-      if (response.class !== "return" || response.value.pos == null) return null;
-      const value = response.value;
-      const uri = value.file ? URI.file(value.file).toString() : event.textDocument.uri;
-      const position = merlin.Position.intoCode(value.pos);
+      if (response.class !== "return") return null;
+      if (response.value.pos == null) return null;
+      const uri = response.value.file ? URI.file(response.value.file).toString() : event.textDocument.uri;
+      const position = merlin.Position.intoCode(response.value.pos);
       const range = LSP.Range.create(position, position);
       const location = LSP.Location.create(uri, range);
       return location;
     };
-
     const locML = await find("ml");
-    if (token.isCancellationRequested) return [];
-
-    // const locMLI = await find("mli"");
-
     const locations: LSP.Location[] = [];
     if (locML) locations.push(locML);
-    // if (locMLI) locations.push(locMLI);
-
     return locations;
-  };
+  });
 }

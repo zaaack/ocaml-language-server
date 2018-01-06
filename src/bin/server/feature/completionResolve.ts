@@ -1,9 +1,10 @@
 import * as LSP from "vscode-languageserver-protocol";
 import { parser } from "../../../lib";
 import Session from "../session";
+import * as support from "../support";
 
-export default function(_session: Session): LSP.RequestHandler<LSP.CompletionItem, LSP.CompletionItem, void> {
-  return event => {
+export default function(session: Session): LSP.RequestHandler<LSP.CompletionItem, LSP.CompletionItem, never> {
+  return support.cancellableHandler(session, async (event, _token) => {
     // FIXME: might want to make a separate parser to just strip ocamldoc
     const documentation: string = event.data.documentation
       .replace(/\{\{:.*?\}(.*?)\}/g, "$1")
@@ -15,5 +16,5 @@ export default function(_session: Session): LSP.RequestHandler<LSP.CompletionIte
       .replace(/\n/g, "");
     event.documentation = markedDoc;
     return event;
-  };
+  });
 }

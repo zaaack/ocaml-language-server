@@ -2,13 +2,15 @@ import * as LSP from "vscode-languageserver-protocol";
 import { merlin } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
+import * as support from "../support";
 
 const annotateKinds = new Set<number>([LSP.SymbolKind.Variable]);
 
-export default function(session: Session): LSP.RequestHandler<LSP.CodeLensParams, LSP.CodeLens[], void> {
-  return async ({ textDocument }, token) => {
-    if (token.isCancellationRequested) return [];
-    if (!session.settings.reason.codelens.enabled) return [];
+export default function(session: Session): LSP.RequestHandler<LSP.CodeLensParams, LSP.CodeLens[], never> {
+  return support.cancellableHandler(session, async ({ textDocument }, token) => {
+    if (!session.settings.reason.codelens.enabled) {
+      return [];
+    }
 
     const languages: Set<string> = new Set(session.settings.reason.server.languages);
     if (languages.size < 1) return [];
@@ -23,14 +25,13 @@ export default function(session: Session): LSP.RequestHandler<LSP.CodeLensParams
 
     const request = merlin.Query.outline();
     const response = await session.merlin.query(request, token, textDocument, 1);
-    if (token.isCancellationRequested) return [];
-
     if (response.class !== "return") return [];
+    const outline = response.value;
+
     const document = await command.getTextDocument(session, textDocument);
-    if (token.isCancellationRequested) return [];
     if (!document) return [];
 
-    const symbols = merlin.Outline.intoCode(response.value, textDocument);
+    const symbols = merlin.Outline.intoCode(outline, textDocument);
     const codeLenses: LSP.CodeLens[] = [];
     let matches: null | RegExpMatchArray = null;
     let textLine: null | string = null;
@@ -54,13 +55,15 @@ export default function(session: Session): LSP.RequestHandler<LSP.CodeLensParams
           event.position.character += matches[3] ? matches[3].length : 0;
           event.position.character += matches[4].length;
         }
-        if (matches)
+        if (matches) {
           codeLenses.push({
             data: { containerName, event, fileKind, kind, location, name },
             range,
           });
+        }
       }
     }
+
     return codeLenses;
-  };
+  });
 }
