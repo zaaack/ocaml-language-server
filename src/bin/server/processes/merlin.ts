@@ -23,11 +23,7 @@ export default class Merlin implements LSP.Disposable {
     const cwd = this.session.initConf.rootUri || this.session.initConf.rootPath;
     const options = cwd ? { cwd: URI.parse(cwd).fsPath } : {};
 
-    (this.process as any) = this.session.environment.spawn(
-      ocamlmerlin,
-      [],
-      options,
-    );
+    (this.process as any) = this.session.environment.spawn(ocamlmerlin, [], options);
 
     // this.process.on("exit", (code, signal) => {
     //   this.session.connection.console.log(JSON.stringify({ code, signal }));
@@ -35,9 +31,7 @@ export default class Merlin implements LSP.Disposable {
     this.process.on("error", (error: Error & { code: string }) => {
       // this.session.connection.console.log(JSON.stringify({ error }));
       if (error.code === "ENOENT") {
-        this.session.connection.window.showWarningMessage(
-          `Cannot find merlin binary at "${ocamlmerlin}".`,
-        );
+        this.session.connection.window.showWarningMessage(`Cannot find merlin binary at "${ocamlmerlin}".`);
         this.session.connection.window.showWarningMessage(
           `Double check your path or try configuring "reason.path.ocamlmerlin" under "User Settings".`,
         );
@@ -45,9 +39,7 @@ export default class Merlin implements LSP.Disposable {
       throw error;
     });
     this.process.stderr.on("data", (data: string) => {
-      this.session.connection.window.showErrorMessage(
-        `ocamlmerlin error: ${data}`,
-      );
+      this.session.connection.window.showErrorMessage(`ocamlmerlin error: ${data}`);
     });
 
     (this.readline as any) = readline.createInterface({
@@ -59,10 +51,7 @@ export default class Merlin implements LSP.Disposable {
     //   this.session.connection.console.log("readline: close");
     // });
 
-    const worker: async.AsyncWorker<merlin.Task, merlin.MerlinResponse<any>> = (
-      task,
-      callback,
-    ) => {
+    const worker: async.AsyncWorker<merlin.Task, merlin.MerlinResponse<any>> = (task, callback) => {
       const begunProcessing = new Date();
       if (task.token && task.token.isCancellationRequested) {
         return callback({
@@ -92,13 +81,9 @@ export default class Merlin implements LSP.Disposable {
     // this.session.connection.console.log(
     //   JSON.stringify({ query, id, priority }),
     // );
-    const context: ["auto", string] | undefined = id
-      ? ["auto", URI.parse(id.uri).fsPath]
-      : undefined;
+    const context: ["auto", string] | undefined = id ? ["auto", URI.parse(id.uri).fsPath] : undefined;
     const request = context ? { context, query } : query;
-    return new Promise(resolve =>
-      this.queue.push(new merlin.Task(request, token), priority, resolve),
-    );
+    return new Promise(resolve => this.queue.push(new merlin.Task(request, token), priority, resolve));
   }
 
   public async restart(): Promise<void> {
@@ -125,13 +110,9 @@ export default class Merlin implements LSP.Disposable {
     // this.session.connection.console.log(
     //   JSON.stringify({ query, id, priority }),
     // );
-    const context: ["auto", string] | undefined = id
-      ? ["auto", URI.parse(id.uri).fsPath]
-      : undefined;
+    const context: ["auto", string] | undefined = id ? ["auto", URI.parse(id.uri).fsPath] : undefined;
     const request = context ? { context, query } : query;
-    return new Promise(resolve =>
-      this.queue.push(new merlin.Task(request), priority, resolve),
-    );
+    return new Promise(resolve => this.queue.push(new merlin.Task(request), priority, resolve));
   }
 
   private async establishProtocol(): Promise<void> {
@@ -142,24 +123,15 @@ export default class Merlin implements LSP.Disposable {
     }
   }
 
-  private logMessage<A>(
-    begunProcessing: Date,
-    task: merlin.Task,
-  ): (result: A) => A {
+  private logMessage<A>(begunProcessing: Date, task: merlin.Task): (result: A) => A {
     return result => {
-      if (
-        this.session.settings.reason.diagnostics &&
-        this.session.settings.reason.diagnostics.merlinPerfLogging
-      ) {
-        const queueDuration =
-          begunProcessing.getTime() - task.enqueuedAt.getTime();
+      if (this.session.settings.reason.diagnostics && this.session.settings.reason.diagnostics.merlinPerfLogging) {
+        const queueDuration = begunProcessing.getTime() - task.enqueuedAt.getTime();
         const merlinDuration = new Date().getTime() - begunProcessing.getTime();
         this.session.connection.telemetry.logEvent(
-          `(${this.queue.length()}) Task ${JSON.stringify(
-            task.task,
-          )} was in the queue for ${queueDuration} ms and took ${
-            merlinDuration
-          } ms to process.`,
+          `(${this.queue.length()}) Task ${JSON.stringify(task.task)} was in the queue for ${
+            queueDuration
+          } ms and took ${merlinDuration} ms to process.`,
         );
       }
       return result;

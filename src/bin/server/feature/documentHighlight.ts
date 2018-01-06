@@ -5,11 +5,7 @@ import Session from "../session";
 
 export default function(
   session: Session,
-): LSP.RequestHandler<
-  LSP.TextDocumentPositionParams,
-  LSP.DocumentHighlight[],
-  void
-> {
+): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.DocumentHighlight[], void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return [];
 

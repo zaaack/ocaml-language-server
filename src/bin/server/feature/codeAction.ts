@@ -1,16 +1,12 @@
 import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
-export default function(
-  _: Session,
-): LSP.RequestHandler<LSP.CodeActionParams, LSP.Command[], void> {
+export default function(_: Session): LSP.RequestHandler<LSP.CodeActionParams, LSP.Command[], void> {
   return async ({ context, textDocument: { uri } }) => {
     const actions: LSP.Command[] = [];
     let matches: null | RegExpMatchArray = null;
     for (const { message, range } of context.diagnostics) {
-      if (
-        message === "Functions must be defined with => instead of the = symbol."
-      ) {
+      if (message === "Functions must be defined with => instead of the = symbol.") {
         const title = "change = to =>";
         const command = "reason.codeAction.fixEqualsShouldBeArrow";
         const location = LSP.Location.create(uri, range);
@@ -28,11 +24,7 @@ export default function(
         actions.push(action);
         continue;
       }
-      if (
-        (matches = message.match(
-          /Warning (?:26|27): unused variable\s+\b(\w+)\b/,
-        ))
-      ) {
+      if ((matches = message.match(/Warning (?:26|27): unused variable\s+\b(\w+)\b/))) {
         const title = "ignore unused variable";
         const command = "reason.codeAction.fixUnusedVariable";
         const location = LSP.Location.create(uri, range);

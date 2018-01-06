@@ -14,9 +14,7 @@ export type CancellationSources = "analyzer/refreshWithKind";
 
 export default class Session implements LSP.Disposable {
   public readonly analyzer: Analyzer;
-  public readonly cancellationSources: {
-    readonly [S in CancellationSources]: LSP.CancellationTokenSource
-  } = {
+  public readonly cancellationSources: { readonly [S in CancellationSources]: LSP.CancellationTokenSource } = {
     "analyzer/refreshWithKind": new LSP.CancellationTokenSource(),
   };
   public readonly connection: server.IConnection = server.createConnection();
@@ -37,9 +35,7 @@ export default class Session implements LSP.Disposable {
 
   public cancelTokens<S extends CancellationSources>(sourceName: S): void {
     this.cancellationSources[sourceName].cancel();
-    (this.cancellationSources[
-      sourceName
-    ] as any) = new LSP.CancellationTokenSource();
+    (this.cancellationSources[sourceName] as any) = new LSP.CancellationTokenSource();
     return;
   }
 
@@ -72,9 +68,7 @@ export default class Session implements LSP.Disposable {
     this.connection.console.log(JSON.stringify(data, null, 2));
   }
 
-  public onDidChangeConfiguration({
-    settings,
-  }: LSP.DidChangeConfigurationParams): void {
+  public onDidChangeConfiguration({ settings }: LSP.DidChangeConfigurationParams): void {
     (this.settings as any) = { ...this.settings, ...settings };
     this.analyzer.onDidChangeConfiguration();
     this.synchronizer.onDidChangeConfiguration();

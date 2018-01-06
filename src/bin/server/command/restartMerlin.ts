@@ -8,9 +8,7 @@ export default async function(session: Session): Promise<void> {
     const content = document.getText();
     const request = merlin.Sync.tell("start", "end", content);
     await session.merlin.sync(request, document, Infinity);
-    const tools: Set<string> = new Set(
-      session.settings.reason.diagnostics.tools,
-    );
+    const tools: Set<string> = new Set(session.settings.reason.diagnostics.tools);
     if (!tools.has("bsb")) {
       await session.analyzer.refreshImmediate(document);
     }

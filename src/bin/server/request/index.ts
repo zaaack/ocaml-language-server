@@ -4,10 +4,4 @@ import giveFormatted from "./giveFormatted";
 import giveMerlinFiles from "./giveMerlinFiles";
 import giveProjectEnv from "./giveProjectEnv";
 
-export {
-  giveCaseAnalysis,
-  giveMerlinFiles,
-  giveFormatted,
-  giveAvailableLibraries,
-  giveProjectEnv,
-};
+export { giveCaseAnalysis, giveMerlinFiles, giveFormatted, giveAvailableLibraries, giveProjectEnv };

@@ -5,35 +5,24 @@ import Session from "../session";
 
 const annotateKinds = new Set<number>([LSP.SymbolKind.Variable]);
 
-export default function(
-  session: Session,
-): LSP.RequestHandler<LSP.CodeLensParams, LSP.CodeLens[], void> {
+export default function(session: Session): LSP.RequestHandler<LSP.CodeLensParams, LSP.CodeLens[], void> {
   return async ({ textDocument }, token) => {
     if (token.isCancellationRequested) return [];
     if (!session.settings.reason.codelens.enabled) return [];
 
-    const languages: Set<string> = new Set(
-      session.settings.reason.server.languages,
-    );
+    const languages: Set<string> = new Set(session.settings.reason.server.languages);
     if (languages.size < 1) return [];
 
     const allowedFileKinds: string[] = [];
     if (languages.has("ocaml")) allowedFileKinds.push("ml");
     if (languages.has("reason")) allowedFileKinds.push("re");
 
-    const fileKindMatch = textDocument.uri.match(
-      new RegExp(`\.(${allowedFileKinds.join("|")})$`),
-    );
+    const fileKindMatch = textDocument.uri.match(new RegExp(`\.(${allowedFileKinds.join("|")})$`));
     if (fileKindMatch == null) return [];
     const fileKind = fileKindMatch[1];
 
     const request = merlin.Query.outline();
-    const response = await session.merlin.query(
-      request,
-      token,
-      textDocument,
-      1,
-    );
+    const response = await session.merlin.query(request, token, textDocument, 1);
     if (token.isCancellationRequested) return [];
 
     if (response.class !== "return") return [];
@@ -55,9 +44,7 @@ export default function(
         const event = { position, textDocument };
         // reason requires computing some offsets first
         if (
-          (textLine = document
-            .getText()
-            .substring(document.offsetAt(start), document.offsetAt(end))) &&
+          (textLine = document.getText().substring(document.offsetAt(start), document.offsetAt(end))) &&
           (matches = textLine.match(
             /^\s*\b(and|let)\b(\s*)(\brec\b)?(\s*)(?:(?:\(?(?:[^\)]*)\)?(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)(?:(?:(?:(?:\b\w+\b)(?:\s*::\s*(?:(?:\b\w+\b)|\((?:\b\w+\b):.*?\)=(?:\b\w+\b)))?|\((?:\b\w+\b)(?::.*?)?\))\s*)|(?::(?=[^:])(?:.*?=>)*)?(?:.*?=)\s*[^\s=;]+?\s*.*?;?$)/m,
           ))

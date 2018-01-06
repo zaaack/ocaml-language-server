@@ -7,16 +7,10 @@ export interface IColumnLine {
 
 export type Position = "start" | "end" | number | IColumnLine;
 export namespace Position {
-  export function fromCode({
-    character: col,
-    line,
-  }: LSP.Position): IColumnLine {
+  export function fromCode({ character: col, line }: LSP.Position): IColumnLine {
     return { col, line: line + 1 };
   }
-  export function intoCode({
-    col: character,
-    line,
-  }: IColumnLine): LSP.Position {
+  export function intoCode({ col: character, line }: IColumnLine): LSP.Position {
     return { character, line: line - 1 };
   }
 }

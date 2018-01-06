@@ -5,10 +5,7 @@ export interface ILocatedPosition {
   uri: string;
 }
 export namespace LocatedPosition {
-  export function create(
-    uri: string,
-    position: LSP.Position,
-  ): ILocatedPosition {
+  export function create(uri: string, position: LSP.Position): ILocatedPosition {
     return { position, uri };
   }
 }

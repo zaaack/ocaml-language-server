@@ -5,10 +5,7 @@ function isWhitespace(str: string = ""): boolean {
   return str.trim() === str;
 }
 
-export default async function(
-  session: Session,
-  event: types.ILocatedPosition,
-): Promise<string> {
+export default async function(session: Session, event: types.ILocatedPosition): Promise<string> {
   const textDocument = session.synchronizer.getTextDocument(event.uri);
   if (!textDocument) return "";
   const text = textDocument.getText();

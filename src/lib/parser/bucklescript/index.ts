@@ -26,9 +26,7 @@ function createDiagnostic(
   };
 }
 
-export function parseErrors(
-  bsbOutput: string,
-): { [key: string]: LSP.Diagnostic[] } {
+export function parseErrors(bsbOutput: string): { [key: string]: LSP.Diagnostic[] } {
   const parsedDiagnostics: { [uri: string]: LSP.Diagnostic[] } = {};
 
   const reLevel1Errors = new RegExp(

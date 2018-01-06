@@ -51,11 +51,7 @@ export default class Environment implements LSP.Disposable {
   ): childProcess.ChildProcess {
     options.shell = process.platform === "win32" ? true : options.shell;
     if (this.projectCommandWrapper !== null) {
-      return childProcess.spawn(
-        this.projectCommandWrapper,
-        [command].concat(args),
-        options,
-      );
+      return childProcess.spawn(this.projectCommandWrapper, [command].concat(args), options);
     } else {
       return childProcess.spawn(command, args, options);
     }
@@ -65,9 +61,7 @@ export default class Environment implements LSP.Disposable {
     return this.session.initConf.rootPath;
   }
 
-  private projectCommandWrapperPath(
-    workspaceRoot: string | null | undefined,
-  ): string | null {
+  private projectCommandWrapperPath(workspaceRoot: string | null | undefined): string | null {
     return workspaceRoot === null || workspaceRoot === undefined
       ? null
       : path.join(
@@ -84,17 +78,13 @@ export default class Environment implements LSP.Disposable {
   private async determineCommandWrapper(): Promise<void> {
     const workspaceRoot = this.workspaceRoot();
     try {
-      const projectCommandWrapper = this.projectCommandWrapperPath(
-        workspaceRoot,
-      );
+      const projectCommandWrapper = this.projectCommandWrapperPath(workspaceRoot);
       if (projectCommandWrapper !== null) {
         const exists = await fs.existsSync(projectCommandWrapper);
         this.projectCommandWrapper = exists ? projectCommandWrapper : null;
       }
     } catch (err) {
-      this.session.error(
-        `Error determining if command wrapper exists at: ${workspaceRoot}`,
-      );
+      this.session.error(`Error determining if command wrapper exists at: ${workspaceRoot}`);
     }
   }
 }

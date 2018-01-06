@@ -5,11 +5,7 @@ import Session from "../session";
 
 export default function(
   session: Session,
-): LSP.RequestHandler<
-  LSP.TextDocumentPositionParams,
-  LSP.CompletionItem[],
-  void
-> {
+): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.CompletionItem[], void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return [];
 
@@ -27,12 +23,7 @@ export default function(
       .prefix(prefix)
       .at(position)
       .with.doc();
-    const response = await session.merlin.query(
-      request,
-      token,
-      event.textDocument,
-      Infinity,
-    );
+    const response = await session.merlin.query(request, token, event.textDocument, Infinity);
     if (token.isCancellationRequested) return [];
     if (response.class !== "return") return [];
 

@@ -20,10 +20,7 @@ export default class Esy {
         }
         resolve("");
       });
-      process.stdout.on(
-        "data",
-        (data: Buffer | string) => (buffer += data.toString()),
-      );
+      process.stdout.on("data", (data: Buffer | string) => (buffer += data.toString()));
       process.stdout.on("end", () => resolve(buffer));
     });
   }

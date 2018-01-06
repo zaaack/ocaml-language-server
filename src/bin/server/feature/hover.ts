@@ -3,9 +3,7 @@ import { parser } from "../../../lib";
 import * as command from "../command";
 import Session from "../session";
 
-export default function(
-  session: Session,
-): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Hover, void> {
+export default function(session: Session): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Hover, void> {
   return async (event, token) => {
     if (token.isCancellationRequested) return { contents: [] };
 
@@ -24,9 +22,7 @@ export default function(
       let language = "plaintext";
       if (/\.mli?/.test(event.textDocument.uri)) language = "ocaml.hover.type";
       if (/\.rei?/.test(event.textDocument.uri))
-        language = /^[A-Z]/.test(word)
-          ? "reason.hover.signature"
-          : "reason.hover.type";
+        language = /^[A-Z]/.test(word) ? "reason.hover.signature" : "reason.hover.type";
       markedStrings.push({ language, value: itemType.type });
       if (itemDocs && !parser.ocamldoc.ignore.test(itemDocs))
         markedStrings.push(parser.ocamldoc.intoMarkdown(itemDocs));
