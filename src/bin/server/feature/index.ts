@@ -8,7 +8,6 @@ import didChangeConfiguration from "./didChangeConfiguration";
 import didChangeWatchedFiles from "./didChangeWatchedFiles";
 import documentFormatting from "./documentFormatting";
 import documentHighlight from "./documentHighlight";
-import documentOnTypeFormatting from "./documentOnTypeFormatting";
 import documentSymbol from "./documentSymbol";
 import hover from "./hover";
 import references from "./references";
@@ -26,7 +25,6 @@ export {
   didChangeWatchedFiles,
   documentFormatting,
   documentHighlight,
-  documentOnTypeFormatting,
   documentSymbol,
   hover,
   references,
