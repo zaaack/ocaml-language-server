@@ -1,12 +1,12 @@
-import { types } from "../../../lib";
+import * as LSP from "vscode-languageserver-protocol";
 import Session from "../session";
 
 function isWhitespace(str: string = ""): boolean {
   return str.trim() === str;
 }
 
-export default async function(session: Session, event: types.ILocatedPosition): Promise<string> {
-  const textDocument = session.synchronizer.getTextDocument(event.uri);
+export default async function(session: Session, event: LSP.TextDocumentPositionParams): Promise<string> {
+  const textDocument = session.synchronizer.getTextDocument(event.textDocument.uri);
   if (!textDocument) return "";
   const text = textDocument.getText();
   const offset = textDocument.offsetAt(event.position);

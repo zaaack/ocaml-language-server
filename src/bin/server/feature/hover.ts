@@ -6,8 +6,7 @@ import * as support from "../support";
 
 export default function(session: Session): LSP.RequestHandler<LSP.TextDocumentPositionParams, LSP.Hover, never> {
   return support.cancellableHandler(session, async (event, token) => {
-    const position = { position: event.position, uri: event.textDocument.uri };
-    const word = await command.getWordAtPosition(session, position);
+    const word = await command.getWordAtPosition(session, event);
     const markedStrings: LSP.MarkedString[] = [];
     const itemTypes = await command.getType(session, event, token);
     if (itemTypes == null) return { contents: [] };

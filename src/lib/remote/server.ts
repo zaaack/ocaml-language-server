@@ -1,8 +1,8 @@
 import { RequestType } from "vscode-jsonrpc";
-import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
+import { TextDocumentIdentifier, TextDocumentItem } from "vscode-languageserver-protocol";
 import * as merlin from "../merlin";
 import * as ordinal from "../merlin/ordinal";
-import { ITextDocumentRange, IUnformattedTextDocument } from "../types";
+import { ITextDocumentRange } from "../types";
 
 export const giveCaseAnalysis = new RequestType<ITextDocumentRange, null | merlin.Case.Destruct, void, void>(
   "reason.server.giveCaseAnalysis",
@@ -20,7 +20,7 @@ export const giveProjectEnv = new RequestType<TextDocumentIdentifier, string[], 
   "reason.server.giveProjectEnv",
 );
 
-export const giveFormatted = new RequestType<IUnformattedTextDocument, null | string, void, void>(
+export const giveFormatted = new RequestType<TextDocumentItem, null | string, void, void>(
   "reason.server.giveFormatted",
 );
 
