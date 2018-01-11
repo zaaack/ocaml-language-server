@@ -1,8 +1,6 @@
 import * as merlin from "./merlin";
-import * as parser from "./parser";
 import * as remote from "./remote";
 import * as types from "./types";
-import * as virtual from "./virtual";
 
 export interface ISettings {
   reason: {
@@ -67,4 +65,4 @@ export namespace ISettings {
   };
 }
 
-export { merlin, parser, remote, types, virtual };
+export { merlin, remote, types };

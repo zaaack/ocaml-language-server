@@ -1,7 +1,8 @@
 import * as _ from "lodash";
 import * as LSP from "vscode-languageserver-protocol";
-import { merlin, parser } from "../../../lib";
+import { merlin } from "../../../lib";
 import * as command from "../command";
+import * as parser from "../parser";
 import * as processes from "../processes";
 import Session from "./index";
 

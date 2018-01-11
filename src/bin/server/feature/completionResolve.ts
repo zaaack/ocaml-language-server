@@ -1,5 +1,5 @@
 import * as LSP from "vscode-languageserver-protocol";
-import { parser } from "../../../lib";
+import * as parser from "../parser";
 import Session from "../session";
 import * as support from "../support";
 
