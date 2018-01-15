@@ -35,6 +35,5 @@ session.connection.onRequest(remote.server.giveCaseAnalysis, request.giveCaseAna
 session.connection.onRequest(remote.server.giveMerlinFiles, request.giveMerlinFiles(session));
 session.connection.onRequest(remote.server.giveAvailableLibraries, request.giveAvailableLibraries(session));
 session.connection.onRequest(remote.server.giveProjectEnv, request.giveProjectEnv(session));
-session.connection.onRequest(remote.server.giveFormatted, request.giveFormatted(session));
 
 session.listen();
