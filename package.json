@@ -27,7 +27,15 @@
       "shx mkdir -p bin/server/parser/ocamldoc && pegjs -o bin/server/parser/ocamldoc/grammar.js src/bin/server/parser/ocamldoc/grammar.pegjs",
     "format": "./node_modules/.bin/prettier --write \"src/**/*.ts\"",
     "lint": "tslint --project tsconfig.json",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "test": "jest"
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": ["**/__tests__/*.(ts|tsx|js)"]
   },
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -38,12 +46,15 @@
   "devDependencies": {
     "@types/async": "2.0.45",
     "@types/glob": "5.0.33",
+    "@types/jest": "^22.0.1",
     "@types/lodash": "4.14.86",
     "@types/lokijs": "1.2.30",
     "@types/node": "8.0.53",
     "@types/pegjs": "0.10.0",
+    "jest": "^22.0.6",
     "prettier": "1.8.2",
     "shx": "0.2.2",
+    "ts-jest": "^22.0.1",
     "ts-node": "3.3.0",
     "tslint": "5.8.0",
     "typescript": "2.6.2"

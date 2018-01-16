@@ -32,7 +32,7 @@ export function parseErrors(bsbOutput: string): { [key: string]: LSP.Diagnostic[
   const reLevel1Errors = new RegExp(
     [
       /File "(.*)", line (\d*), characters (\d*)-(\d*):[\s\S]*?/,
-      /Error: ([\s\S]*)(We've found a bug for you!|File "(.*)", line (\d*):\nError: Error while running external preprocessor)/,
+      /(?:Error|Warning \d+): ([\s\S]*)(We've found a bug for you!|File "(.*)", line (\d*):\nError: Error while running external preprocessor|File "(.*)", line (\d*):\nError: Some fatal warnings were triggered)/,
     ]
       .map(r => r.source)
       .join(""),
@@ -111,6 +111,48 @@ export function parseErrors(bsbOutput: string): { [key: string]: LSP.Diagnostic[
       parsedDiagnostics[fileUri] = [];
     }
     parsedDiagnostics[fileUri].push(diagnostic);
+  }
+
+  // Only added because of the special output format of interface/implementation mismatch errors
+  const reLevel3Errors = new RegExp(
+    [
+      /(?:We've found a bug for you!|Warning number \d+)\n\s*/, // Heading of the error / warning
+      /(.*)/, // Capturing file name
+      /\n  \n  ((?:.|\n)*?)/, // Capturing error / warning message
+      /((?=We've found a bug for you!)|(?:\[\d+\/\d+\] (?:\x1b\[[0-9;]*?m)?Building)|(?:ninja: build stopped: subcommand failed)|(?=Warning number \d+)|$)/, // Possible tails
+    ]
+      .map(r => r.source)
+      .join(""),
+    "g",
+  );
+
+  // If nothing was detected before, try to parse interface/implementation mismatch errors
+  if (Object.keys(parsedDiagnostics).length === 0) {
+    while ((errorMatch = reLevel3Errors.exec(bsbOutput))) {
+      const fileUri = "file://" + errorMatch[1];
+      // No line/char info in this case
+      const startLine = 0;
+      const startCharacter = 0;
+      const endLine = 0;
+      const endCharacter = 0;
+      const message = errorMatch[2].replace(/\n  /g, "\n");
+      const severity = /^Warning number \d+/.exec(errorMatch[0])
+        ? LSP.DiagnosticSeverity.Warning
+        : LSP.DiagnosticSeverity.Error;
+
+      const diagnostic: LSP.Diagnostic = createDiagnostic(
+        message,
+        startCharacter,
+        startLine,
+        endCharacter,
+        endLine,
+        severity,
+      );
+      if (!parsedDiagnostics[fileUri]) {
+        parsedDiagnostics[fileUri] = [];
+      }
+      parsedDiagnostics[fileUri].push(diagnostic);
+    }
   }
   return parsedDiagnostics;
 }
