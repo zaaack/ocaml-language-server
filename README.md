@@ -64,7 +64,7 @@ Pick your favorite editor and install the plugin! They should all work with
 ocaml-language-server. Some of them are called "myeditor-reason", but they
 support both Reason and OCaml.
 
-- Atom: [atom-ide-reason](https://github.com/zaaack/atom-ide-reason)
+- Atom: [atom-ide-reason](https://github.com/reasonml-editor/atom-ide-reason)
 
 - Emacs: [lsp-ocaml](https://github.com/emacs-lsp/lsp-ocaml).
   For extra Reason support: the emacs integration isn't using
